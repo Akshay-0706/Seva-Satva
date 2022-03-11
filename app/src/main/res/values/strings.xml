@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Seva Satva</string>
+
+    <string name="splash_text_seva">Seva</string>
+    <string name="splash_text_satva">Satva</string>
+    <string name="splash_text_slash">/</string>
+
+    <string name="app_intro_st_heading">As a Student</string>
+    <string name="app_intro_mt_heading">As a Mentor</string>
+    <string name="app_intro_next_text">Next</string>
+    <string name="app_intro_back_text">Back</string>
+    <string name="app_intro_continue_text">Continue</string>
+    <string name="app_intro_role_text">Select your role</string>
+    <string name="app_intro_role_student">Student</string>
+    <string name="app_intro_role_mentor">Mentor</string>
+
+    <string name="login_email_text">Email</string>
+    <string name="login_password_text">Password</string>
+    <string name="login_forgot_pass_text">Forgot password?</string>
+    <string name="login_text">Log in</string>
+    <string name="login_student_login_text">Student log in</string>
+    <string name="login_or_text">or continue with</string>
+    <string name="login_question">Don\'t have an account?</string>
+    <string name="login_register_text">Register here</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="bg" format="color"/>
+    <attr name="textColor" format="color"/>
+    <attr name="textColorLight" format="color"/>
+    <attr name="white" format="color"/>
+    <attr name="black" format="color"/>
+    <attr name="inverted" format="color"/>
+</resources>
