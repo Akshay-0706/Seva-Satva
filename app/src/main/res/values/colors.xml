@@ -8,6 +8,9 @@
 <!--    <color name="black">#FF000000</color>-->
 <!--    <color name="white">#FFFFFFFF</color>-->
 
+    <color name="error">#FB6944</color>
+    <color name="warning">#FFAA71</color>
+    <color name="success">#4BB543</color>
 
     <color name="textColor">#000000</color>
     <color name="textColorNight">#FFFFFF</color>

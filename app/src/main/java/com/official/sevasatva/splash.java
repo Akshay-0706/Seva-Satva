@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class splash extends AppCompatActivity {
 
@@ -24,18 +23,15 @@ public class splash extends AppCompatActivity {
         satvaText.animate().alpha(1).setDuration(2000);
 
 
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                        .getBoolean("isFirstRun", true);
+                boolean isFirstRunAppIntro = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                        .getBoolean("isFirstRunAppIntro", true);
 
-                if (isFirstRun) {
+                if (isFirstRunAppIntro) {
                     //show start activity
-
                     startActivity(new Intent(splash.this, appIntro.class));
                     finish();
                 }
@@ -44,8 +40,7 @@ public class splash extends AppCompatActivity {
                     finish();
                 }
 
-                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                        .putBoolean("isFirstRun", false).apply();
+
             }
         }, 3000);
     }

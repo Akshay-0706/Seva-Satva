@@ -1,7 +1,6 @@
 package com.official.sevasatva;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
@@ -15,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -69,6 +67,10 @@ public class appIntro extends AppCompatActivity {
                             int radioCheckID = radioGroup.getCheckedRadioButtonId();
                             RadioButton radioStudent = drawer.findViewById(R.id.radioStudent);
                             RadioButton radioMentor = drawer.findViewById(R.id.radioMentor);
+                            bottomSheetDialog.dismiss();
+
+                            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                                    .putBoolean("isFirstRunAppIntro", false).apply();
 
                             if (radioCheckID == radioStudent.getId()) {
                                 Intent intent = new Intent(appIntro.this, studentLogin.class);

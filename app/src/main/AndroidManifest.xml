@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.official.sevasatva">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/xtra_app_icon"
@@ -10,10 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Official.SevaSatva">
         <activity
-            android:name=".mentorLogin"
+            android:name=".home"
             android:exported="false" />
         <activity
             android:name=".studentLogin"
+            android:exported="false" />
+        <activity
+            android:name=".studentDetails"
+            android:exported="false" />
+        <activity
+            android:name=".mentorLogin"
             android:exported="false" />
         <activity
             android:name=".appIntro"

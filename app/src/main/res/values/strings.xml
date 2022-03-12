@@ -5,6 +5,14 @@
     <string name="splash_text_satva">Satva</string>
     <string name="splash_text_slash">/</string>
 
+    <string name="confirmation_dialog_temp_heading_text">Confirm</string>
+    <string name="confirmation_dialog_temp_info_text">You won\'t be able to change your course again!</string>
+    <string name="confirmation_dialog_temp_yes_text">Yes</string>
+    <string name="confirmation_dialog_temp_no_text">No</string>
+
+    <string name="redirecting_dialog_temp_heading_text">Redirecting…</string>
+    <string name="redirecting_dialog_temp_info_text">Unable to connect to internet</string>
+
     <string name="app_intro_st_heading">As a Student</string>
     <string name="app_intro_mt_heading">As a Mentor</string>
     <string name="app_intro_next_text">Next</string>
@@ -19,7 +27,55 @@
     <string name="login_forgot_pass_text">Forgot password?</string>
     <string name="login_text">Log in</string>
     <string name="login_student_login_text">Student log in</string>
+    <string name="login_mentor_login_text">Mentor log in</string>
     <string name="login_or_text">or continue with</string>
-    <string name="login_question">Don\'t have an account?</string>
+    <string name="login_student_question">Don\'t have an account?</string>
+    <string name="login_mentor_question">Unable to login?</string>
     <string name="login_register_text">Register here</string>
+    <string name="login_contact_us_text">Contact us</string>
+
+    <string name="student_details_heading">Course details</string>
+    <string name="student_details_uid_text">UID</string>
+    <string name="student_details_uid_hint">2020300071</string>
+    <string name="student_details_branch_text">Branch</string>
+    <string name="student_details_class_text">Class</string>
+    <string name="student_details_continue_text">Continue</string>
+    <string name="student_details_temp_cc_text">SV12</string>
+    <string name="student_details_temp_cn_text">India\'s top 2 problems</string>
+
+    <!--    String arrays-->
+    <string-array name="Branches">
+        <item>COMPS</item>
+        <item>IT</item>
+        <item>EXTC</item>
+        <item>ETRX</item>
+        <item>MCA</item>
+    </string-array>
+
+    <string-array name="Classes">
+        <item>FE</item>
+        <item>SE</item>
+        <item>TE</item>
+        <item>BE</item>
+    </string-array>
+
+    <!--    Error list-->
+    <!--    100 series - Registration-->
+    <string name="error_100">User not registered</string>
+    <string name="error_101">Unable to login</string>
+    <string name="error_102">Request timeout</string>
+    <string name="error_103">Unauthorized</string>
+    <!--    200 series - Connections-->
+    <string name="error_200">Could not connect to internet</string>
+    <string name="error_201">Check your internet connection and refresh this page</string>
+    <!--    300 series - Permissions-->
+    <string name="error_300">You don\'t have permission to access this content</string>
+    <string name="error_301">File access permission denied</string>
+    <string name="error_302">Camera permission denied</string>
+    <!--    400 series - Files and media-->
+    <string name="error_400">This type of media is not supported</string>
+    <string name="error_404">File not found</string>
+    <!--    500 series - Others-->
+    <string name="error_500">Loading time out</string>
+    <string name="error_501">Please choose SPIT email only!</string>
 </resources>
