@@ -7,15 +7,23 @@ import android.widget.Toast;
 
 public class home extends AppCompatActivity {
 
+    String email;
+    String name;
+    String branch;
+    String cls;
+    int uid, year;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         Bundle extras = getIntent().getExtras();
-        String name = extras.getString("name");
-        String surname = extras.getString("surname");
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, surname, Toast.LENGTH_SHORT).show();
+        email = extras.getString("email");
+        name = extras.getString("name");
+        branch = extras.getString("branch");
+        cls = extras.getString("cls");
+        uid = extras.getInt("uid");
+        year = extras.getInt("year");
     }
 }

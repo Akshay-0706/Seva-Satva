@@ -36,16 +36,25 @@ public class studentDetails extends AppCompatActivity {
     RecyclerView recyclerView;
     studentDetailsAdapter studentDetailsAdapter;
     ArrayList<HashMap<String, String>> list;
-    String name, surname;
+    String email;
+    String name;
+    String branch;
+    String cls;
+    int uid, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         setContentView(R.layout.activity_student_details);
         redirectingDialog = new Dialog(this);
         Bundle extras = getIntent().getExtras();
+        email = extras.getString("email");
         name = extras.getString("name");
-        surname = extras.getString("surname");
+        branch = extras.getString("branch");
+        cls = extras.getString("cls");
+        uid = extras.getInt("uid");
+        year = extras.getInt("year");
 
         if (!isInternetAvailable()) {
             redirectingDialog.setContentView(R.layout.fragment_redirecting);
@@ -66,12 +75,6 @@ public class studentDetails extends AppCompatActivity {
         loadingDialog = new Dialog(this);
         recyclerView = (RecyclerView) findViewById(R.id.studentDetailsRecycler);
         getItems();
-
-        findViewById(R.id.courseDetailsContinueBtn).setOnClickListener(v -> {
-            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                    .putBoolean("isFirstRunStudentDetails", false).apply();
-            startActivity(new Intent(this, home.class).putExtra("name", name).putExtra("surname", surname));
-        });
 
     }
 
@@ -123,13 +126,13 @@ public class studentDetails extends AppCompatActivity {
 
                 String code = jo.getString("code");
                 String name = jo.getString("name");
-//                String desc = jo.getString("desc");
+                String desc = jo.getString("desc");
 
                 HashMap<String, String> item = new HashMap<>();
                 item.put("code", code);
                 item.put("name", name);
-//                item.put("desc", desc);
-//                item.put("isExpanded", "false");
+                item.put("desc", desc);
+                item.put("isExpanded", "false");
 
                 list.add(item);
             }
@@ -138,6 +141,7 @@ public class studentDetails extends AppCompatActivity {
         }
 
         studentDetailsAdapter = new studentDetailsAdapter(list);
+        studentDetailsAdapter.setDetails(email, name, branch, cls, uid, year);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(studentDetailsAdapter);
 

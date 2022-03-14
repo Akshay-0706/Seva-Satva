@@ -4,199 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".studentDetails"
-    android:background="?attr/bg">
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLineStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLineTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="20dp" />
+    android:background="?attr/textColor"
+    tools:context=".studentDetails">
 
     <TextView
         android:id="@+id/studentDetailsHeading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
         android:fontFamily="@font/baloo_bhai_regular"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:text="@string/student_details_heading"
-        android:textColor="?attr/textColor"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideLineStart"
-        app:layout_constraintTop_toTopOf="@+id/guideLineTop"
-        app:layout_constraintVertical_bias="0.0" />
+        android:textColor="?attr/inverted"
+        android:textSize="28sp"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/studentDetailsRecycler"
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
         android:background="@drawable/student_details_recycler_bg"
-        android:padding="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideLineStart"
-        app:layout_constraintTop_toBottomOf="@+id/studentDetailsHeading"
-        app:layout_constraintVertical_bias="0.1" />
-
-    <com.google.android.material.textfield.TextInputLayout
-
-        android:id="@+id/uidInput"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:elevation="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:hint="@string/student_details_uid_text"
-        android:textColorHint="?attr/textColorLight"
-        app:boxStrokeColor="?attr/textColorLight"
-        app:endIconMode="clear_text"
-        app:endIconTint="?attr/textColorLight"
-        app:hintTextColor="?attr/textColorLight"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guideLineStart"
-        app:layout_constraintTop_toBottomOf="@+id/studentDetailsRecycler"
-        app:layout_constraintVertical_bias="0.0"
-        app:startIconDrawable="@drawable/xtra_uid_icon"
-        app:startIconTint="?attr/textColorLight">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailTextInput"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:textColor="?attr/textColor"
-            app:layout_constraintBottom_toBottomOf="@+id/emailInput"
-            app:layout_constraintEnd_toEndOf="@+id/emailInput"
-            app:layout_constraintStart_toStartOf="@+id/emailInput"
-            app:layout_constraintTop_toTopOf="@+id/emailInput" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guideLineStart"
-        app:layout_constraintTop_toBottomOf="@+id/uidInput"
-        app:layout_constraintVertical_bias="0.0">
-
-        <com.google.android.material.textfield.TextInputLayout
-
-            android:id="@+id/branchInput"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:elevation="5dp"
-            android:hint="@string/student_details_branch_text"
-            android:textColorHint="?attr/textColorLight"
-            app:boxStrokeColor="?attr/textColorLight"
-            app:endIconTint="?attr/textColorLight"
-            app:hintTextColor="?attr/textColorLight"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.75"
-            app:startIconTint="?attr/textColorLight">
-
-            <AutoCompleteTextView
-                android:id="@+id/branchTextInput"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="none"
-                android:textColor="?attr/textColorLight"
-                app:layout_constraintBottom_toBottomOf="@+id/emailInput"
-                app:layout_constraintEnd_toEndOf="@+id/emailInput"
-                app:layout_constraintStart_toStartOf="@+id/emailInput"
-                app:layout_constraintTop_toTopOf="@+id/emailInput" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-
-            android:id="@+id/classInput"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:elevation="5dp"
-            android:hint="@string/student_details_class_text"
-            android:textColorHint="?attr/textColorLight"
-            app:boxStrokeColor="?attr/textColorLight"
-            app:endIconTint="?attr/textColorLight"
-            app:hintTextColor="?attr/textColorLight"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.75"
-            app:startIconTint="?attr/textColorLight">
-
-            <AutoCompleteTextView
-                android:id="@+id/classTextInput"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="none"
-                android:textColor="?attr/textColorLight"
-                app:layout_constraintBottom_toBottomOf="@+id/emailInput"
-                app:layout_constraintEnd_toEndOf="@+id/emailInput"
-                app:layout_constraintStart_toStartOf="@+id/emailInput"
-                app:layout_constraintTop_toTopOf="@+id/emailInput" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/courseDetailsContinueBtn"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/student_login_login_btn_bg"
-        android:elevation="5dp"
-        android:text="@string/student_details_continue_text"
-        android:textAllCaps="false"
-        android:textColor="?attr/inverted"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guideLineStart"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/studentDetailsHeading" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

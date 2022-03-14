@@ -69,6 +69,9 @@ public class appIntro extends AppCompatActivity {
                             RadioButton radioMentor = drawer.findViewById(R.id.radioMentor);
                             bottomSheetDialog.dismiss();
 
+                            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                                    .getBoolean("isUserStudent", true);
+
                             getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                                     .putBoolean("isFirstRunAppIntro", false).apply();
 
@@ -78,6 +81,8 @@ public class appIntro extends AppCompatActivity {
                                 finish();
                             }
                             else {
+                                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                                        .putBoolean("isUserStudent", false).apply();
                                 Intent intent = new Intent(appIntro.this, mentorLogin.class);
                                 appIntro.this.startActivity(intent);
                                 finish();

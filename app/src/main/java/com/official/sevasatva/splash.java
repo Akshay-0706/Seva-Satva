@@ -30,15 +30,23 @@ public class splash extends AppCompatActivity {
                 boolean isFirstRunAppIntro = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                         .getBoolean("isFirstRunAppIntro", true);
 
+                boolean isUserStudent = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                        .getBoolean("isUserStudent", true);
+
                 if (isFirstRunAppIntro) {
                     //show start activity
                     startActivity(new Intent(splash.this, appIntro.class));
                     finish();
                 }
-                else {
+                else if (isUserStudent) {
                     startActivity(new Intent(splash.this, studentLogin.class));
                     finish();
                 }
+                else {
+                    startActivity(new Intent(splash.this, mentorLogin.class));
+                    finish();
+                }
+
 
 
             }

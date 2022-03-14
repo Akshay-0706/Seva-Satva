@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -14,6 +13,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,6 +33,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class studentLogin extends AppCompatActivity {
 
     private GoogleSignInClient googleSignInClient;
@@ -36,10 +45,18 @@ public class studentLogin extends AppCompatActivity {
 
     private static final String TAG = "Google sign in tag";
 
+    String email;
+    String name;
+    String branch;
+    String cls;
+    int uid, year;
+    boolean isStudentNew = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+        setContentView(R.layout.activity_student_login);
 
         signIn();
     }
@@ -80,6 +97,11 @@ public class studentLogin extends AppCompatActivity {
                     Log.d(TAG, "onActivityResult: "+e.getMessage());
                 }
             }
+            else
+            {
+                Toast.makeText(studentLogin.this, R.string.error_100, Toast.LENGTH_SHORT).show();
+                signIn();
+            }
         }
     });
 
@@ -93,11 +115,11 @@ public class studentLogin extends AppCompatActivity {
                     public void onSuccess(AuthResult authResult) {
                         Log.d(TAG, "onSuccess: Logged in");
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                        String uid = firebaseUser.getUid();
-                        String email = firebaseUser.getEmail();
+                        String uidOfUser = firebaseUser.getUid();
+                        email = firebaseUser.getEmail();
 
                         Log.d(TAG, "onSuccess: Email: "+email);
-                        Log.d(TAG, "onSuccess: UID: "+uid);
+                        Log.d(TAG, "onSuccess: UID: "+uidOfUser);
 
                         boolean isFirstRunStudentDetails = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                                 .getBoolean("isFirstRunStudentDetails", true);
@@ -108,15 +130,14 @@ public class studentLogin extends AppCompatActivity {
                         if (authResult.getAdditionalUserInfo().isNewUser() || isFirstRunStudentDetails) {
                             Log.d(TAG, "onSuccess: Account created\n"+email);
                             Toast.makeText(studentLogin.this, "Account created", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(studentLogin.this, studentDetails.class).putExtra("name", name[0]).putExtra("surname", name[1]));
-                            finish();
+                            isStudentNew = true;
                         }
                         else {
                             Log.d(TAG, "onSuccess: Account already exists\n"+email);
                             Toast.makeText(studentLogin.this, "Account already exists", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(studentLogin.this, home.class).putExtra("name", name[0]).putExtra("surname", name[1]));
-                            finish();
+                            isStudentNew = false;
                         }
+                        fetchStudentDetails();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -126,6 +147,52 @@ public class studentLogin extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void fetchStudentDetails() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbzH90F-mXT__bwGafdJI6pNljuBDKScyc1ncuDkTqVpsXXALWxF4x3-VzfQCXIuUYd6/exec?action=getItems&email=" + email,
+                this::parseItems,
+
+                error -> {
+                }
+        );
+
+        int socketTimeOut = 50000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
+    }
+
+    private void parseItems(String jsonResponse) {
+
+        try {
+            JSONObject jobj = new JSONObject(jsonResponse);
+            JSONArray jarray = jobj.getJSONArray("student_database");
+
+            JSONObject jo = jarray.getJSONObject(0);
+
+            uid = jo.getInt("uid");
+            name = jo.getString("name");
+            branch = jo.getString("branch");
+            cls = jo.getString("class");
+            year = jo.getInt("year");
+            Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+
+            if (isStudentNew) {
+                startActivity(new Intent(studentLogin.this, studentDetails.class).putExtra("email", email).putExtra("uid",uid)
+                        .putExtra("name", name).putExtra("branch",branch).putExtra("cls",cls).putExtra("year",year));
+                finish();
+            }
+            else {
+                startActivity(new Intent(studentLogin.this, home.class).putExtra("email", email).putExtra("uid",uid)
+                        .putExtra("name", name).putExtra("branch",branch).putExtra("cls",cls).putExtra("year",year));
+                finish();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private String[] getNameSurname(String email) {

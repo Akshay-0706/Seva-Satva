@@ -1,146 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
+        android:elevation="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/student_details_recycler_item_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/courseItemLayout1"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStudentStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStudentEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStudentTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStudentBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="20dp" />
+
+        <TextView
+            android:id="@+id/courseName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:minHeight="150dp"
-            android:background="@drawable/student_details_recycler_items_bg"
-            android:elevation="5dp">
+            android:text="@string/student_details_temp_cn_text"
+            android:fontFamily="@font/baloo_bhai_regular"
+            android:textColor="?attr/textColor"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineStudentBottom"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineStudentEnd"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"
+            app:layout_constraintTop_toTopOf="@+id/guidelineStudentTop"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/courseCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/student_details_temp_cc_text"
+            android:textSize="16sp"
+            android:textColor="?attr/textColorLight"
+            android:fontFamily="@font/baloo_bhai_regular"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineStudentBottom"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineStudentEnd"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"
+            app:layout_constraintTop_toBottomOf="@+id/courseName"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/courseLayoutDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@id/guidelineStudentBottom"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineStudentEnd"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"
+            app:layout_constraintTop_toBottomOf="@+id/courseCode"
+            app:layout_constraintVertical_bias="1.0">
+
 
             <TextView
-                android:id="@+id/courseCode1"
-                android:layout_width="wrap_content"
+                android:id="@+id/courseDesc"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/baloo_bhai_regular"
-                android:text="@string/student_details_temp_cc_text"
+                android:text="@string/student_details_temp_desc_text"
+                android:textSize="14sp"
                 android:textColor="?attr/textColorLight"
-                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/courseSelectBtn"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <RadioButton
-                android:id="@+id/courseSelected1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="15dp"
-                android:buttonTint="?attr/textColorLight"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/courseSelectBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/student_details_recycler_item_btn_bg"
+                android:fontFamily="@font/baloo_bhai_regular"
+                android:text="@string/student_details_select_text"
+                android:textAllCaps="false"
+                android:textColor="?attr/inverted"
+                app:layout_constraintBottom_toBottomOf="@+id/courseDesc"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="@+id/courseDesc">
 
-            <TextView
-                android:id="@+id/courseName1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:fontFamily="@font/baloo_bhai_regular"
-                android:gravity="center"
-                android:text="@string/student_details_temp_cn_text"
-                android:textColor="?attr/textColor"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/courseSelected1" />
+            </androidx.appcompat.widget.AppCompatButton>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/courseItemLayout2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:minHeight="150dp"
-            android:background="@drawable/student_details_recycler_items_bg"
-            android:elevation="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/courseCode2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:fontFamily="@font/baloo_bhai_regular"
-                android:text="@string/student_details_temp_cc_text"
-                android:textColor="?attr/textColorLight"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <RadioButton
-                android:id="@+id/courseSelected2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="15dp"
-                android:buttonTint="?attr/textColorLight"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/courseName2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:fontFamily="@font/baloo_bhai_regular"
-                android:gravity="center"
-                android:text="@string/student_details_temp_cn_text"
-                android:textColor="?attr/textColor"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/courseSelected2" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
