@@ -36,6 +36,24 @@
     <string name="student_details_temp_cc_text">SV12</string>
     <string name="student_details_temp_cn_text">India\'s top 2 problems</string>
     <string name="student_details_temp_desc_text">Lorem Ipsum</string>
+    <string name="student_details_eval_text">Evaluation type:</string>
+    <string name="student_details_temp_eval_type_text">Presentation</string>
+
+    <string name="home_heading">Seva Satva</string>
+    <string name="home_greeting">Hi,</string>
+    <string name="home_greeting_name">Akshay</string>
+    <string name="home_tests_text">Upcoming tests</string>
+    <string name="home_temp_tests_info_text">No test scheduled in this week</string>
+    <string name="home_lec_text">Lectures schedule</string>
+    <string name="home_temp_lec_info_text">No lectures scheduled! Ask your mentor to schedule lectures to reflect changes in the app</string>
+
+    <string name="ans_heading">Announcements</string>
+
+    <string name="news_heading">News</string>
+
+    <string name="tests_heading">Tests &amp; Grades</string>
+
+    <string name="pro_heading">Profile</string>
 
     <!--    String arrays-->
     <string-array name="Branches">
@@ -72,4 +90,6 @@
     <!--    500 series - Others-->
     <string name="error_500">Loading time out</string>
     <string name="error_501">Please choose SPIT email only!</string>
+
+    <string name="hello_blank_fragment">Hello</string>
 </resources>

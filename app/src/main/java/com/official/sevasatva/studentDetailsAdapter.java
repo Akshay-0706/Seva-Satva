@@ -1,6 +1,7 @@
 package com.official.sevasatva;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,10 +25,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,22 +36,19 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 
     private static final String TAG = "Position";
     ArrayList<HashMap<String, String>> list;
+    String[] studentData = {"", "", "", "", "", ""};
 
-    String email;
 
-    public void setDetails(String email, String name, String branch, String cls, int uid, int year) {
-        this.email = email;
-        this.name = name;
-        this.branch = branch;
-        this.cls = cls;
-        this.uid = uid;
-        this.year = year;
+    public void setDetails(String[] studentData) {
+        this.studentData = studentData;
+//        this.email = studentData[0];
+//        this.name = studentData[2];
+//        this.branch = studentData[3];
+//        this.cls = studentData[4];
+//        this.uid = Integer.parseInt(studentData[1]);
+//        this.year = Integer.parseInt(studentData[5]);
+
     }
-
-    String name;
-    String branch;
-    String cls;
-    int uid, year;
 
     int currentPosition = -1;
     ViewGroup viewGroup;
@@ -158,11 +154,17 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwlaKsBo6JoKSO2Ww6d5359UGEW07uIBOLxYrkiZ0WMw0k5b0c-alh-Ha20SfTRz7zs/exec?action=addItems",
                     response -> {
-                        Toast.makeText(viewGroup.getContext(),response,Toast.LENGTH_LONG).show();
                         loadingDialog.dismiss();
-                        Intent intent = new Intent(viewGroup.getContext(), home.class).putExtra("email", email).putExtra("uid",uid)
-                                .putExtra("name", name).putExtra("branch",branch).putExtra("cls",cls).putExtra("year",year);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("Email", studentData[0]);
+                        map.put("Course code", cc);
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                        firestore.collection("Students").document(auth.getUid()).set(map);
+
+                        Intent intent = new Intent(viewGroup.getContext(), mainScreen.class).putExtra("student_data", studentData);
                         viewGroup.getContext().startActivity(intent);
+                        ((Activity) viewGroup.getContext()).finish();
                     },
                     error -> {
                         Toast.makeText(viewGroup.getContext(), "Here", Toast.LENGTH_SHORT).show();
@@ -176,12 +178,12 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
                     Map<String, String> parmas = new HashMap<>();
 
                     parmas.put("action","addItems");
-                    parmas.put("uid",String.valueOf(uid));
-                    parmas.put("email",email);
-                    parmas.put("name",name);
-                    parmas.put("branch",branch);
-                    parmas.put("cls",cls);
-                    parmas.put("year",String.valueOf(year));
+                    parmas.put("uid",String.valueOf(studentData[1]));
+                    parmas.put("email",studentData[0]);
+                    parmas.put("name",studentData[2]);
+                    parmas.put("branch",studentData[3]);
+                    parmas.put("cls",studentData[4]);
+                    parmas.put("year",String.valueOf(studentData[5]));
                     parmas.put("cc",cc);
                     parmas.put("cn",cn);
 

@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Official.SevaSatva">
         <activity
-            android:name=".home"
+            android:name=".home_announcements"
+            android:exported="false" />
+        <activity
+            android:name=".mainScreen"
             android:exported="false" />
         <activity
             android:name=".studentLogin"

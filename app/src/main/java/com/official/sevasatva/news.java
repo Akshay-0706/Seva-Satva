@@ -1,10 +1,7 @@
 package com.official.sevasatva;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,10 +10,10 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link home#newInstance} factory method to
+ * Use the {@link news#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class home extends Fragment {
+public class news extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +24,7 @@ public class home extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public home() {
+    public news() {
         // Required empty public constructor
     }
 
@@ -37,11 +34,11 @@ public class home extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment home.
+     * @return A new instance of fragment news.
      */
     // TODO: Rename and change types and number of parameters
-    public static home newInstance(String param1, String param2) {
-        home fragment = new home();
+    public static news newInstance(String param1, String param2) {
+        news fragment = new news();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,18 +59,6 @@ public class home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        getView().findViewById(R.id.homeAnsBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), home_announcements.class));
-            }
-        });
+        return inflater.inflate(R.layout.fragment_news, container, false);
     }
 }

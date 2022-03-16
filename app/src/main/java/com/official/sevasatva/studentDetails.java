@@ -36,11 +36,7 @@ public class studentDetails extends AppCompatActivity {
     RecyclerView recyclerView;
     studentDetailsAdapter studentDetailsAdapter;
     ArrayList<HashMap<String, String>> list;
-    String email;
-    String name;
-    String branch;
-    String cls;
-    int uid, year;
+    String[] studentData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +45,7 @@ public class studentDetails extends AppCompatActivity {
         setContentView(R.layout.activity_student_details);
         redirectingDialog = new Dialog(this);
         Bundle extras = getIntent().getExtras();
-        email = extras.getString("email");
-        name = extras.getString("name");
-        branch = extras.getString("branch");
-        cls = extras.getString("cls");
-        uid = extras.getInt("uid");
-        year = extras.getInt("year");
+        studentData = extras.getStringArray("student_data");
 
         if (!isInternetAvailable()) {
             redirectingDialog.setContentView(R.layout.fragment_redirecting);
@@ -141,7 +132,7 @@ public class studentDetails extends AppCompatActivity {
         }
 
         studentDetailsAdapter = new studentDetailsAdapter(list);
-        studentDetailsAdapter.setDetails(email, name, branch, cls, uid, year);
+        studentDetailsAdapter.setDetails(studentData);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(studentDetailsAdapter);
 

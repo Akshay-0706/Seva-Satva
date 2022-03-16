@@ -24,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +33,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,12 +48,9 @@ public class studentLogin extends AppCompatActivity {
 
     private static final String TAG = "Google sign in tag";
 
-    String email;
-    String name;
-    String branch;
-    String cls;
-    int uid, year;
-    boolean isStudentNew = true;
+    String[] studentData = {"", "", "", "", "", ""};
+    String uid;
+    boolean isNewStudent = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,28 +115,20 @@ public class studentLogin extends AppCompatActivity {
                     public void onSuccess(AuthResult authResult) {
                         Log.d(TAG, "onSuccess: Logged in");
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                        String uidOfUser = firebaseUser.getUid();
-                        email = firebaseUser.getEmail();
+                        uid = firebaseUser.getUid();
+                        studentData[0] = firebaseUser.getEmail();
 
-                        Log.d(TAG, "onSuccess: Email: "+email);
-                        Log.d(TAG, "onSuccess: UID: "+uidOfUser);
+                        Log.d(TAG, "onSuccess: Email: "+ studentData[0]);
+                        Log.d(TAG, "onSuccess: UID: "+uid);
 
-                        boolean isFirstRunStudentDetails = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                                .getBoolean("isFirstRunStudentDetails", true);
 
-                        assert email != null;
-                        String[] name = getNameSurname(email);
-                        Toast.makeText(studentLogin.this, name[0] + " "+name[1], Toast.LENGTH_SHORT).show();
-                        if (authResult.getAdditionalUserInfo().isNewUser() || isFirstRunStudentDetails) {
-                            Log.d(TAG, "onSuccess: Account created\n"+email);
-                            Toast.makeText(studentLogin.this, "Account created", Toast.LENGTH_SHORT).show();
-                            isStudentNew = true;
-                        }
-                        else {
-                            Log.d(TAG, "onSuccess: Account already exists\n"+email);
-                            Toast.makeText(studentLogin.this, "Account already exists", Toast.LENGTH_SHORT).show();
-                            isStudentNew = false;
-                        }
+
+//                        assert studentData[0] != null;
+//
+//                        if (authResult.getAdditionalUserInfo().isNewUser()) {
+//                            isNewStudent = true;
+//                        }
+
                         fetchStudentDetails();
                     }
                 })
@@ -150,7 +142,7 @@ public class studentLogin extends AppCompatActivity {
     }
 
     private void fetchStudentDetails() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbzH90F-mXT__bwGafdJI6pNljuBDKScyc1ncuDkTqVpsXXALWxF4x3-VzfQCXIuUYd6/exec?action=getItems&email=" + email,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbzH90F-mXT__bwGafdJI6pNljuBDKScyc1ncuDkTqVpsXXALWxF4x3-VzfQCXIuUYd6/exec?action=getItems&email=" + studentData[0],
                 this::parseItems,
 
                 error -> {
@@ -166,32 +158,59 @@ public class studentLogin extends AppCompatActivity {
 
     private void parseItems(String jsonResponse) {
 
+        boolean isFirstRunStudentDetails = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getBoolean("isFirstRunStudentDetails", true);
+
         try {
             JSONObject jobj = new JSONObject(jsonResponse);
             JSONArray jarray = jobj.getJSONArray("student_database");
 
             JSONObject jo = jarray.getJSONObject(0);
 
-            uid = jo.getInt("uid");
-            name = jo.getString("name");
-            branch = jo.getString("branch");
-            cls = jo.getString("class");
-            year = jo.getInt("year");
-            Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+            studentData[1] = String.valueOf(jo.getInt("uid"));
+            studentData[2] = jo.getString("name");
+            studentData[3] = jo.getString("branch");
+            studentData[4] = jo.getString("class");
+            studentData[5] = String.valueOf(jo.getInt("year"));
 
-            if (isStudentNew) {
-                startActivity(new Intent(studentLogin.this, studentDetails.class).putExtra("email", email).putExtra("uid",uid)
-                        .putExtra("name", name).putExtra("branch",branch).putExtra("cls",cls).putExtra("year",year));
-                finish();
+            Log.i(TAG, "parseItems: "+ isNewStudent);
+            Log.i(TAG, "parseItems: "+ isFirstRunStudentDetails);
+
+            if (isFirstRunStudentDetails) {
+                Log.i(TAG, "parseItems: "+"Inside");
+                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+                Task<DocumentSnapshot> task = firestore.collection("Students").document(uid).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                if (documentSnapshot.exists())
+                                    isNewStudent = false;
+
+                                Log.i(TAG, "onComplete: "+isNewStudent);
+                                goToActivity();
+                            }
+                        });
             }
             else {
-                startActivity(new Intent(studentLogin.this, home.class).putExtra("email", email).putExtra("uid",uid)
-                        .putExtra("name", name).putExtra("branch",branch).putExtra("cls",cls).putExtra("year",year));
-                finish();
+                isNewStudent = false;
+                goToActivity();
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void goToActivity() {
+        if (isNewStudent) {
+            startActivity(new Intent(studentLogin.this, studentDetails.class).putExtra("student_data", studentData));
+            finish();
+        }
+        else {
+            startActivity(new Intent(studentLogin.this, mainScreen.class).putExtra("student_data", studentData));
+            finish();
         }
     }
 

@@ -17,6 +17,7 @@
     <color name="textColorLight">#686868</color>
     <color name="textColorLightNight">#D3D3D3</color>
     <color name="iconColor">#4C82E5</color>
+    <color name="iconColorLight">#C0D4FB</color>
     <color name="sevaTextColor">#6FA2FF</color>
     <color name="satvaTextColor">#3B71CF</color>
     <color name="BG">#F3F5FC</color>
