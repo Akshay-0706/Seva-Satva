@@ -19,6 +19,7 @@
         <item name="textColor">@color/textColorNight</item>
         <item name="textColorLight">@color/textColorLightNight</item>
         <item name="inverted">@color/textColor</item>
+        <item name="recieverChatBG">@color/receiverChatBGNight</item>
     </style>
 
     <style name="appIntoBottomDrawerTheme" parent="Theme.Design.BottomSheetDialog">

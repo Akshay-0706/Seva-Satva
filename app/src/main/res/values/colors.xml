@@ -23,4 +23,10 @@
     <color name="BG">#F3F5FC</color>
     <color name="BGNight">#333333</color>
     <color name="trans">@android:color/transparent</color>
+    <color name="receiverChatBG">#CACACA</color>
+    <color name="receiverChatBGNight">#737373</color>
+    <color name="senderChatBG">#3C5678</color>
+    <color name="chatEditBg">#1C2E46</color>
+    <color name="chatMentorTextColor">#F44336</color>
+    <color name="chatDeveloperTextColor">#00BCD4</color>
 </resources>

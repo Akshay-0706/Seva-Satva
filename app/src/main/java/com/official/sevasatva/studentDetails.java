@@ -36,7 +36,6 @@ public class studentDetails extends AppCompatActivity {
     RecyclerView recyclerView;
     studentDetailsAdapter studentDetailsAdapter;
     ArrayList<HashMap<String, String>> list;
-    String[] studentData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +43,6 @@ public class studentDetails extends AppCompatActivity {
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         setContentView(R.layout.activity_student_details);
         redirectingDialog = new Dialog(this);
-        Bundle extras = getIntent().getExtras();
-        studentData = extras.getStringArray("student_data");
 
         if (!isInternetAvailable()) {
             redirectingDialog.setContentView(R.layout.fragment_redirecting);
@@ -132,7 +129,6 @@ public class studentDetails extends AppCompatActivity {
         }
 
         studentDetailsAdapter = new studentDetailsAdapter(list);
-        studentDetailsAdapter.setDetails(studentData);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(studentDetailsAdapter);
 

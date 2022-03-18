@@ -1,9 +1,13 @@
 package com.official.sevasatva;
 
 
+import static android.content.Context.MODE_APPEND;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -25,8 +29,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,19 +46,7 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 
     private static final String TAG = "Position";
     ArrayList<HashMap<String, String>> list;
-    String[] studentData = {"", "", "", "", "", ""};
-
-
-    public void setDetails(String[] studentData) {
-        this.studentData = studentData;
-//        this.email = studentData[0];
-//        this.name = studentData[2];
-//        this.branch = studentData[3];
-//        this.cls = studentData[4];
-//        this.uid = Integer.parseInt(studentData[1]);
-//        this.year = Integer.parseInt(studentData[5]);
-
-    }
+    SharedPreferences sharedPreferences;
 
     int currentPosition = -1;
     ViewGroup viewGroup;
@@ -68,7 +66,7 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.i(TAG, String.valueOf(position)+" "+String.valueOf(currentPosition));
+        Log.i(TAG, String.valueOf(position) + " " + String.valueOf(currentPosition));
         HashMap<String, String> hashMap = list.get(position);
         holder.courseCode.setText(hashMap.get("code"));
         holder.courseName.setText(hashMap.get("name"));
@@ -92,6 +90,7 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
         ConstraintLayout constraintLayout;
         TextView courseName, courseCode, courseDescription;
         AppCompatButton courseSelectionButton;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             courseName = itemView.findViewById(R.id.courseName);
@@ -147,6 +146,10 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
         }
 
         public void addItems(String cc, String cn) {
+            sharedPreferences = viewGroup.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE);
+            sharedPreferences.edit().putString("cc", cc).apply();
+            sharedPreferences.edit().putString("cn", cn).apply();
+
             loadingDialog.setContentView(R.layout.fragment_loading);
             loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             loadingDialog.setCancelable(false);
@@ -155,37 +158,96 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
             StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwlaKsBo6JoKSO2Ww6d5359UGEW07uIBOLxYrkiZ0WMw0k5b0c-alh-Ha20SfTRz7zs/exec?action=addItems",
                     response -> {
                         loadingDialog.dismiss();
+                        int[] count = {1};
                         Map<String, Object> map = new HashMap<>();
-                        map.put("Email", studentData[0]);
-                        map.put("Course code", cc);
+                        Map<String, Object> map2 = new HashMap<>();
+                        Map<String, Object> map3 = new HashMap<>();
+
                         FirebaseAuth auth = FirebaseAuth.getInstance();
                         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                        firestore.collection("Students").document(auth.getUid()).set(map);
 
-                        Intent intent = new Intent(viewGroup.getContext(), mainScreen.class).putExtra("student_data", studentData);
-                        viewGroup.getContext().startActivity(intent);
-                        ((Activity) viewGroup.getContext()).finish();
+
+//                        firestore.collection("Courses").document(cc).set();
+                        firestore.collection("Courses").document("Enrolled").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                Map<String, Object> data = documentSnapshot.getData();
+
+                                if (data != null)
+                                    for (Map.Entry<String, Object> entry : data.entrySet()) {
+
+                                        if (entry.getKey().equals("count")) {
+                                            int count = Integer.parseInt(entry.getValue().toString());
+                                            count++;
+                                            map3.put("count", count);
+                                            map3.put("email_"+count, sharedPreferences.getString("email", "temp"));
+                                            firestore.collection("Courses").document("Enrolled").set(map3, SetOptions.merge());
+                                            break;
+                                        }
+                                    }
+                            }
+                        });
+
+                        firestore.collection("Courses").document(cc).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                Map<String, Object> data = documentSnapshot.getData();
+
+                                if (data != null)
+                                    for (Map.Entry<String, Object> entry : data.entrySet()) {
+
+                                        if (entry.getKey().equals("Students")) {
+                                            Map<String, Object> students = (Map<String, Object>) entry.getValue();
+
+                                            for (Map.Entry<String, Object> dataEntry : students.entrySet()) {
+
+                                                if (dataEntry.getKey().equals("count")) {
+                                                    count[0] = Integer.parseInt(dataEntry.getValue().toString());
+                                                    count[0]++;
+                                                    Log.d("TAG", String.valueOf(count[0]));
+
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                map2.put("count", count[0]);
+                                map2.put("email_" + count[0], sharedPreferences.getString("email", "temp"));
+                                map.put("Students", map2);
+                                firestore.collection("Courses").document(cc).set(map, SetOptions.merge());
+
+
+
+                                Intent intent = new Intent(viewGroup.getContext(), mainScreen.class);
+                                viewGroup.getContext().startActivity(intent);
+                                ((Activity) viewGroup.getContext()).finish();
+                            }
+                        });
+
+
                     },
                     error -> {
                         Toast.makeText(viewGroup.getContext(), "Here", Toast.LENGTH_SHORT).show();
                         Toast.makeText(viewGroup.getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                         loadingDialog.dismiss();
                     }
-            ){
+            ) {
                 @NonNull
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> parmas = new HashMap<>();
 
-                    parmas.put("action","addItems");
-                    parmas.put("uid",String.valueOf(studentData[1]));
-                    parmas.put("email",studentData[0]);
-                    parmas.put("name",studentData[2]);
-                    parmas.put("branch",studentData[3]);
-                    parmas.put("cls",studentData[4]);
-                    parmas.put("year",String.valueOf(studentData[5]));
-                    parmas.put("cc",cc);
-                    parmas.put("cn",cn);
+                    parmas.put("action", "addItems");
+                    parmas.put("uid", sharedPreferences.getString("uid", "temp"));
+                    parmas.put("email", sharedPreferences.getString("email", "temp"));
+                    parmas.put("name", sharedPreferences.getString("name", "temp"));
+                    parmas.put("branch", sharedPreferences.getString("branch", "temp"));
+                    parmas.put("cls", sharedPreferences.getString("class", "temp"));
+                    parmas.put("year", sharedPreferences.getString("year", "temp"));
+                    parmas.put("cc", cc);
+                    parmas.put("cn", cn);
 
                     return parmas;
                 }
@@ -200,6 +262,10 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
             queue.add(stringRequest);
         }
 
+        public void writeData(Map.Entry<String, Object> data, String cc) {
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+            firestore.collection("Courses").document(cc).set(data, SetOptions.merge());
+        }
 
     }
 

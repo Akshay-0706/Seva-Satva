@@ -54,6 +54,19 @@
     <string name="tests_heading">Tests &amp; Grades</string>
 
     <string name="pro_heading">Profile</string>
+    <string name="pro_student_name">Akshay Vhatkar</string>
+    <string name="pro_student_email">akshay.vhatkar@spit.ac.in</string>
+    <string name="pro_sem_text">Semester wise record</string>
+    <string name="pro_theme_text">Set theme</string>
+    <string name="pro_theme_light_text">Light</string>
+    <string name="pro_theme_dark_text">Dark</string>
+    <string name="pro_theme_system_text">System Default</string>
+    <string name="pro_ask_text">Ask Mentor</string>
+    <string name="pro_about_text">About Us</string>
+    <string name="pro_feedback_text">Feedback</string>
+    <string name="pro_share_text">Share</string>
+
+    <string name="chat_heading">Ask Mentor</string>
 
     <!--    String arrays-->
     <string-array name="Branches">

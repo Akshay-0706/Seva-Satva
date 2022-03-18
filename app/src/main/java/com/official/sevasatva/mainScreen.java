@@ -14,13 +14,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.official.sevasatva.databinding.ActivityMainScreenBinding;
 
 public class mainScreen extends AppCompatActivity {
 
     ActivityMainScreenBinding binding;
-    String[] studentData = {"", "", "", "", "", ""};
     String value = "home";
 
     @Override
@@ -32,11 +32,8 @@ public class mainScreen extends AppCompatActivity {
         replaceFragment(new home());
         setNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
 
-        Bundle extras = getIntent().getExtras();
-        studentData = extras.getStringArray("student_data");
-
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isFirstRunStudentDetails", false).apply();
+                .putBoolean("isFirstLaunch", false).apply();
 
         findViewById(R.id.homeTab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,8 +68,6 @@ public class mainScreen extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -97,10 +92,10 @@ public class mainScreen extends AppCompatActivity {
         transitionDrawable1.setCrossFadeEnabled(true);
         transitionDrawable2.setCrossFadeEnabled(true);
         linearLayout.setBackground(transitionDrawable1);
-        transitionDrawable1.startTransition(500);
+        transitionDrawable1.startTransition(300);
 
         imageView.setBackground(transitionDrawable2);
-        transitionDrawable2.startTransition(500);
+        transitionDrawable2.startTransition(300);
 
         textView.setText(text);
     }
@@ -157,10 +152,10 @@ public class mainScreen extends AppCompatActivity {
         transitionDrawable2.setCrossFadeEnabled(true);
 
         linearLayoutCurrent.setBackground(transitionDrawable1);
-        transitionDrawable1.startTransition(500);
+        transitionDrawable1.startTransition(300);
 
         imageViewCurrent.setBackground(transitionDrawable2);
-        transitionDrawable2.startTransition(500);
+        transitionDrawable2.startTransition(300);
 
         textViewCurrent.setText(null);
         setNavTab(linearLayoutNew, imageViewNew, textViewNew, text, drawableNew, drawableNewSelected);

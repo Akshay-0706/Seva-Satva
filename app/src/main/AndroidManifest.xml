@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Official.SevaSatva">
         <activity
+            android:name=".chatScreen"
+            android:exported="false" />
+        <activity
             android:name=".home_announcements"
             android:exported="false" />
         <activity

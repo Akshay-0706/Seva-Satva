@@ -7,4 +7,5 @@
     <attr name="white" format="color"/>
     <attr name="black" format="color"/>
     <attr name="inverted" format="color"/>
+    <attr name="recieverChatBG" format="color"/>
 </resources>
