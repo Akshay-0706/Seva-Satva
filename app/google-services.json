@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "426988667812",
+    "project_id": "seva-satva",
+    "storage_bucket": "seva-satva.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426988667812:android:1438c89eaac67e2929b731",
+        "android_client_info": {
+          "package_name": "com.official.sevasatva"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426988667812-meoa78skojkt8d3u0rs5mi9dd4i5nok3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhnho8hLrG6LEGOUFHOqHBkZLFYi2NOCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426988667812-meoa78skojkt8d3u0rs5mi9dd4i5nok3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

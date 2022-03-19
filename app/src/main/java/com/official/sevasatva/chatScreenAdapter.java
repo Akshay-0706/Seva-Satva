@@ -1,14 +1,11 @@
 package com.official.sevasatva;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,12 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.MyViewHolder> {
 
     private List<chatScreenModel> chatList;
     private final Context context;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
     String todaysDate = dateFormat.format(new Date());
 
     public chatScreenAdapter(List<chatScreenModel> chatList, Context context) {
@@ -50,7 +48,7 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
         if (list2 == null || !list.getDate().equals(list2.getDate())) {
             holder.chatDateLayout.setVisibility(View.VISIBLE);
             if (list.getDate().equals(todaysDate))
-                holder.chatDate.setText("Today");
+                holder.chatDate.setText(R.string.chat_today);
             else
                 holder.chatDate.setText(list.getDate());
         } else {
@@ -61,7 +59,7 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
             holder.senderLayout.setVisibility(View.VISIBLE);
             holder.receiverLayout.setVisibility(View.GONE);
 
-            holder.senderName.setText("You");
+            holder.senderName.setText(R.string.chat_you);
             holder.senderMessage.setText(list.getMsg());
 
             if (list.getEmail().equals("akshay.vhatkar@spit.ac.in")
@@ -108,8 +106,8 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private ConstraintLayout chatDateLayout, receiverLayout, senderLayout;
-        private TextView chatDate, receiverName, receiverMessage, receiverTime, senderName, senderMessage, senderTime;
+        final private ConstraintLayout chatDateLayout, receiverLayout, senderLayout;
+        final private TextView chatDate, receiverName, receiverMessage, receiverTime, senderName, senderMessage, senderTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/baloo_bhai_regular"
-            android:text="18 March 2022"
+            android:text="@string/chat_date"
             android:textColor="?attr/textColorLight"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/baloo_bhai_regular"
             android:gravity="start"
-            android:text="Akshay Vhatkar"
+            android:text="@string/chat_name"
             android:textColor="?attr/textColorLight"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -107,7 +107,7 @@
                 android:background="@drawable/chat_screen_receiver_bg"
                 android:fontFamily="@font/baloo_bhai_regular"
                 android:padding="20dp"
-                android:text="Good morning"
+                android:text="@string/chat_msg"
                 android:textColor="@color/textColor" />
 
             <TextView
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/baloo_bhai_regular"
                 android:gravity="start"
-                android:text="3:06 am"
+                android:text="@string/chat_time"
                 android:textColor="?attr/textColorLight" />
 
         </LinearLayout>
@@ -143,7 +143,7 @@
             android:layout_marginEnd="30dp"
             android:fontFamily="@font/baloo_bhai_regular"
             android:gravity="end"
-            android:text="Akshay Vhatkar"
+            android:text="@string/chat_name"
             android:textColor="?attr/textColorLight"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -173,7 +173,7 @@
                 android:background="@drawable/chat_screen_sender_bg"
                 android:fontFamily="@font/baloo_bhai_regular"
                 android:padding="20dp"
-                android:text="Good morning"
+                android:text="@string/chat_msg"
                 android:textColor="@color/textColorNight" />
 
             <TextView
@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/baloo_bhai_regular"
                 android:gravity="end"
-                android:text="3:06 am"
+                android:text="@string/chat_time"
                 android:textColor="?attr/textColorLight" />
 
         </LinearLayout>

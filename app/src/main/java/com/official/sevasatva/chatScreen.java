@@ -33,7 +33,6 @@ public class chatScreen extends AppCompatActivity {
     private RecyclerView chatRecyclerView;
     private final List<chatScreenModel> chatList = new ArrayList<>();
     private chatScreenAdapter chatScreenAdapter;
-    private Boolean loadingFirstTime = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +103,7 @@ public class chatScreen extends AppCompatActivity {
 
     private void sendMessage(String message) {
         String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
         String currentDate = dateFormat.format(new Date());
         String currentTime = timeFormat.format(new Date());

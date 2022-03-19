@@ -67,6 +67,12 @@
     <string name="pro_share_text">Share</string>
 
     <string name="chat_heading">Ask Mentor</string>
+    <string name="chat_date">07/06/2003</string>
+    <string name="chat_name">Akshay Vhatkar</string>
+    <string name="chat_msg">Good morning</string>
+    <string name="chat_time">5:00 am</string>
+    <string name="chat_today">Today</string>
+    <string name="chat_you">You</string>
 
     <!--    String arrays-->
     <string-array name="Branches">
