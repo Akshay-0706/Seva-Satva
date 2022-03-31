@@ -1,7 +1,6 @@
 package com.official.sevasatva;
 
 
-import static android.content.Context.MODE_APPEND;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
@@ -30,10 +29,8 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -158,79 +155,77 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
             StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwlaKsBo6JoKSO2Ww6d5359UGEW07uIBOLxYrkiZ0WMw0k5b0c-alh-Ha20SfTRz7zs/exec?action=addItems",
                     response -> {
                         loadingDialog.dismiss();
-                        int[] count = {1};
                         Map<String, Object> map = new HashMap<>();
-                        Map<String, Object> map2 = new HashMap<>();
-                        Map<String, Object> map3 = new HashMap<>();
+//                        Map<String, Object> map3 = new HashMap<>();
 
-                        FirebaseAuth auth = FirebaseAuth.getInstance();
                         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
+//                        firestore.collection("Courses").document("Enrolled").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                DocumentSnapshot documentSnapshot = task.getResult();
+//                                Map<String, Object> data = documentSnapshot.getData();
 
-//                        firestore.collection("Courses").document(cc).set();
-                        firestore.collection("Courses").document("Enrolled").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                DocumentSnapshot documentSnapshot = task.getResult();
-                                Map<String, Object> data = documentSnapshot.getData();
+//                                if (data != null)
+//                                    for (Map.Entry<String, Object> entry : data.entrySet()) {
 
-                                if (data != null)
-                                    for (Map.Entry<String, Object> entry : data.entrySet()) {
+//                                        if (entry.getKey().equals("count")) {
+//                                            int count = Integer.parseInt(entry.getValue().toString());
+//                                            count++;
+//                                            map3.put("count", count);
+                        map.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), sharedPreferences.getString("email", "temp"));
+                        firestore.collection("Courses").document("Students").set(map, SetOptions.merge());
 
-                                        if (entry.getKey().equals("count")) {
-                                            int count = Integer.parseInt(entry.getValue().toString());
-                                            count++;
-                                            map3.put("count", count);
-                                            map3.put("email_"+count, sharedPreferences.getString("email", "temp"));
-                                            firestore.collection("Courses").document("Enrolled").set(map3, SetOptions.merge());
-                                            break;
-                                        }
-                                    }
-                            }
-                        });
+//                                        }
+//                                    }
+//                            }
+//                        });
 
-                        firestore.collection("Courses").document(cc).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                DocumentSnapshot documentSnapshot = task.getResult();
-                                Map<String, Object> data = documentSnapshot.getData();
+//                        firestore.collection("Courses").document(cc).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                DocumentSnapshot documentSnapshot = task.getResult();
+//                                Map<String, Object> data = documentSnapshot.getData();
+//
+//                                if (data != null)
+//                                    for (Map.Entry<String, Object> entry : data.entrySet()) {
+//
+//                                        if (entry.getKey().equals("Students")) {
+//                                            Map<String, Object> students = (Map<String, Object>) entry.getValue();
+//
+//                                            for (Map.Entry<String, Object> dataEntry : students.entrySet()) {
+//
+//                                                if (dataEntry.getKey().equals("count")) {
+//                                                    count[0] = Integer.parseInt(dataEntry.getValue().toString());
+//                                                    count[0]++;
+//                                                    Log.d("TAG", String.valueOf(count[0]));
+//
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+                        map.clear();
+                        map.put("email", sharedPreferences.getString("email", "temp"));
+                        map.put("mentor", "Not allocated");
 
-                                if (data != null)
-                                    for (Map.Entry<String, Object> entry : data.entrySet()) {
+//                                map2.put("count", count[0]);
+//                                map2.put("email_" + count[0], sharedPreferences.getString("email", "temp"));
+                        Map<String, Object> map2 = new HashMap<>();
+                        map2.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), map);
+                        Map<String, Object> map3 = new HashMap<>();
+                        map3.put("Students", map2);
+                        firestore.collection("Courses").document(cc).set(map3, SetOptions.merge());
 
-                                        if (entry.getKey().equals("Students")) {
-                                            Map<String, Object> students = (Map<String, Object>) entry.getValue();
-
-                                            for (Map.Entry<String, Object> dataEntry : students.entrySet()) {
-
-                                                if (dataEntry.getKey().equals("count")) {
-                                                    count[0] = Integer.parseInt(dataEntry.getValue().toString());
-                                                    count[0]++;
-                                                    Log.d("TAG", String.valueOf(count[0]));
-
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                map2.put("count", count[0]);
-                                map2.put("email_" + count[0], sharedPreferences.getString("email", "temp"));
-                                map.put("Students", map2);
-                                firestore.collection("Courses").document(cc).set(map, SetOptions.merge());
-
-
-
-                                Intent intent = new Intent(viewGroup.getContext(), mainScreen.class);
-                                viewGroup.getContext().startActivity(intent);
-                                ((Activity) viewGroup.getContext()).finish();
-                            }
-                        });
+                        Intent intent = new Intent(viewGroup.getContext(), studentScreen.class);
+                        viewGroup.getContext().startActivity(intent);
+                        ((Activity) viewGroup.getContext()).finish();
+//                            }
+//                        });
 
 
                     },
                     error -> {
-                        Toast.makeText(viewGroup.getContext(), "Here", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(viewGroup.getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(viewGroup.getContext(), "An error occured: " + error.getMessage(), Toast.LENGTH_LONG).show();
                         loadingDialog.dismiss();
                     }
             ) {
@@ -260,11 +255,6 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 
             RequestQueue queue = Volley.newRequestQueue(viewGroup.getContext());
             queue.add(stringRequest);
-        }
-
-        public void writeData(Map.Entry<String, Object> data, String cc) {
-            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            firestore.collection("Courses").document(cc).set(data, SetOptions.merge());
         }
 
     }

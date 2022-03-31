@@ -36,7 +36,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +75,6 @@ public class studentLogin extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         resultLauncher.launch(new Intent(googleSignInClient.getSignInIntent()));
-
     }
 
     ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -122,7 +120,7 @@ public class studentLogin extends AppCompatActivity {
                         if (sharedPreferences.getBoolean("isFirstLaunch", true))
                             fetchStudentDetails();
                         else {
-                            startActivity(new Intent(studentLogin.this, mainScreen.class));
+                            startActivity(new Intent(studentLogin.this, studentScreen.class));
                             finish();
                         }
                     }
@@ -141,6 +139,7 @@ public class studentLogin extends AppCompatActivity {
                 this::parseItems,
 
                 error -> {
+                    Toast.makeText(this, "Unable to access student data!", Toast.LENGTH_LONG).show();
                 }
         );
 
@@ -166,24 +165,34 @@ public class studentLogin extends AppCompatActivity {
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-            firestore.collection("Courses").document("Enrolled").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            firestore.collection("Courses").document("Students").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    int count = Objects.requireNonNull(documentSnapshot.getLong("count")).intValue();
+                    DocumentSnapshot documentSnapshot = null;
+                    Map<String, Object> data = null;
+                    if (task.getResult() != null)
+                        documentSnapshot = task.getResult();
+                    if (documentSnapshot.getData() != null)
+                        data = documentSnapshot.getData();
 
-                    for (int i = 1; i < count + 1; i++)
-                        if (Objects.equals(documentSnapshot.getString("email_" + i), sharedPreferences.getString("email", "temp"))) {
+                    boolean isAllowed = (boolean) data.get("areAllowed");
+
+                    for (Map.Entry<String, Object> entry : data.entrySet()) {
+                        if (entry.getValue().equals(sharedPreferences.getString("email", "temp"))) {
                             isNewStudent = false;
                             break;
                         }
+                    }
 
-                    if (isNewStudent) {
+                    if (!isAllowed && isNewStudent) {
+                        Toast.makeText(studentLogin.this, "Course enrollment has stopped!\nPlease contact our organizer if you missed enrollment.", Toast.LENGTH_LONG).show();
+                        finishAndRemoveTask();
+                    } else if (isNewStudent) {
                         startActivity(new Intent(studentLogin.this, studentDetails.class));
                         finish();
-                    }
-                    else {
-                        startActivity(new Intent(studentLogin.this, mainScreen.class));
+
+                    } else {
+                        startActivity(new Intent(studentLogin.this, studentScreen.class));
                         finish();
                     }
                 }
@@ -192,6 +201,7 @@ public class studentLogin extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Your data is not listed in our database, please contact our organizer.", Toast.LENGTH_LONG).show();
         }
     }
 

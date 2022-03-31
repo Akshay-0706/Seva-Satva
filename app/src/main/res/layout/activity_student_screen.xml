@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/bg"
+    tools:context=".studentScreen">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/bg"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="4"
+        app:layout_constraintVertical_bias="1">
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:transitionName="resTransition"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/homeTab"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/homeIcon"
+                android:layout_width="24dp"
+                android:layout_gravity="center"
+                android:transitionName="resTransImage"
+                android:background="@drawable/xtra_home_icon"
+                android:layout_height="24dp"/>
+            <TextView
+                android:id="@+id/homeTabText"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/baloo_bhai_regular"
+                android:transitionName="resTransText"
+                android:textColor="@color/iconColor"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:transitionName="ansTransition"
+            android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/newsTab"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/newsIcon"
+                android:layout_width="22dp"
+                android:background="@drawable/xtra_news_icon"
+                android:layout_gravity="center"
+                android:transitionName="ansTransImage"
+                android:layout_height="22dp"/>
+            <TextView
+                android:id="@+id/newsTabText"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/iconColor"
+                android:fontFamily="@font/baloo_bhai_regular"
+                android:transitionName="ansTransText"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:transitionName="testsTransition"
+            android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/testsTab"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/testsIcon"
+                android:layout_width="26dp"
+                android:background="@drawable/xtra_tests_icon"
+                android:layout_gravity="center"
+                android:transitionName="testsTransImage"
+                android:layout_height="26dp"/>
+            <TextView
+                android:id="@+id/testsTabText"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/iconColor"
+                android:fontFamily="@font/baloo_bhai_regular"
+                android:transitionName="testsTransText"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:transitionName="proTransition"
+            android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/proTab"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/proIcon"
+                android:layout_width="22dp"
+                android:background="@drawable/xtra_pro_icon"
+                android:layout_gravity="center"
+                android:transitionName="proTransImage"
+                android:layout_height="22dp"/>
+            <TextView
+                android:id="@+id/proTabText"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/iconColor"
+                android:fontFamily="@font/baloo_bhai_regular"
+                android:transitionName="proTransText"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

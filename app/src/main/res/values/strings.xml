@@ -48,6 +48,10 @@
     <string name="home_temp_lec_info_text">No lectures scheduled! Ask your mentor to schedule lectures to reflect changes in the app</string>
 
     <string name="ans_heading">Announcements</string>
+    <string name="ansTitle">Title</string>
+    <string name="ansDesc">Description</string>
+    <string name="ansAttach"><u>View attachments</u></string>
+    <string name="mentor_home_ans_create_ans_text">Create Announcement</string>
 
     <string name="news_heading">News</string>
 
@@ -67,12 +71,14 @@
     <string name="pro_share_text">Share</string>
 
     <string name="chat_heading">Ask Mentor</string>
+    <string name="chat_heading_mentor">Student Doubts</string>
     <string name="chat_date">07/06/2003</string>
     <string name="chat_name">Akshay Vhatkar</string>
     <string name="chat_msg">Good morning</string>
     <string name="chat_time">5:00 am</string>
     <string name="chat_today">Today</string>
     <string name="chat_you">You</string>
+
 
     <!--    String arrays-->
     <string-array name="Branches">
@@ -105,6 +111,7 @@
     <string name="error_302">Camera permission denied</string>
     <!--    400 series - Files and media-->
     <string name="error_400">This type of media is not supported</string>
+    <string name="error_401">No file chosen</string>
     <string name="error_404">File not found</string>
     <!--    500 series - Others-->
     <string name="error_500">Loading time out</string>

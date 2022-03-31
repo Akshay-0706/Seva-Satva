@@ -55,7 +55,7 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
             holder.chatDateLayout.setVisibility(View.GONE);
         }
 
-        if (list.getEmail().equals(context.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("email", "temp"))) {
+        if (list.getEmail().equals(context.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("email", "mentor@spit.ac.in"))) {
             holder.senderLayout.setVisibility(View.VISIBLE);
             holder.receiverLayout.setVisibility(View.GONE);
 
@@ -98,10 +98,6 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
     @Override
     public int getItemCount() {
         return chatList.size();
-    }
-
-    public void updateChatList(List<chatScreenModel> chatList) {
-        this.chatList = chatList;
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

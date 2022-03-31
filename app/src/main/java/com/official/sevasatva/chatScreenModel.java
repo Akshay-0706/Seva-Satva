@@ -8,6 +8,18 @@ public class chatScreenModel {
     String name;
     String time;
 
+    public chatScreenModel() {
+    }
+
+    public chatScreenModel(String date, String email, Boolean isStudent, String msg, String name, String time) {
+        this.date = date;
+        this.email = email;
+        this.isStudent = isStudent;
+        this.msg = msg;
+        this.name = name;
+        this.time = time;
+    }
+
     public String getDate() {
         return date;
     }
@@ -32,15 +44,4 @@ public class chatScreenModel {
         return time;
     }
 
-    public chatScreenModel() {
-    }
-
-    public chatScreenModel(String date, String email, Boolean isStudent, String msg, String name, String time) {
-        this.date = date;
-        this.email = email;
-        this.isStudent = isStudent;
-        this.msg = msg;
-        this.name = name;
-        this.time = time;
-    }
 }

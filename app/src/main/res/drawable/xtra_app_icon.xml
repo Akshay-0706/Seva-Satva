@@ -12,13 +12,13 @@
         android:pathData="M469,5227h1365v1391h-1365z"/>
     <path
         android:pathData="M477,5856l621,-621l727,754l-621,621z"
-        android:fillColor="#434242"/>
+        android:fillColor="#2F5395"/>
   </group>
   <group>
     <clip-path
         android:pathData="M2641,7436h1329v1336h-1329z"/>
     <path
         android:pathData="M2650,8010c220,-165 409,-337 621,-566l691,763c-216,217 -369,379 -585,556l-727,-754z"
-        android:fillColor="#434242"/>
+        android:fillColor="#2F5395"/>
   </group>
 </vector>

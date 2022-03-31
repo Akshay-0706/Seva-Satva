@@ -18,9 +18,9 @@ public class splash extends AppCompatActivity {
         TextView slashText = (TextView) findViewById(R.id.splashTextSlash);
         TextView satvaText = (TextView) findViewById(R.id.splashTextSatva);
 
-        sevaText.animate().alpha(1).setDuration(1000);
-        slashText.animate().alpha(1).setDuration(1500);
-        satvaText.animate().alpha(1).setDuration(2000);
+        sevaText.animate().alpha(1).setDuration(500);
+        slashText.animate().alpha(1).setDuration(1000);
+        satvaText.animate().alpha(1).setDuration(1500);
 
 
         new Handler().postDelayed(new Runnable() {
@@ -32,6 +32,8 @@ public class splash extends AppCompatActivity {
 
                 boolean isUserStudent = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                         .getBoolean("isUserStudent", true);
+
+                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", true).apply();
 
                 if (isFirstRunAppIntro) {
                     //show start activity
@@ -50,6 +52,6 @@ public class splash extends AppCompatActivity {
 
 
             }
-        }, 3000);
+        }, 2000);
     }
 }

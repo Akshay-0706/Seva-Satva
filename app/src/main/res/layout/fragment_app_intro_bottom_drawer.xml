@@ -89,7 +89,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:textAllCaps="false"
-        android:background="@drawable/default_main_btn_bg"
+        android:background="@drawable/app_intro_bottom_drawer_btn_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -13,13 +13,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Official.SevaSatva">
         <activity
+            android:name=".mentorAllocator"
+            android:exported="false" />
+        <activity
+            android:name=".mentorAllocation"
+            android:exported="false" />
+        <activity
+            android:name=".adminScreen"
+            android:exported="false" />
+        <activity
+            android:name=".mentorHomeAns"
+            android:exported="false" />
+        <activity
+            android:name=".mentorScreen"
+            android:exported="false" />
+        <activity
             android:name=".chatScreen"
             android:exported="false" />
         <activity
-            android:name=".home_announcements"
+            android:name=".studentHomeAns"
             android:exported="false" />
         <activity
-            android:name=".mainScreen"
+            android:name=".studentScreen"
             android:exported="false" />
         <activity
             android:name=".studentLogin"
