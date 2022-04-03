@@ -7,6 +7,8 @@
 
     <string name="confirmation_dialog_temp_heading_text">Confirm</string>
     <string name="confirmation_dialog_temp_info_text">You won\'t be able to change your course again!</string>
+    <string name="confirmation_dialog_temp_course_text">Selected course:</string>
+    <string name="confirmation_dialog_temp_course_code_text">SV10</string>
     <string name="confirmation_dialog_temp_yes_text">Yes</string>
     <string name="confirmation_dialog_temp_no_text">No</string>
 
@@ -32,6 +34,7 @@
     <string name="login_contact_us_text">Contact us</string>
 
     <string name="student_details_heading">Select course</string>
+    <string name="student_details_search">Search</string>
     <string name="student_details_select_text">Select</string>
     <string name="student_details_temp_cc_text">SV12</string>
     <string name="student_details_temp_cn_text">India\'s top 2 problems</string>
@@ -43,9 +46,18 @@
     <string name="home_greeting">Hi,</string>
     <string name="home_greeting_name">Akshay</string>
     <string name="home_tests_text">Upcoming tests</string>
-    <string name="home_temp_tests_info_text">No test scheduled in this week</string>
+    <string name="home_temp_tests_info_text">No test scheduled in this week.</string>
     <string name="home_lec_text">Lectures schedule</string>
     <string name="home_temp_lec_info_text">No lectures scheduled! Ask your mentor to schedule lectures to reflect changes in the app</string>
+    <string name="home_page_adapter_ans_heading">Check</string>
+    <string name="home_page_adapter_news_heading">Explore</string>
+    <string name="home_page_adapter_doubts_heading">Ask</string>
+    <string name="home_page_adapter_ans_title">Announcements</string>
+    <string name="home_page_adapter_news_title">News Section</string>
+    <string name="home_page_adapter_doubts_title">Doubts</string>
+    <string name="home_page_adapter_ans_desc">Check for new announcements and attachments.</string>
+    <string name="home_page_adapter_news_desc">Get latest news every day.</string>
+    <string name="home_page_adapter_doubts_desc">Ask and discuss your doubts with mentor.</string>
 
     <string name="ans_heading">Announcements</string>
     <string name="ansTitle">Title</string>

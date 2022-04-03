@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/sliderImage"
+        android:id="@+id/appIntroSliderAnim"
         android:layout_width="300dp"
         android:layout_height="300dp"
         app:lottie_autoPlay="true"
@@ -19,16 +19,16 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <TextView
-        android:id="@+id/sliderHeading"
+        android:id="@+id/appIntroSliderHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_intro_st_heading"
         android:textSize="24sp"
         android:textColor="?attr/textColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/sliderImage"
-        app:layout_constraintStart_toStartOf="@+id/sliderImage"
-        app:layout_constraintTop_toBottomOf="@+id/sliderImage"
+        app:layout_constraintEnd_toEndOf="@+id/appIntroSliderAnim"
+        app:layout_constraintStart_toStartOf="@+id/appIntroSliderAnim"
+        app:layout_constraintTop_toBottomOf="@+id/appIntroSliderAnim"
         app:layout_constraintVertical_bias="0.12" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

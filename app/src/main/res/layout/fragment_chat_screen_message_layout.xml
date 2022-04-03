@@ -35,7 +35,7 @@
             android:id="@+id/chatDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/baloo_bhai_regular"
+            android:fontFamily="@font/poppins"
             android:text="@string/chat_date"
             android:textColor="?attr/textColorLight"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/baloo_bhai_regular"
+            android:fontFamily="@font/poppins"
             android:gravity="start"
             android:text="@string/chat_name"
             android:textColor="?attr/textColorLight"
@@ -105,16 +105,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/chat_screen_receiver_bg"
-                android:fontFamily="@font/baloo_bhai_regular"
+                android:fontFamily="@font/poppins"
                 android:padding="20dp"
                 android:text="@string/chat_msg"
-                android:textColor="@color/textColor" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/receiverTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/baloo_bhai_regular"
+                android:fontFamily="@font/poppins"
                 android:gravity="start"
                 android:text="@string/chat_time"
                 android:textColor="?attr/textColorLight" />
@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="30dp"
-            android:fontFamily="@font/baloo_bhai_regular"
+            android:fontFamily="@font/poppins"
             android:gravity="end"
             android:text="@string/chat_name"
             android:textColor="?attr/textColorLight"
@@ -171,16 +171,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/chat_screen_sender_bg"
-                android:fontFamily="@font/baloo_bhai_regular"
+                android:fontFamily="@font/poppins"
                 android:padding="20dp"
                 android:text="@string/chat_msg"
-                android:textColor="@color/textColorNight" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/senderTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/baloo_bhai_regular"
+                android:fontFamily="@font/poppins"
                 android:gravity="end"
                 android:text="@string/chat_time"
                 android:textColor="?attr/textColorLight" />

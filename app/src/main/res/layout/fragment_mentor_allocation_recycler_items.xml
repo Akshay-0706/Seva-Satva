@@ -52,7 +52,7 @@
             android:id="@+id/mentorAlcName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/baloo_bhai_regular"
+            android:fontFamily="@font/poppins"
             android:text="@string/student_details_temp_cn_text"
             android:textColor="?attr/textColor"
             android:textSize="18sp"
@@ -68,7 +68,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/baloo_bhai_regular"
+            android:fontFamily="@font/poppins"
             android:text="@string/student_details_temp_cc_text"
             android:textColor="?attr/textColorLight"
             android:textSize="16sp"
@@ -86,14 +86,14 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="@color/trans"
-            android:fontFamily="@font/baloo_bhai_regular"
+            android:fontFamily="@font/poppins"
             android:src="@drawable/xtra_goto_icon"
             app:layout_constraintBottom_toBottomOf="@+id/mentorAlcCode"
             app:layout_constraintEnd_toStartOf="@+id/guidelineStudentEnd"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"
             app:layout_constraintTop_toTopOf="@+id/mentorAlcName"
-            app:tint="@color/textColor" />
+            app:tint="@color/black" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

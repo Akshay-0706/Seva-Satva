@@ -7,12 +7,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +77,43 @@ public class studentHome extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ViewPager viewPager;
+        viewPager = getView().findViewById(R.id.studentHomeViewPager);
+
+        studentHomePageAdapter studentHomePageAdapter = new studentHomePageAdapter(getActivity());
+        viewPager.setAdapter(studentHomePageAdapter);
+
+        Handler handler = new Handler();
+        final int[] currentPage = {viewPager.getCurrentItem()};
+
+        Runnable update = new Runnable() {
+
+            public void run() {
+                currentPage[0]++;
+                if (currentPage[0] == 3) {
+                    currentPage[0] = 0;
+                }
+                viewPager.setCurrentItem(currentPage[0], true);
+            }
+        };
+
+        new Timer().schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                handler.post(update);
+            }
+        }, 5000, 5000);
+
         ((TextView) getView().findViewById(R.id.homeName)).setText(getFirstName());
+        ((TextView) getView().findViewById(R.id.homeCourseName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("cn", "India's top problems"));
+        ((TextView) getView().findViewById(R.id.homeCourseCode)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("cc", "SV12"));
+        ((TextView) getView().findViewById(R.id.homeCourseDesc)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("desc", "Study of India's top two problems"));
+        ((TextView) getView().findViewById(R.id.homeCourseEvalType)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("eval", "Your mentor will set the evaluation type soon."));
 
         getView().findViewById(R.id.homeAnsBtn).setOnClickListener(new View.OnClickListener() {
             @Override

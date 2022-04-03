@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,7 @@ public class appIntroPageAdapter extends PagerAdapter {
         this.context = context;
     }
 
-    public String[] sliderImages = {
+    public String[] sliderAnim = {
             "app_intro_student.json",
             "app_intro_mentor.json"
     };
@@ -48,10 +47,10 @@ public class appIntroPageAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.fragment_app_intro_slider_pages, container, false);
 
-        LottieAnimationView sliderImage = (LottieAnimationView) view.findViewById(R.id.sliderImage);
-        TextView sliderHeading = (TextView) view.findViewById(R.id.sliderHeading);
+        LottieAnimationView sliderImage = (LottieAnimationView) view.findViewById(R.id.appIntroSliderAnim);
+        TextView sliderHeading = (TextView) view.findViewById(R.id.appIntroSliderHeading);
 
-        sliderImage.setAnimation(sliderImages[position]);
+        sliderImage.setAnimation(sliderAnim[position]);
         sliderHeading.setText(sliderHeadings[position]);
         container.addView(view);
 

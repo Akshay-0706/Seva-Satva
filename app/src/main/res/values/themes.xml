@@ -16,9 +16,11 @@
 
     <style name="Theme.Official.SevaSatva" parent="Theme.MaterialComponents.NoActionBar">
         <item name="bg">@color/BG</item>
-        <item name="textColor">@color/textColor</item>
+        <item name="bgSec">@color/BGSec</item>
+        <item name="textColor">@color/black</item>
         <item name="textColorLight">@color/textColorLight</item>
-        <item name="inverted">@color/textColorNight</item>
+        <item name="inverted">@color/white</item>
+        <item name="tabTextColor">@color/black</item>
         <item name="recieverChatBG">@color/receiverChatBG</item>
     </style>
 
@@ -35,7 +37,7 @@
         <item name="colorControlActivated">@color/iconColor</item>
 
         <!-- inactive thumb color -->
-        <item name="colorSwitchThumbNormal">@color/textColorNight
+        <item name="colorSwitchThumbNormal">@color/white
         </item>
 
         <!-- inactive track color (30% transparency) -->

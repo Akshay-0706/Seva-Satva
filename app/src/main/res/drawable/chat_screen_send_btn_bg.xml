@@ -3,7 +3,7 @@
     android:shape="oval">
 
     <gradient
-        android:startColor="@color/chatEditBg"
-        android:endColor="@color/chatEditBg"
+        android:startColor="@color/BGSec"
+        android:endColor="@color/BGSec"
         android:angle="270" />
 </shape>

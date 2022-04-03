@@ -45,7 +45,7 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
     ArrayList<HashMap<String, String>> list;
     SharedPreferences sharedPreferences;
 
-    int currentPosition = -1;
+    int previousExpanded = -1;
     ViewGroup viewGroup;
 
     public studentDetailsAdapter(ArrayList<HashMap<String, String>> list) {
@@ -63,7 +63,7 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.i(TAG, String.valueOf(position) + " " + String.valueOf(currentPosition));
+        Log.i(TAG, String.valueOf(position) + " " + String.valueOf(previousExpanded));
         HashMap<String, String> hashMap = list.get(position);
         holder.courseCode.setText(hashMap.get("code"));
         holder.courseName.setText(hashMap.get("name"));
@@ -71,13 +71,19 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
         String isExpanded = hashMap.get("isExpanded");
         assert isExpanded != null;
         holder.courseLayoutDescription.setVisibility(isExpanded.equals("true") ? View.VISIBLE : View.GONE);
+
         if (isExpanded.equals("true"))
-            currentPosition = holder.getAdapterPosition();
+            previousExpanded = holder.getAdapterPosition();
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void filteredList(ArrayList<HashMap<String, String>> newList) {
+        list = newList;
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -101,14 +107,33 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
                 @Override
                 public void onClick(View v) {
                     HashMap<String, String> hashMap = list.get(getAdapterPosition());
+
                     String isExpanded = hashMap.get("isExpanded");
                     assert isExpanded != null;
                     if (isExpanded.equals("false"))
                         hashMap.put("isExpanded", "true");
                     else
                         hashMap.put("isExpanded", "false");
-                    notifyItemChanged(currentPosition);
                     notifyItemChanged(getAdapterPosition());
+
+                    if (previousExpanded == getAdapterPosition())
+                        previousExpanded = -1;
+
+                    HashMap<String, String> hashMap2 = null;
+                    if (previousExpanded != -1 && list.size() > 1)
+                        hashMap2 = list.get(previousExpanded);
+
+                    String isExpanded2;
+                    if (hashMap2 != null)
+                    {
+                        isExpanded2 = hashMap2.get("isExpanded");
+                        assert isExpanded2 != null;
+                        if (isExpanded2.equals("false"))
+                            hashMap2.put("isExpanded", "true");
+                        else
+                            hashMap2.put("isExpanded", "false");
+                        notifyItemChanged(previousExpanded);
+                    }
                 }
             });
 
@@ -120,6 +145,9 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
                     confirmationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     confirmationDialog.setCancelable(false);
                     confirmationDialog.show();
+                    HashMap<String, String> hashMap = list.get(getAdapterPosition());
+
+                    ((TextView) confirmationDialog.findViewById(R.id.confirmCourseCode)).setText(hashMap.get("code"));
 
                     confirmationDialog.findViewById(R.id.confirmNoButton).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -132,20 +160,20 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
                         @Override
                         public void onClick(View v) {
                             confirmationDialog.dismiss();
-                            addItems(courseCode.getText().toString(), courseName.getText().toString());
+                            addItems(courseCode.getText().toString(), courseName.getText().toString(), courseDescription.getText().toString());
                         }
                     });
 
                 }
             });
 
-
         }
 
-        public void addItems(String cc, String cn) {
+        public void addItems(String cc, String cn, String desc) {
             sharedPreferences = viewGroup.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE);
             sharedPreferences.edit().putString("cc", cc).apply();
             sharedPreferences.edit().putString("cn", cn).apply();
+            sharedPreferences.edit().putString("desc", desc).apply();
 
             loadingDialog.setContentView(R.layout.fragment_loading);
             loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

@@ -34,7 +34,7 @@ public class appIntro extends AppCompatActivity {
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         setContentView(R.layout.activity_app_intro);
 
-        viewPager = findViewById(R.id.viewPager);
+        viewPager = findViewById(R.id.appIntroViewPager);
         linearLayout = findViewById(R.id.dotsLayout);
         nextBtn = findViewById(R.id.appIntroNext);
         prevBtn = findViewById(R.id.appIntroPrev);
@@ -116,7 +116,7 @@ public class appIntro extends AppCompatActivity {
         }
 
         if (dots.length > 0)
-            dots[position].setTextColor(getResources().getColor(R.color.textColor));
+            dots[position].setTextColor(getResources().getColor(R.color.black));
     }
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {

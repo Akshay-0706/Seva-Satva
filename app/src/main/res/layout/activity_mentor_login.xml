@@ -185,7 +185,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/baloo_bhai_regular"
+            android:fontFamily="@font/poppins"
             android:text="@string/login_mentor_login_text"
             android:textColor="?attr/textColor"
             android:textSize="30sp"

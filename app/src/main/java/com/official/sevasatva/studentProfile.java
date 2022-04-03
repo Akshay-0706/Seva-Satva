@@ -94,21 +94,21 @@ public class studentProfile extends Fragment {
         ((TextView) getView().findViewById(R.id.proName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("name", "User"));
         ((TextView) getView().findViewById(R.id.proEmail)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("email", "User email"));
 
-        ConstraintLayout proTheme = getView().findViewById(R.id.proTheme);
-        ConstraintLayout proThemeLayout = getView().findViewById(R.id.proThemeLayout);
-        ImageView proSpinner = getView().findViewById(R.id.proSpinner);
-        proThemeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (proTheme.getVisibility() == View.GONE) {
-                    proTheme.setVisibility(View.VISIBLE);
-                    proSpinner.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.xtra_dropup_icon));
-                } else {
-                    proTheme.setVisibility(View.GONE);
-                    proSpinner.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.xtra_dropdown_icon));
-                }
-            }
-        });
+//        ConstraintLayout proTheme = getView().findViewById(R.id.proTheme);
+//        ConstraintLayout proThemeLayout = getView().findViewById(R.id.proThemeLayout);
+//        ImageView proSpinner = getView().findViewById(R.id.proSpinner);
+//        proThemeLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (proTheme.getVisibility() == View.GONE) {
+//                    proTheme.setVisibility(View.VISIBLE);
+//                    proSpinner.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.xtra_dropup_icon));
+//                } else {
+//                    proTheme.setVisibility(View.GONE);
+//                    proSpinner.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.xtra_dropdown_icon));
+//                }
+//            }
+//        });
 
         Intent intent = new Intent(getActivity(), chatScreen.class);
 

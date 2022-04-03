@@ -12,8 +12,8 @@
     <color name="warning">#FFAA71</color>
     <color name="success">#4BB543</color>
 
-    <color name="textColor">#000000</color>
-    <color name="textColorNight">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
     <color name="textColorLight">#686868</color>
     <color name="textColorLightNight">#D3D3D3</color>
     <color name="iconColor">#4C82E5</color>
@@ -22,11 +22,11 @@
     <color name="satvaTextColor">#3B71CF</color>
     <color name="BG">#F3F5FC</color>
     <color name="BGNight">#333333</color>
+    <color name="BGSec">#1C2E46</color>
     <color name="trans">@android:color/transparent</color>
     <color name="receiverChatBG">#CACACA</color>
     <color name="receiverChatBGNight">#737373</color>
     <color name="senderChatBG">#3C5678</color>
-    <color name="chatEditBg">#1C2E46</color>
     <color name="chatMentorTextColor">#F44336</color>
     <color name="chatDeveloperTextColor">#00BCD4</color>
     <color name="adminBG">#1C2E46</color>

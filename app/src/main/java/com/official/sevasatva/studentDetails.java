@@ -14,6 +14,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -22,6 +24,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +40,8 @@ public class studentDetails extends AppCompatActivity {
     RecyclerView recyclerView;
     studentDetailsAdapter studentDetailsAdapter;
     ArrayList<HashMap<String, String>> list;
+    TextInputLayout searchInput;
+    TextInputEditText searchTextInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +68,39 @@ public class studentDetails extends AppCompatActivity {
 
         loadingDialog = new Dialog(this);
         recyclerView = (RecyclerView) findViewById(R.id.studentDetailsRecycler);
+
         getItems();
 
+
+        searchInput = findViewById(R.id.searchInput);
+        searchTextInput = findViewById(R.id.searchTextInput);
+
+        searchTextInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+            }
+        });
+
+    }
+
+    private void filter(String text) {
+        ArrayList<HashMap<String, String>> newList = new ArrayList<>();
+        for (HashMap<String, String> map : list) {
+            if (map.get("code").toLowerCase().contains(text.toLowerCase()) || map.get("name").toLowerCase().contains(text.toLowerCase()))
+                newList.add(map);
+        }
+        studentDetailsAdapter.filteredList(newList);
     }
 
     private boolean isInternetAvailable() {

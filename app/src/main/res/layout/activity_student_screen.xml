@@ -36,8 +36,6 @@
         android:weightSum="4"
         app:layout_constraintVertical_bias="1">
 
-
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,9 +67,10 @@
                 android:id="@+id/homeTabText"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="5dp"
-                android:fontFamily="@font/baloo_bhai_regular"
+                android:fontFamily="@font/poppins"
                 android:transitionName="resTransText"
                 android:textColor="@color/iconColor"
+                android:textSize="16sp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_height="wrap_content"/>
@@ -110,7 +109,8 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="5dp"
                 android:textColor="@color/iconColor"
-                android:fontFamily="@font/baloo_bhai_regular"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins"
                 android:transitionName="ansTransText"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"/>
@@ -149,7 +149,8 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="5dp"
                 android:textColor="@color/iconColor"
-                android:fontFamily="@font/baloo_bhai_regular"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins"
                 android:transitionName="testsTransText"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"/>
@@ -188,7 +189,8 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="5dp"
                 android:textColor="@color/iconColor"
-                android:fontFamily="@font/baloo_bhai_regular"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins"
                 android:transitionName="proTransText"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"/>

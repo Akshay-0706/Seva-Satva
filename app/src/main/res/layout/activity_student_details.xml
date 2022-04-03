@@ -11,7 +11,7 @@
         android:id="@+id/studentDetailsHeading"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:fontFamily="@font/baloo_bhai_regular"
+        android:fontFamily="@font/poppins"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:text="@string/student_details_heading"
@@ -24,6 +24,44 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+
+        android:id="@+id/searchInput"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:autofillHints="name"
+        android:elevation="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/student_details_search"
+        android:textColorHint="?attr/inverted"
+        app:boxStrokeColor="?attr/inverted"
+        app:endIconMode="clear_text"
+        app:endIconTint="?attr/inverted"
+        app:hintTextColor="?attr/inverted"
+        app:layout_constraintBottom_toTopOf="@+id/studentDetailsRecycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/studentDetailsHeading"
+        app:startIconDrawable="@drawable/xtra_search_icon"
+        app:startIconTint="?attr/inverted">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchTextInput"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            android:textColor="?attr/inverted"
+            app:layout_constraintBottom_toBottomOf="@+id/emailInput"
+            app:layout_constraintEnd_toEndOf="@+id/emailInput"
+            app:layout_constraintStart_toStartOf="@+id/emailInput"
+            app:layout_constraintTop_toTopOf="@+id/emailInput" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/studentDetailsRecycler"
         android:layout_width="0dp"
@@ -32,6 +70,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/studentDetailsHeading" />
+        app:layout_constraintTop_toBottomOf="@+id/searchInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
