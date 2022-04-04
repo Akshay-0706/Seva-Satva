@@ -21,9 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -87,7 +87,7 @@ public class studentProfile extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl() != null)
-            Glide.with(getActivity())
+            Picasso.get()
                     .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
                     .into((ImageView) getView().findViewById(R.id.proImage));
 

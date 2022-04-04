@@ -157,7 +157,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/homeCourseDesc"
+                    android:id="@+id/homeCourseMentor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -185,8 +185,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/homeCourseDesc"
-                    app:layout_constraintTop_toBottomOf="@+id/homeCourseDesc"
+                    app:layout_constraintStart_toStartOf="@+id/homeCourseMentor"
+                    app:layout_constraintTop_toBottomOf="@+id/homeCourseMentor"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
@@ -201,10 +201,10 @@
                     android:textColor="?attr/textColorLight"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/homeCourseDesc"
+                    app:layout_constraintEnd_toEndOf="@+id/homeCourseMentor"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/homeCourseEval"
-                    app:layout_constraintTop_toBottomOf="@+id/homeCourseDesc"
+                    app:layout_constraintTop_toBottomOf="@+id/homeCourseMentor"
                     app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

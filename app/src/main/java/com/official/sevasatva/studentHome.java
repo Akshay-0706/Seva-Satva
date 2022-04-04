@@ -110,7 +110,7 @@ public class studentHome extends Fragment {
                 .getString("cn", "India's top problems"));
         ((TextView) getView().findViewById(R.id.homeCourseCode)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getString("cc", "SV12"));
-        ((TextView) getView().findViewById(R.id.homeCourseDesc)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+        ((TextView) getView().findViewById(R.id.homeCourseMentor)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getString("desc", "Study of India's top two problems"));
         ((TextView) getView().findViewById(R.id.homeCourseEvalType)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getString("eval", "Your mentor will set the evaluation type soon."));

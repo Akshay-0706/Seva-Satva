@@ -51,6 +51,9 @@
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/student_details_recycler_items_bg.xml" value="0.288" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/student_grades_heading_bg.xml" value="0.286" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/student_login_login_btn_bg.xml" value="0.321" />
+        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/student_news_details_btn_bg.xml" value="0.286" />
+        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/student_news_recycler_items_bg.xml" value="0.286" />
+        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/student_news_scroll_up_bg.xml" value="0.286" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/student_tests_heading_bg.xml" value="0.286" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/xtra_add_icon.xml" value="0.32" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/drawable/xtra_ans_icon.xml" value="0.288" />
@@ -93,13 +96,15 @@
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_main_screen.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_mentor_allocation.xml" value="0.29743589743589743" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_mentor_allocator.xml" value="0.25" />
-        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_mentor_home_ans.xml" value="0.33" />
+        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_mentor_home_ans.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_mentor_login.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_mentor_screen.xml" value="0.25" />
+        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_news_detail.xml" value="0.29743589743589743" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_student_details.xml" value="0.33" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_student_home_ans.xml" value="0.29743589743589743" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_student_login.xml" value="0.25" />
+        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_student_news_details.xml" value="0.29743589743589743" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/activity_student_screen.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_app_intro_bottom_drawer.xml" value="0.33" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_app_intro_slider_pages.xml" value="0.29743589743589743" />
@@ -121,11 +126,12 @@
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_student_home.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_student_home_ans_recycler_items.xml" value="0.33" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_student_home_slider_pages.xml" value="0.29743589743589743" />
-        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_student_news.xml" value="0.29743589743589743" />
+        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_student_news.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_student_profile.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_student_tests.xml" value="0.33" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/fragment_tests.xml" value="0.29743589743589743" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/main_screen_empty_nav.xml" value="0.29743589743589743" />
+        <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/layout/news_rv_item.xml" value="0.25" />
         <entry key="..\:/Users/aksha/Coding/Android development/SevaSatva/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3105" />
       </map>
     </option>
