@@ -116,6 +116,7 @@ public class studentLogin extends AppCompatActivity {
 
                         assert firebaseUser != null;
                         sharedPreferences.edit().putString("email", firebaseUser.getEmail()).apply();
+                        sharedPreferences.edit().putString("image", firebaseUser.getPhotoUrl().toString()).apply();
 
                         if (sharedPreferences.getBoolean("isFirstLaunch", true))
                             fetchStudentDetails();
@@ -175,26 +176,42 @@ public class studentLogin extends AppCompatActivity {
                     if (documentSnapshot.getData() != null)
                         data = documentSnapshot.getData();
 
-                    boolean isAllowed = (boolean) data.get("areAllowed");
+                    final boolean[] isAllowed = {true};
 
-                    for (Map.Entry<String, Object> entry : data.entrySet()) {
-                        if (entry.getValue().equals(sharedPreferences.getString("email", "temp"))) {
-                            isNewStudent = false;
-                            break;
+                    Map<String, Object> finalData = data;
+                    firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot documentSnapshot = null;
+                            Map<String, Object> data2 = null;
+                            if (task.getResult() != null)
+                                documentSnapshot = task.getResult();
+                            if (documentSnapshot.getData() != null)
+                                data2 = documentSnapshot.getData();
+
+                            isAllowed[0] = (boolean) data2.get("areStudentsAllowed");
+
+                            for (Map.Entry<String, Object> entry : finalData.entrySet()) {
+                                if (entry.getValue().equals(sharedPreferences.getString("email", "temp"))) {
+                                    isNewStudent = false;
+                                    break;
+                                }
+                            }
+
+                            if (!isAllowed[0] && isNewStudent) {
+                                Toast.makeText(studentLogin.this, "Course enrollment has stopped!", Toast.LENGTH_LONG).show();
+                                finishAndRemoveTask();
+                            } else if (isNewStudent) {
+                                startActivity(new Intent(studentLogin.this, studentDetails.class));
+                                finish();
+
+                            } else {
+                                startActivity(new Intent(studentLogin.this, studentScreen.class));
+                                finish();
+                            }
                         }
-                    }
+                    });
 
-                    if (!isAllowed && isNewStudent) {
-                        Toast.makeText(studentLogin.this, "Course enrollment has stopped!\nPlease contact our organizer if you missed enrollment.", Toast.LENGTH_LONG).show();
-                        finishAndRemoveTask();
-                    } else if (isNewStudent) {
-                        startActivity(new Intent(studentLogin.this, studentDetails.class));
-                        finish();
-
-                    } else {
-                        startActivity(new Intent(studentLogin.this, studentScreen.class));
-                        finish();
-                    }
                 }
             });
 
@@ -202,6 +219,7 @@ public class studentLogin extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Your data is not listed in our database, please contact our organizer.", Toast.LENGTH_LONG).show();
+            finishAndRemoveTask();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.official.sevasatva;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -142,6 +143,7 @@ public class studentNews extends Fragment {
         loadingDialog.show();
 
         newsList.clear(); // clears and add specfic categories
+        String courseName = getContext().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("cn", "");
 
         String categoryURL = "https://newsapi.org/v2/everything?language=en&sortBy=publishedAt&q=tesla&from=2022-04-03" + "&apiKey=c2c368b741844c39a08a194825a365e0";
         String url = categoryURL;

@@ -44,7 +44,6 @@ public class mentorAllocation extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        mentorAlcRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         loadingDialog.setContentView(R.layout.fragment_loading);
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

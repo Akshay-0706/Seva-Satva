@@ -88,11 +88,11 @@ public class studentProfile extends Fragment {
 
         if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl() != null)
             Picasso.get()
-                    .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
+                    .load(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("image", ""))
                     .into((ImageView) getView().findViewById(R.id.proImage));
 
-        ((TextView) getView().findViewById(R.id.proName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("name", "User"));
-        ((TextView) getView().findViewById(R.id.proEmail)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("email", "User email"));
+        ((TextView) getView().findViewById(R.id.studentProName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("name", "User"));
+        ((TextView) getView().findViewById(R.id.studentProEmail)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("email", "User email"));
 
 //        ConstraintLayout proTheme = getView().findViewById(R.id.proTheme);
 //        ConstraintLayout proThemeLayout = getView().findViewById(R.id.proThemeLayout);

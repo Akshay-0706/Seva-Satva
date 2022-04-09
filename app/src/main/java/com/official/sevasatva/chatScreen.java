@@ -98,8 +98,9 @@ public class chatScreen extends AppCompatActivity {
                         final String msg = dataSnapshot.child("msg").getValue(String.class);
                         final String name = dataSnapshot.child("name").getValue(String.class);
                         final String time = dataSnapshot.child("time").getValue(String.class);
+                        final String id = dataSnapshot.getKey();
 
-                        chatScreenModel chatScreenModel = new chatScreenModel(date, email, isStudent, msg, name, time);
+                        chatScreenModel chatScreenModel = new chatScreenModel(date, email, isStudent, msg, name, time, id);
                         chatList.add(chatScreenModel);
 
                         if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {

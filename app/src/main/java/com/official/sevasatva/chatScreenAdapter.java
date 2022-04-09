@@ -1,18 +1,29 @@
 package com.official.sevasatva;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -70,8 +81,10 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
             } else if (!list.getIsStudent()) {
                 holder.senderName.setTextColor(ContextCompat.getColor(context, R.color.chatMentorTextColor));
                 holder.senderTime.setText("Mentor " + Html.fromHtml("&#9679;") + " " + list.getTime());
-            } else
+            } else {
                 holder.senderTime.setText(list.getTime());
+                holder.senderName.setTextColor(ContextCompat.getColor(context, R.color.textColorLight));
+            }
 
         } else {
             holder.senderLayout.setVisibility(View.GONE);
@@ -88,11 +101,11 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
             } else if (!list.getIsStudent()) {
                 holder.receiverName.setTextColor(ContextCompat.getColor(context, R.color.chatMentorTextColor));
                 holder.receiverTime.setText(list.getTime() + " " + Html.fromHtml("&#9679;") + " Mentor");
-            } else
+            } else {
                 holder.receiverTime.setText(list.getTime());
+                holder.receiverName.setTextColor(ContextCompat.getColor(context, R.color.textColorLight));
+            }
         }
-
-
     }
 
     @Override
@@ -100,11 +113,13 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
         return chatList.size();
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        private boolean longClickActive = false;
 
         final private ConstraintLayout chatDateLayout, receiverLayout, senderLayout;
         final private TextView chatDate, receiverName, receiverMessage, receiverTime, senderName, senderMessage, senderTime;
 
+        @SuppressLint("ClickableViewAccessibility")
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -121,6 +136,79 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
             senderMessage = itemView.findViewById(R.id.senderMessage);
             senderTime = itemView.findViewById(R.id.senderTime);
 
+            senderMessage.setOnTouchListener(new View.OnTouchListener() {
+                private static final int COPY_DURATION = 1000;
+                private static final int DELETE_DURATION = 5000;
+                private long startClickTime;
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_UP:
+                            if (longClickActive) {
+                                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                                if (clickDuration >= DELETE_DURATION) {
+                                    DatabaseReference databaseReference;
+                                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                                    databaseReference.child("messages").child(v.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(chatList.get(getAdapterPosition()).getId()).removeValue();
+                                    Toast.makeText(v.getContext(), "Message deleted successfully!", Toast.LENGTH_SHORT).show();
+                                }
+                                else if (clickDuration >= COPY_DURATION) {
+                                    ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("Copied", senderMessage.getText().toString());
+                                    clipboard.setPrimaryClip(clip);
+                                    Toast.makeText(v.getContext(), "Copied to clipboard!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            longClickActive = false;
+                            break;
+                        case MotionEvent.ACTION_DOWN:
+                            if (!longClickActive) {
+                                longClickActive = true;
+                                startClickTime = Calendar.getInstance().getTimeInMillis();
+                            }
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            break;
+                    }
+                    return true;
+                }
+
+            });
+
+            receiverMessage.setOnTouchListener(new View.OnTouchListener() {
+                private static final int COPY_DURATION = 1000;
+                private long startClickTime;
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_UP:
+                            if (longClickActive) {
+                                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                                if (clickDuration >= COPY_DURATION) {
+                                    ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("Copied", receiverMessage.getText().toString());
+                                    clipboard.setPrimaryClip(clip);
+                                    Toast.makeText(v.getContext(), "Copied to clipboard!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            longClickActive = false;
+                            break;
+                        case MotionEvent.ACTION_DOWN:
+                            if (!longClickActive) {
+                                longClickActive = true;
+                                startClickTime = Calendar.getInstance().getTimeInMillis();
+                            }
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            break;
+                    }
+                    return true;
+                }
+            });
         }
     }
 }

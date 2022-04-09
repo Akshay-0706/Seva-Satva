@@ -17,6 +17,8 @@
 
     <string name="app_intro_st_heading">As a Student</string>
     <string name="app_intro_mt_heading">As a Mentor</string>
+    <string name="app_intro_st_desc">Gain information through news related to your course, appear for tests, get your doubts cleared by your mentor through our exclusive chat room &amp; much more…</string>
+    <string name="app_intro_mt_desc">Make important announcements, create tests and grade them, interact with students and clear their doubts, get entire students\' data &amp; much more…</string>
     <string name="app_intro_next_text">Next</string>
     <string name="app_intro_back_text">Back</string>
     <string name="app_intro_continue_text">Continue</string>
@@ -24,6 +26,7 @@
     <string name="app_intro_role_student">Student</string>
     <string name="app_intro_role_mentor">Mentor</string>
 
+    <string name="login_name_text">Name</string>
     <string name="login_email_text">Email</string>
     <string name="login_password_text">Password</string>
     <string name="login_text">Log in</string>
@@ -81,6 +84,7 @@
     <string name="pro_about_text">About Us</string>
     <string name="pro_feedback_text">Feedback</string>
     <string name="pro_share_text">Share</string>
+    <string name="pro_logout_text">Log Out</string>
 
     <string name="chat_heading">Ask Mentor</string>
     <string name="chat_heading_mentor">Student Doubts</string>

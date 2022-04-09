@@ -234,6 +234,12 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 //                                    }
                         map.clear();
                         map.put("email", sharedPreferences.getString("email", "temp"));
+                        map.put("uid", sharedPreferences.getString("uid", "temp"));
+                        map.put("name", sharedPreferences.getString("name", "temp"));
+                        map.put("branch", sharedPreferences.getString("branch", "temp"));
+                        map.put("cls", sharedPreferences.getString("class", "temp"));
+                        map.put("year", sharedPreferences.getString("year", "temp"));
+                        map.put("image", sharedPreferences.getString("image", "temp"));
                         map.put("mentor", "Not allocated");
 
 //                                map2.put("count", count[0]);

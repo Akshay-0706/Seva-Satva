@@ -15,6 +15,7 @@
     <!--    </style>-->
 
     <style name="Theme.Official.SevaSatva" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/BGSec</item>
         <item name="bg">@color/BG</item>
         <item name="bgSec">@color/BGSec</item>
         <item name="textColor">@color/black</item>

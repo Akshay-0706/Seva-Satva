@@ -5,15 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    tools:context=".studentHome"
     android:isScrollContainer="false"
     android:fitsSystemWindows="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/bg"
-        tools:context=".studentHome">
-
+        android:background="?attr/bg">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
@@ -34,7 +33,7 @@
                 android:fontFamily="@font/poppins"
                 android:text="@string/home_heading"
                 android:textColor="@color/white"
-                android:textSize="32sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +63,7 @@
                 android:fontFamily="@font/poppins"
                 android:text="@string/home_greeting"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -81,7 +80,7 @@
                 android:fontFamily="@font/poppins"
                 android:text="@string/home_greeting_name"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -116,7 +115,7 @@
                     android:fontFamily="@font/poppins"
                     android:text="@string/student_details_temp_cn_text"
                     android:textColor="?attr/textColor"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -134,7 +133,7 @@
                     android:fontFamily="@font/poppins"
                     android:text="@string/student_details_temp_cc_text"
                     android:textColor="?attr/textColorLight"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.031"
@@ -164,7 +163,7 @@
                     android:fontFamily="@font/poppins"
                     android:text="@string/student_details_temp_desc_text"
                     android:textColor="?attr/textColorLight"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/homeCourseCode"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -181,7 +180,7 @@
                     android:fontFamily="@font/poppins"
                     android:text="@string/student_details_eval_text"
                     android:textColor="?attr/textColorLight"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -199,7 +198,7 @@
                     android:fontFamily="@font/poppins"
                     android:text="@string/student_details_temp_eval_type_text"
                     android:textColor="?attr/textColorLight"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/homeCourseMentor"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -221,7 +220,7 @@
             android:fontFamily="@font/poppins"
             android:text="@string/home_tests_text"
             android:textColor="?attr/textColor"
-            android:textSize="22sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -239,7 +238,7 @@
             android:fontFamily="@font/poppins"
             android:text="@string/home_temp_tests_info_text"
             android:textColor="?attr/textColorLight"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -254,8 +253,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeTestsInfo"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@+id/homeTestsInfo">
 
         </androidx.viewpager.widget.ViewPager>
 

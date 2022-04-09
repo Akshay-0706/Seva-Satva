@@ -57,7 +57,7 @@ public class mentorScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 changeNavTab((LinearLayout) findViewById(R.id.testsTab), (ImageView) findViewById(R.id.testsIcon), (TextView) findViewById(R.id.testsTabText), "Tests", R.drawable.xtra_tests_icon, R.drawable.xtra_tests_icon_selected);
-                replaceFragment(new mentorTests());
+                replaceFragment(new mentorTestsNGrades());
                 value = "tests";
             }
         });

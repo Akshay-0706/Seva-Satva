@@ -99,6 +99,7 @@ public class studentHomeAnsAdapter extends RecyclerView.Adapter<studentHomeAnsAd
                     notifyItemChanged(getAdapterPosition());
                 }
             });
+
             if (context.getClass().equals(mentorHomeAns.class))
                 ansMentorDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -107,19 +108,20 @@ public class studentHomeAnsAdapter extends RecyclerView.Adapter<studentHomeAnsAd
                         databaseReference = FirebaseDatabase.getInstance().getReference();
                         databaseReference.child("announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(ansList.get(getAdapterPosition()).getId()).removeValue();
                         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                        for (int i = 0; i < attach.size(); i++) {
-                            int finalI = i;
-                            storageReference.child("Announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(ansList.get(getAdapterPosition()).getId())
-                                    .child(attach.get(i)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                }
-                            });
-                        }
+                        if (attach != null)
+                            for (int i = 0; i < attach.size(); i++) {
+                                int finalI = i;
+                                storageReference.child("Announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(ansList.get(getAdapterPosition()).getId())
+                                        .child(attach.get(i)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
+                            }
                         Toast.makeText(context, "Announcement deleted", Toast.LENGTH_SHORT).show();
                     }
                 });

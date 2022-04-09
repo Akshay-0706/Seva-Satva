@@ -7,17 +7,19 @@ public class chatScreenModel {
     String msg;
     String name;
     String time;
+    String id;
 
     public chatScreenModel() {
     }
 
-    public chatScreenModel(String date, String email, Boolean isStudent, String msg, String name, String time) {
+    public chatScreenModel(String date, String email, Boolean isStudent, String msg, String name, String time, String id) {
         this.date = date;
         this.email = email;
         this.isStudent = isStudent;
         this.msg = msg;
         this.name = name;
         this.time = time;
+        this.id = id;
     }
 
     public String getDate() {
@@ -44,4 +46,7 @@ public class chatScreenModel {
         return time;
     }
 
+    public String getId() {
+        return id;
+    }
 }

@@ -2,9 +2,9 @@ package com.official.sevasatva;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,84 +13,167 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class mentorAllocator extends AppCompatActivity {
 
-    String name, code, email = "", pass = "";
-    int enrolled;
+    String cn, cc, name = "", email = "", pass = "";
+    int enrolled = 0, mentorDetailsIndex = 0, studentDataIndex = 0;
     int[] mentorsDetails;
+    boolean addingMentor = false, editingAvailable = false, areAllocated = false, newLaunch = true;
+    List<mentorAllocatorModel> mentorList = new ArrayList<>();
     TextView requiredMentors;
-    boolean editingAvailable = false;
+    Map<String, Object> studentData = new HashMap<>();
+    FirebaseFirestore firebaseFirestore;
+    RecyclerView mentorAllocatorRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_allocator);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        mentorAllocatorRecyclerView = findViewById(R.id.mentorAlcDetailsRecyclerView);
 
         Bundle bundle = getIntent().getExtras();
-        name = bundle.getString("name");
-        code = bundle.getString("code");
+        cn = bundle.getString("name");
+        cc = bundle.getString("code");
 
-        getStudentsEnrolled();
+        setMentorsItems();
+
         findViewById(R.id.mentorAlcAddBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (addingMentor)
+                    Toast.makeText(mentorAllocator.this, "Adding mentor please wait!", Toast.LENGTH_SHORT).show();
                 if (!editingAvailable)
                     Toast.makeText(mentorAllocator.this, "Fetching details please wait", Toast.LENGTH_SHORT).show();
+                else if (mentorsDetails.length == 0)
+                    Toast.makeText(mentorAllocator.this, "No mentors required!", Toast.LENGTH_SHORT).show();
+                else if (areAllocated)
+                    Toast.makeText(mentorAllocator.this, "Can't add more mentors!", Toast.LENGTH_SHORT).show();
                 else {
                     if (findViewById(R.id.mentorAlcAddLayout).getVisibility() == View.GONE) {
                         findViewById(R.id.mentorAlcAddLayout).setVisibility(View.VISIBLE);
                         getInput();
-                    }
-                    else
+                    } else
                         findViewById(R.id.mentorAlcAddLayout).setVisibility(View.GONE);
                 }
             }
         });
+    }
 
+    private void setMentorsItems() {
+
+        firebaseFirestore.collection("Courses").document(cc).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot documentSnapshot = null;
+                Map<String, Object> data = null;
+                if (task.getResult() != null)
+                    documentSnapshot = task.getResult();
+                if (documentSnapshot.getData() != null)
+                    data = documentSnapshot.getData();
+
+                Map<String, Object> mentorsData = null;
+                Map<String, Object> mentorsData2 = null;
+
+                if (data != null) {
+                    mentorList.clear();
+                    for (Map.Entry<String, Object> entry : data.entrySet()) {
+                        if (entry.getKey().equals("Mentors")) {
+                            mentorsData = (Map<String, Object>) entry.getValue();
+                            for (Map.Entry<String, Object> entry2 : mentorsData.entrySet()) {
+                                mentorsData2 = (Map<String, Object>) entry2.getValue();
+
+                                String mentorName = "", mentorEmail = "", mentorPass = "", mentorStudentCount = "";
+                                Log.i("INFO", "onComplete: " + "size: " + mentorsData2.size());
+
+                                for (Map.Entry<String, Object> entry3 :
+                                        mentorsData2.entrySet()) {
+                                    if (entry3.getKey().equals("name"))
+                                        mentorName = entry3.getValue().toString();
+                                    else if (entry3.getKey().equals("email"))
+                                        mentorEmail = entry3.getValue().toString();
+                                    else if (entry3.getKey().equals("pass"))
+                                        mentorPass = entry3.getValue().toString();
+                                    else if (entry3.getKey().equals("studentCount"))
+                                        mentorStudentCount = entry3.getValue().toString();
+                                }
+                                mentorAllocatorModel allocatorModel = new mentorAllocatorModel(mentorName, "Email: " + mentorEmail, "Password: " + mentorPass, "Students: " + mentorStudentCount, false);
+                                mentorList.add(allocatorModel);
+                            }
+                        }
+                    }
+                    mentorAllocatorAdapter mentorAllocatorAdapter = new mentorAllocatorAdapter(mentorList);
+                    mentorAllocatorRecyclerView.setLayoutManager(new LinearLayoutManager(mentorAllocator.this));
+                    mentorAllocatorRecyclerView.setAdapter(mentorAllocatorAdapter);
+                }
+
+                if (newLaunch) {
+                    if (data != null)
+                        areAllocated = (boolean) data.get("areAllocated");
+                    getStudentsEnrolled();
+                }
+            }
+        });
 
     }
 
     private void getStudentsEnrolled() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://script.google.com/macros/s/AKfycbwlaKsBo6JoKSO2Ww6d5359UGEW07uIBOLxYrkiZ0WMw0k5b0c-alh-Ha20SfTRz7zs/exec?action=getCount&cc=" + code,
-                this::setDetails, error -> Toast.makeText(mentorAllocator.this, "Unable to get students enrolled details", Toast.LENGTH_SHORT).show());
+        newLaunch = false;
 
-        int socketTimeOut = 50000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(stringRequest);
+        firebaseFirestore.collection("Courses").document(cc).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot documentSnapshot = null;
+                        Map<String, Object> data = null;
+                        if (task.getResult() != null)
+                            documentSnapshot = task.getResult();
+                        if (documentSnapshot.getData() != null)
+                            data = documentSnapshot.getData();
+
+                        if (data != null)
+                            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                                if (entry.getKey().equals("Students")) {
+                                    studentData = (Map<String, Object>) entry.getValue();
+                                    break;
+                                }
+                            }
+
+                        setDetails();
+
+                    }
+                });
     }
 
-    private void setDetails(String Enrolled) {
-        enrolled = Integer.parseInt(Enrolled);
+    private void setDetails() {
+        enrolled = studentData.size();
 
         TextView courseName = findViewById(R.id.mentorAlcCardName);
         TextView courseCode = findViewById(R.id.mentorAlcCardCode);
         TextView studentsEnrolled = findViewById(R.id.mentorAlcCardEnrolled);
         requiredMentors = findViewById(R.id.mentorAlcCardRequired);
 
-        courseName.setText(name);
-        courseCode.setText(code);
-        studentsEnrolled.setText(Enrolled);
+        courseName.setText(this.cn);
+        courseCode.setText(cc);
+        studentsEnrolled.setText(String.valueOf(enrolled));
         getMentors();
     }
 
@@ -134,10 +217,29 @@ public class mentorAllocator extends AppCompatActivity {
 
     private void getInput() {
 
+        TextInputLayout nameLayout = findViewById(R.id.mentorAlcNameLayout);
+        TextInputEditText nameTextInput = findViewById(R.id.mentorAlcNameText);
         TextInputLayout emailLayout = findViewById(R.id.mentorAlcEmailLayout);
         TextInputEditText emailTextInput = findViewById(R.id.mentorAlcEmailText);
         TextInputLayout passLayout = findViewById(R.id.mentorAlcPassLayout);
         TextInputEditText passTextInput = findViewById(R.id.mentorAlcPassText);
+
+        nameTextInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                name = s.toString();
+            }
+        });
 
         emailTextInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -176,11 +278,13 @@ public class mentorAllocator extends AppCompatActivity {
         findViewById(R.id.mentorAlcSaveBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mentorAllocator.this, "Clicked!", Toast.LENGTH_SHORT).show();
-                if (!(email.isEmpty() && pass.isEmpty())) {
-                    Toast.makeText(mentorAllocator.this, "Inside!", Toast.LENGTH_SHORT).show();
+                if (!(name.isEmpty() && email.isEmpty() && pass.isEmpty())) {
+                    addingMentor = true;
+                    Toast.makeText(mentorAllocator.this, "Adding mentor...", Toast.LENGTH_SHORT).show();
+                    findViewById(R.id.mentorAlcAddLayout).setVisibility(View.GONE);
                     addMentor();
-                }
+                } else
+                    Toast.makeText(mentorAllocator.this, "Please enter details first!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -189,9 +293,11 @@ public class mentorAllocator extends AppCompatActivity {
         String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> map2 = new HashMap<>();
+        map2.put("name", name);
         map2.put("email", email);
-        map2.put("cc", code);
+        map2.put("cc", cc);
         map.put(timeStamp, map2);
+        firebaseFirestore.collection("Courses").document("Mentors").set(map, SetOptions.merge());
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -201,15 +307,70 @@ public class mentorAllocator extends AppCompatActivity {
                     public void onSuccess(AuthResult authResult) {
                         Toast.makeText(mentorAllocator.this, "Mentor added", Toast.LENGTH_SHORT).show();
                         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                        firestore.collection("Courses").document("Mentors").set(map, SetOptions.merge());
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "onFailure: "+e);
+                Log.d("TAG", "onFailure: " + e);
                 Toast.makeText(mentorAllocator.this, "Unable to add mentor", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // Create map object for mentor.
+        Map<String, Object> mentor = new HashMap<>();
+        Map<String, Object> allocatedMentor = new HashMap<>();
+        Map<String, Object> allocatedMentorDetails = new HashMap<>();
+        // Create sub map object to store data of each student.
+        Map<String, Object> allocatedStudents = new HashMap<>();
+
+        // Add mentor details
+        allocatedMentorDetails.put("name", name);
+        allocatedMentorDetails.put("email", email);
+        allocatedMentorDetails.put("pass", pass);
+        allocatedMentorDetails.put("students", allocatedStudents);
+
+        // Add student count
+        allocatedMentorDetails.put("studentCount", mentorsDetails[mentorDetailsIndex]);
+
+        // Set iterable for studentData map.
+        Iterator<Map.Entry<String, Object>> iterator = studentData.entrySet().iterator();
+        for (int i = 0; i < studentDataIndex; i++) {
+            iterator.next();
+        }
+
+        // Iterate through the map till the allocated students.
+        for (int i = 0; i < mentorsDetails[mentorDetailsIndex]; i++) {
+            Map.Entry<String, Object> entry = iterator.next();
+            studentDataIndex++;
+            Map<String, Object> subStudentData = (Map<String, Object>) entry.getValue();
+            subStudentData.put("mentor", email);
+            allocatedStudents.put(entry.getKey(), entry.getValue());
+        }
+
+        allocatedMentor.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), allocatedMentorDetails);
+        mentor.put("Mentors", allocatedMentor);
+        firebaseFirestore.collection("Courses").document(cc).set(mentor, SetOptions.merge())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        mentorDetailsIndex++;
+                        addingMentor = false;
+                        Toast.makeText(mentorAllocator.this, "Mentor added successfully!", Toast.LENGTH_SHORT).show();
+                        setMentorsItems();
+                    }
+                });
+
+        if (mentorDetailsIndex == mentorsDetails.length - 1) {
+            Map<String, Object> areAllocatedBoolean = new HashMap<>();
+            Map<String, Object> students = new HashMap<>();
+            areAllocatedBoolean.put("areAllocated", true);
+            students.put("Students", studentData);
+            areAllocated = true;
+            firebaseFirestore.collection("Courses").document(cc).set(areAllocatedBoolean, SetOptions.merge());
+            firebaseFirestore.collection("Courses").document(cc).set(students, SetOptions.merge());
+        }
+
     }
 
 }

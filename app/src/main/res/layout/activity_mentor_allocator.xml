@@ -260,12 +260,51 @@
 
             <com.google.android.material.textfield.TextInputLayout
 
-                android:id="@+id/mentorAlcEmailLayout"
+                android:id="@+id/mentorAlcNameLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:autofillHints="name"
+                android:elevation="5dp"
+                android:hint="@string/login_name_text"
+                android:textColorHint="?attr/textColorLight"
+                app:boxStrokeColor="?attr/textColorLight"
+                app:endIconMode="clear_text"
+                app:endIconTint="?attr/textColorLight"
+                app:hintTextColor="?attr/textColorLight"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:startIconDrawable="@drawable/xtra_person_icon"
+                app:startIconTint="?attr/textColorLight">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mentorAlcNameText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    android:textColor="?attr/textColor"
+                    app:layout_constraintBottom_toBottomOf="@+id/emailInput"
+                    app:layout_constraintEnd_toEndOf="@+id/emailInput"
+                    app:layout_constraintStart_toStartOf="@+id/emailInput"
+                    app:layout_constraintTop_toTopOf="@+id/emailInput" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                android:id="@+id/mentorAlcEmailLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:autofillHints="emailAddress"
                 android:elevation="5dp"
@@ -279,7 +318,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mentorAlcNameLayout"
                 app:layout_constraintVertical_bias="0.0"
                 app:startIconDrawable="@drawable/xtra_email_icon"
                 app:startIconTint="?attr/textColorLight">

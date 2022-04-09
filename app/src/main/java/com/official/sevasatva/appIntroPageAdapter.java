@@ -31,6 +31,11 @@ public class appIntroPageAdapter extends PagerAdapter {
             R.string.app_intro_mt_heading
     };
 
+    public int[] sliderDescs = {
+            R.string.app_intro_st_desc,
+            R.string.app_intro_mt_desc
+    };
+
     @Override
     public int getCount() {
         return sliderHeadings.length;
@@ -49,9 +54,11 @@ public class appIntroPageAdapter extends PagerAdapter {
 
         LottieAnimationView sliderImage = (LottieAnimationView) view.findViewById(R.id.appIntroSliderAnim);
         TextView sliderHeading = (TextView) view.findViewById(R.id.appIntroSliderHeading);
+        TextView sliderDesc = (TextView) view.findViewById(R.id.appIntroSliderDesc);
 
         sliderImage.setAnimation(sliderAnim[position]);
         sliderHeading.setText(sliderHeadings[position]);
+        sliderDesc.setText(sliderDescs[position]);
         container.addView(view);
 
         return view;

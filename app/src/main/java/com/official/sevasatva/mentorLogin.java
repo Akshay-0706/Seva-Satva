@@ -28,6 +28,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
 
 
 public class mentorLogin extends AppCompatActivity {
@@ -114,14 +120,14 @@ public class mentorLogin extends AppCompatActivity {
             if (response.equals("Accepted")) {
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 auth.signInWithEmailAndPassword(email, pass)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(mentorLogin.this, "Welcome back admin!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(mentorLogin.this, adminScreen.class));
-                        finish();
-                    }
-                });
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                Toast.makeText(mentorLogin.this, "Welcome back admin!", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(mentorLogin.this, adminScreen.class));
+                                finish();
+                            }
+                        });
 
             } else
                 getMentor();
@@ -135,19 +141,58 @@ public class mentorLogin extends AppCompatActivity {
     }
 
     private void getMentor() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signInWithEmailAndPassword(email, pass)
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                Toast.makeText(mentorLogin.this, "Sign in successful!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(mentorLogin.this, mentorScreen.class));
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                        Toast.makeText(mentorLogin.this, "Sign in successful!", Toast.LENGTH_SHORT).show();
+                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("email", email).apply();
+                        assert firebaseUser != null;
+//                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("image", firebaseUser.getPhotoUrl().toString()).apply();
+
+                        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                        firestore.collection("Courses").document("Mentors").get()
+                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        boolean found = false;
+                                        String name = "", code = "";
+                                        DocumentSnapshot documentSnapshot = null;
+                                        Map<String, Object> data = null;
+                                        if (task.getResult() != null)
+                                            documentSnapshot = task.getResult();
+                                        if (documentSnapshot.getData() != null)
+                                            data = documentSnapshot.getData();
+
+                                        for (Map.Entry<String, Object> entry : data.entrySet()) {
+                                            if (found)
+                                                break;
+                                            Map<String, Object> map = (Map<String, Object>) entry.getValue();
+                                            for (Map.Entry<String, Object> entry2 : map.entrySet()) {
+                                                if (entry2.getKey().equals("name"))
+                                                    name = entry2.getValue().toString();
+                                                else if (entry2.getKey().equals("cc"))
+                                                    code = entry2.getValue().toString();
+                                                else if (entry2.getValue().equals(email)) {
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("name", name).apply();
+                                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("cc", code).apply();
+                                        startActivity(new Intent(mentorLogin.this, mentorScreen.class));
+                                        finish();
+                                    }
+                                });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "onFailure: "+e);
+                Log.d("TAG", "onFailure: " + e);
                 Toast.makeText(mentorLogin.this, "You are not allocated to any course yet", Toast.LENGTH_SHORT).show();
             }
         });

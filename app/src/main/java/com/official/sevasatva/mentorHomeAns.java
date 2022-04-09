@@ -1,7 +1,5 @@
 package com.official.sevasatva;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -17,7 +15,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -25,6 +24,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,13 +37,20 @@ import java.util.HashMap;
 
 public class mentorHomeAns extends AppCompatActivity {
 
-    String fileName;
+    String title = "", desc = "", fileName;
     Uri fileUri;
     ListView attachLists;
     Boolean newAnsAvailable = true;
+
     ArrayList<String> attachments = new ArrayList<>();
     ArrayList<Uri> attachUris = new ArrayList<>();
+
+    RecyclerView ansMentorRecyclerView;
     ConstraintLayout createAnsLayout;
+    TextInputLayout titleLayout;
+    TextInputEditText titleTextInput;
+    TextInputLayout descLayout;
+    TextInputEditText descTextInput;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
 
@@ -52,7 +60,12 @@ public class mentorHomeAns extends AppCompatActivity {
         setContentView(R.layout.activity_mentor_home_ans);
 
         attachLists = findViewById(R.id.mentorHomeAnsAttachLists);
-        RecyclerView ansMentorRecyclerView = findViewById(R.id.ansMentorRecyclerView);
+        titleLayout = findViewById(R.id.mentorHomeAnsEmailLayout);
+        titleTextInput = findViewById(R.id.mentorHomeAnsEmailText);
+        descLayout = findViewById(R.id.mentorHomeAnsPassLayout);
+        descTextInput = findViewById(R.id.mentorHomeAnsPassText);
+        ansMentorRecyclerView = findViewById(R.id.ansMentorRecyclerView);
+
         studentHomeAns studentHomeAns = new studentHomeAns();
         studentHomeAns.getAnnouncements(ansMentorRecyclerView, this);
 
@@ -68,31 +81,80 @@ public class mentorHomeAns extends AppCompatActivity {
         findViewById(R.id.mentorAlcAddBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (newAnsAvailable)
-                    createAnsLayout.setVisibility(View.VISIBLE);
-                else
+
+
+                if (newAnsAvailable) {
+                    if (createAnsLayout.getVisibility() == View.VISIBLE)
+                        createAnsLayout.setVisibility(View.GONE);
+                    else if (createAnsLayout.getVisibility() == View.GONE)
+                        createAnsLayout.setVisibility(View.VISIBLE);
+//                    getInput();
+                } else
                     Toast.makeText(mentorHomeAns.this, "Creating previous announcement, please wait", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        titleTextInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                title = s.toString();
+            }
+        });
+
+        descTextInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                desc = s.toString();
             }
         });
 
         findViewById(R.id.mentorHomeAnsSaveBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newAnsAvailable = false;
-                Toast.makeText(mentorHomeAns.this, "Creating announcement", Toast.LENGTH_SHORT).show();
-                createAnsLayout.setVisibility(View.GONE);
-                findViewById(R.id.mentorHomeAnsAttachListsText).setVisibility(View.GONE);
-                attachLists.setVisibility(View.GONE);
-                if (attachments.size() == 0)
-                    sendAnnouncement("My ans", "Welcome to this course", false);
-                else
-                    sendAnnouncement("My ans", "Welcome to this course", true);
+
+                if (!(title.isEmpty() && desc.isEmpty())) {
+                    newAnsAvailable = false;
+                    Toast.makeText(mentorHomeAns.this, "Creating announcement...", Toast.LENGTH_SHORT).show();
+                    createAnsLayout.setVisibility(View.GONE);
+                    findViewById(R.id.mentorHomeAnsAttachListsText).setVisibility(View.GONE);
+                    attachLists.setVisibility(View.GONE);
+
+                    if (attachments.size() == 0)
+                        sendAnnouncement(title.trim(), desc.trim(), false);
+                    else
+                        sendAnnouncement(title.trim(), desc.trim(), true);
+                } else
+                    Toast.makeText(mentorHomeAns.this, "Please enter details first!", Toast.LENGTH_SHORT).show();
             }
         });
 
         findViewById(R.id.mentorHomeAnsCancelText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                title = "";
+                desc = "";
+                titleTextInput.setText(null);
+                descTextInput.setText(null);
                 createAnsLayout.setVisibility(View.GONE);
                 findViewById(R.id.mentorHomeAnsAttachListsText).setVisibility(View.GONE);
                 attachLists.setVisibility(View.GONE);
@@ -113,6 +175,11 @@ public class mentorHomeAns extends AppCompatActivity {
                 resultLauncher.launch(new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT));
             }
         });
+    }
+
+    private void getInput() {
+
+
     }
 
     ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -154,8 +221,22 @@ public class mentorHomeAns extends AppCompatActivity {
         }
     });
 
+    private void sendAnnouncement(String title, String desc, Boolean hasAttachments) {
+        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+        HashMap<String, Object> map = new HashMap<>();
+        DatabaseReference databaseReference;
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        map.put("title", title);
+        map.put("desc", desc);
+        map.put("hasAttach", hasAttachments);
+        map.put("attach", attachments);
+
+        databaseReference.child("announcements").child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(timeStamp).setValue(map);
+        sendFiles(timeStamp);
+    }
+
     private void sendFiles(String timeStamp) {
-        Log.d("FILES", "sendFiles: " + attachments);
         for (int i = 0; i < attachments.size(); i++) {
             firebaseStorage = FirebaseStorage.getInstance().getReference().getStorage();
             storageReference = firebaseStorage.getReference().child("Announcements").child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(timeStamp).child(attachments.get(i));
@@ -173,22 +254,10 @@ public class mentorHomeAns extends AppCompatActivity {
                 attachments);
         attachLists.setAdapter(arrayAdapter);
         Toast.makeText(mentorHomeAns.this, "Announcement created", Toast.LENGTH_SHORT).show();
+        title = "";
+        desc = "";
+        titleTextInput.setText(null);
+        descTextInput.setText(null);
         newAnsAvailable = true;
-    }
-
-    private void sendAnnouncement(String title, String desc, Boolean hasAttachments) {
-        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
-        HashMap<String, Object> map = new HashMap<>();
-        DatabaseReference databaseReference;
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        map.put("title", title);
-        map.put("desc", desc);
-        map.put("hasAttach", hasAttachments);
-        map.put("attach", attachments);
-        Log.d(TAG, "sendAnnouncement: " + map);
-
-        databaseReference.child("announcements").child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(timeStamp).setValue(map);
-        sendFiles(timeStamp);
     }
 }

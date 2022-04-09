@@ -49,7 +49,7 @@ public class adminScreen extends AppCompatActivity {
 
         SwitchMaterial switchMaterial = findViewById(R.id.adminStopEnrollmentSwitch);
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Courses").document("Students").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot documentSnapshot = null;
@@ -59,7 +59,7 @@ public class adminScreen extends AppCompatActivity {
                 if (documentSnapshot.getData() != null)
                     data = documentSnapshot.getData();
 
-                switchMaterial.setChecked(!(boolean) data.get("areAllowed"));
+                switchMaterial.setChecked(!(boolean) data.get("areStudentsAllowed"));
             }
         });
 
@@ -67,8 +67,8 @@ public class adminScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("areAllowed", !isChecked);
-                firestore.collection("Courses").document("Students").set(map, SetOptions.merge());
+                map.put("areStudentsAllowed", !isChecked);
+                firestore.collection("Courses").document("Flags").set(map, SetOptions.merge());
                 if (isChecked)
                     Toast.makeText(adminScreen.this, "Enrollment stopped!", Toast.LENGTH_SHORT).show();
                 else

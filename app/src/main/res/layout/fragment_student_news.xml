@@ -24,7 +24,7 @@
             android:fontFamily="@font/poppins"
             android:text="@string/news_heading"
             android:textColor="@color/white"
-            android:textSize="28sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
