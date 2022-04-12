@@ -71,7 +71,6 @@ public class studentDetails extends AppCompatActivity {
 
         getItems();
 
-
         searchInput = findViewById(R.id.searchInput);
         searchTextInput = findViewById(R.id.searchTextInput);
 

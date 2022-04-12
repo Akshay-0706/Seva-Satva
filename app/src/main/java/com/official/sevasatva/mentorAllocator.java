@@ -344,7 +344,8 @@ public class mentorAllocator extends AppCompatActivity {
             Map.Entry<String, Object> entry = iterator.next();
             studentDataIndex++;
             Map<String, Object> subStudentData = (Map<String, Object>) entry.getValue();
-            subStudentData.put("mentor", email);
+            subStudentData.put("mentorName", name);
+            subStudentData.put("mentorEmail", email);
             allocatedStudents.put(entry.getKey(), entry.getValue());
         }
 

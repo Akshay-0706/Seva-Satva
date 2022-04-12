@@ -106,14 +106,16 @@ public class studentHome extends Fragment {
         }, 5000, 5000);
 
         ((TextView) getView().findViewById(R.id.homeName)).setText(getFirstName());
+//        Toast.makeText(getContext(), getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+//                .getString("desc", "Course description here"), Toast.LENGTH_SHORT).show();
         ((TextView) getView().findViewById(R.id.homeCourseName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
-                .getString("cn", "India's top problems"));
+                .getString("cn", "Course name here"));
         ((TextView) getView().findViewById(R.id.homeCourseCode)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
-                .getString("cc", "SV12"));
-        ((TextView) getView().findViewById(R.id.homeCourseMentor)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
-                .getString("desc", "Study of India's top two problems"));
-        ((TextView) getView().findViewById(R.id.homeCourseEvalType)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
-                .getString("eval", "Your mentor will set the evaluation type soon."));
+                .getString("cc", "Course code here"));
+        ((TextView) getView().findViewById(R.id.homeCourseDesc)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("desc", "Course description here"));
+        ((TextView) getView().findViewById(R.id.homeCourseMentorName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("mentorName", "Not allocated yet"));
 
         getView().findViewById(R.id.homeAnsBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +124,6 @@ public class studentHome extends Fragment {
             }
 
         });
-
     }
 
     private String getFirstName() {

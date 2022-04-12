@@ -42,8 +42,8 @@
     <string name="student_details_temp_cc_text">SV12</string>
     <string name="student_details_temp_cn_text">India\'s top 2 problems</string>
     <string name="student_details_temp_desc_text">Lorem Ipsum</string>
-    <string name="student_details_eval_text">Evaluation type:</string>
-    <string name="student_details_temp_eval_type_text">Presentation</string>
+    <string name="student_details_mentor_text">Mentor:</string>
+    <string name="student_details_temp_mentor_name_text">Not allocated yet</string>
 
     <string name="home_heading">Seva Satva</string>
     <string name="home_greeting">Hi,</string>
@@ -114,7 +114,7 @@
 
     <!--    Error list-->
     <!--    100 series - Registration-->
-    <string name="error_100">User not registered</string>
+    <string name="error_100">Please try again later…</string>
     <string name="error_101">Unable to login</string>
     <string name="error_102">Request timeout</string>
     <string name="error_103">Unauthorized</string>

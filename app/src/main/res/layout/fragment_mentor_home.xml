@@ -156,11 +156,29 @@
                     app:layout_constraintTop_toBottomOf="@+id/mentorHomeCourseCode"
                     app:layout_constraintVertical_bias="0.0" />
 
+
+                <TextView
+                    android:id="@+id/mentorHomeCourseDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/student_details_temp_desc_text"
+                    android:textColor="?attr/textColorLight"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/mentorHomeCourseStudents"
+                    app:layout_constraintTop_toBottomOf="@+id/divider1"
+                    app:layout_constraintVertical_bias="0.0" />
+
                 <TextView
                     android:id="@+id/mentorHomeCourseStudents"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
                     android:fontFamily="@font/poppins"
                     android:text="Students: 10"
                     android:textColor="?attr/textColorLight"
@@ -169,43 +187,9 @@
                     app:layout_constraintEnd_toEndOf="@+id/mentorHomeCourseCode"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/mentorHomeCourseCode"
-                    app:layout_constraintTop_toBottomOf="@+id/divider1"
+                    app:layout_constraintTop_toBottomOf="@+id/mentorHomeCourseDesc"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <TextView
-                    android:id="@+id/mentorHomeCourseEval"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/poppins"
-                    android:text="@string/student_details_eval_text"
-                    android:textColor="?attr/textColorLight"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/mentorHomeCourseStudents"
-                    app:layout_constraintTop_toBottomOf="@+id/mentorHomeCourseStudents"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/homeCourseEvalType"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"
-                    android:fontFamily="@font/poppins"
-                    android:text="@string/student_details_temp_eval_type_text"
-                    android:textColor="?attr/textColorLight"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/mentorHomeCourseStudents"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/mentorHomeCourseEval"
-                    app:layout_constraintTop_toBottomOf="@+id/mentorHomeCourseStudents"
-                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

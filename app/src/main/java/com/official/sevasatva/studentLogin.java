@@ -121,8 +121,12 @@ public class studentLogin extends AppCompatActivity {
                         if (sharedPreferences.getBoolean("isFirstLaunch", true))
                             fetchStudentDetails();
                         else {
-                            startActivity(new Intent(studentLogin.this, studentScreen.class));
-                            finish();
+                            if (!getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
+                                getMentorDetails();
+                            else {
+                                startActivity(new Intent(studentLogin.this, studentScreen.class));
+                                finish();
+                            }
                         }
                     }
                 })
@@ -166,7 +170,7 @@ public class studentLogin extends AppCompatActivity {
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-            firestore.collection("Courses").document("Students").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot documentSnapshot = null;
@@ -177,9 +181,9 @@ public class studentLogin extends AppCompatActivity {
                         data = documentSnapshot.getData();
 
                     final boolean[] isAllowed = {true};
+                    isAllowed[0] = (boolean) data.get("areStudentsAllowed");
 
-                    Map<String, Object> finalData = data;
-                    firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    firestore.collection("Courses").document("Students").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot documentSnapshot = null;
@@ -189,12 +193,31 @@ public class studentLogin extends AppCompatActivity {
                             if (documentSnapshot.getData() != null)
                                 data2 = documentSnapshot.getData();
 
-                            isAllowed[0] = (boolean) data2.get("areStudentsAllowed");
+                            String cc = "", cn = "", desc = "";
 
-                            for (Map.Entry<String, Object> entry : finalData.entrySet()) {
-                                if (entry.getValue().equals(sharedPreferences.getString("email", "temp"))) {
-                                    isNewStudent = false;
+                            boolean found = false;
+
+                            for (Map.Entry<String, Object> entry : data2.entrySet()) {
+                                if (found)
                                     break;
+                                for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
+                                    switch (entry2.getKey()) {
+                                        case "cc":
+                                            cc = entry2.getValue().toString();
+                                            break;
+                                        case "cn":
+                                            cn = entry2.getValue().toString();
+                                            break;
+                                        case "desc":
+                                            desc = entry2.getValue().toString();
+                                            break;
+                                        case "email":
+                                            if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
+                                                isNewStudent = false;
+                                                found = true;
+                                            }
+                                            break;
+                                    }
                                 }
                             }
 
@@ -204,10 +227,12 @@ public class studentLogin extends AppCompatActivity {
                             } else if (isNewStudent) {
                                 startActivity(new Intent(studentLogin.this, studentDetails.class));
                                 finish();
-
                             } else {
-                                startActivity(new Intent(studentLogin.this, studentScreen.class));
-                                finish();
+                                sharedPreferences.edit().putString("cc", cc).apply();
+                                sharedPreferences.edit().putString("cn", cn).apply();
+                                sharedPreferences.edit().putString("desc", desc).apply();
+
+                                getMentorDetails();
                             }
                         }
                     });
@@ -216,11 +241,68 @@ public class studentLogin extends AppCompatActivity {
             });
 
 
-        } catch (JSONException e) {
+        } catch (
+                JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Your data is not listed in our database, please contact our organizer.", Toast.LENGTH_LONG).show();
             finishAndRemoveTask();
         }
+
+    }
+
+    private void getMentorDetails() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        firestore.collection("Courses").document(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot documentSnapshot = null;
+                        Map<String, Object> data3 = null;
+                        if (task.getResult() != null)
+                            documentSnapshot = task.getResult();
+                        if (documentSnapshot.getData() != null)
+                            data3 = documentSnapshot.getData();
+
+                        String mentorName = "", mentorEmail = "";
+                        boolean areMentorsAllocated = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false);
+                        boolean found2 = false;
+
+                        if (!areMentorsAllocated) {
+                            label:
+                            for (Map.Entry<String, Object> entry : data3.entrySet())
+                                if (entry.getKey().equals("Students")) {
+                                    for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
+                                        if (found2)
+                                            break label;
+                                        for (Map.Entry<String, Object> entry3 : ((Map<String, Object>) entry2.getValue()).entrySet())
+                                            switch (entry3.getKey()) {
+                                                case "mentorName":
+                                                    mentorName = entry3.getValue().toString();
+                                                    break;
+                                                case "mentorEmail":
+                                                    mentorEmail = entry3.getValue().toString();
+                                                    break;
+                                                case "email":
+                                                    if (entry3.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
+                                                        isNewStudent = false;
+                                                        found2 = true;
+                                                    }
+                                                    break;
+                                            }
+                                    }
+                                } else if (entry.getKey().equals("areAllocated"))
+                                    areMentorsAllocated = (boolean) entry.getValue();
+
+                            sharedPreferences.edit().putString("mentorName", mentorName).apply();
+                            sharedPreferences.edit().putString("mentorEmail", mentorEmail).apply();
+                            sharedPreferences.edit().putBoolean("areMentorsAllocated", areMentorsAllocated).apply();
+                        }
+
+                        startActivity(new Intent(studentLogin.this, studentScreen.class));
+                        finish();
+                    }
+                });
     }
 
     private String[] getNameSurname(String email) {

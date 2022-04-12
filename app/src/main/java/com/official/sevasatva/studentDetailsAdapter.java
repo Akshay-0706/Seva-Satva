@@ -184,6 +184,7 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
                     response -> {
                         loadingDialog.dismiss();
                         Map<String, Object> map = new HashMap<>();
+                        Map<String, Object> map2 = new HashMap<>();
 //                        Map<String, Object> map3 = new HashMap<>();
 
                         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -201,7 +202,11 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 //                                            int count = Integer.parseInt(entry.getValue().toString());
 //                                            count++;
 //                                            map3.put("count", count);
-                        map.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), sharedPreferences.getString("email", "temp"));
+                        map2.put("email", sharedPreferences.getString("email", "temp"));
+                        map2.put("cc", cc);
+                        map2.put("cn", cn);
+                        map2.put("desc", desc);
+                        map.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), map2);
                         firestore.collection("Courses").document("Students").set(map, SetOptions.merge());
 
 //                                        }
@@ -240,15 +245,15 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
                         map.put("cls", sharedPreferences.getString("class", "temp"));
                         map.put("year", sharedPreferences.getString("year", "temp"));
                         map.put("image", sharedPreferences.getString("image", "temp"));
-                        map.put("mentor", "Not allocated");
+                        map.put("mentorName", "Not allocated yet");
 
 //                                map2.put("count", count[0]);
 //                                map2.put("email_" + count[0], sharedPreferences.getString("email", "temp"));
-                        Map<String, Object> map2 = new HashMap<>();
-                        map2.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), map);
                         Map<String, Object> map3 = new HashMap<>();
-                        map3.put("Students", map2);
-                        firestore.collection("Courses").document(cc).set(map3, SetOptions.merge());
+                        map3.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), map);
+                        Map<String, Object> map4 = new HashMap<>();
+                        map4.put("Students", map3);
+                        firestore.collection("Courses").document(cc).set(map4, SetOptions.merge());
 
                         Intent intent = new Intent(viewGroup.getContext(), studentScreen.class);
                         viewGroup.getContext().startActivity(intent);
