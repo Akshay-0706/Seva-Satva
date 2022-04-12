@@ -128,21 +128,21 @@
         <!--            app:layout_constraintTop_toBottomOf="@+id/divider2"-->
         <!--            app:layout_constraintVertical_bias="0.0">-->
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/poppins"
-            android:text="@string/pro_sem_text"
-            android:textColor="?attr/textColor"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/divider2"
-            app:layout_constraintTop_toBottomOf="@+id/divider2"
-            app:layout_constraintVertical_bias="0.0" />
+<!--        <TextView-->
+<!--            android:id="@+id/textView2"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:fontFamily="@font/poppins"-->
+<!--            android:text="@string/pro_sem_text"-->
+<!--            android:textColor="?attr/textColor"-->
+<!--            android:textSize="20sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/imageView2"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/divider2"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/divider2"-->
+<!--            app:layout_constraintVertical_bias="0.0" />-->
 
         <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
@@ -161,11 +161,11 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/textView2"
+            app:layout_constraintBottom_toBottomOf="@+id/divider2"
             app:layout_constraintEnd_toEndOf="@+id/divider2"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView2" />
+            app:layout_constraintTop_toTopOf="@+id/divider2" />
 
         <!--            <ImageView-->
         <!--                android:id="@+id/imageView4"-->
@@ -292,8 +292,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/proAskMentorIcon"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/divider2"
+            app:layout_constraintTop_toBottomOf="@+id/divider2"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView

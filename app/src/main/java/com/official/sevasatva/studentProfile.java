@@ -1,5 +1,7 @@
 package com.official.sevasatva;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +23,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -88,11 +93,11 @@ public class studentProfile extends Fragment {
 
         if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl() != null)
             Picasso.get()
-                    .load(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("image", ""))
+                    .load(getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("image", ""))
                     .into((ImageView) getView().findViewById(R.id.proImage));
 
-        ((TextView) getView().findViewById(R.id.studentProName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("name", "User"));
-        ((TextView) getView().findViewById(R.id.studentProEmail)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("email", "User email"));
+        ((TextView) getView().findViewById(R.id.studentProName)).setText(getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "User"));
+        ((TextView) getView().findViewById(R.id.studentProEmail)).setText(getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "User email"));
 
 //        ConstraintLayout proTheme = getView().findViewById(R.id.proTheme);
 //        ConstraintLayout proThemeLayout = getView().findViewById(R.id.proThemeLayout);
@@ -125,6 +130,19 @@ public class studentProfile extends Fragment {
             }
         });
 
+        view.findViewById(R.id.imageView7).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
+        view.findViewById(R.id.textView8).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
 
 //        proSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -136,5 +154,33 @@ public class studentProfile extends Fragment {
 //                proTheme.setVisibility(View.GONE);
 //            }
 //        });
+    }
+
+    private void logout() {
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstRunAppIntro", true).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isUserStudent", true).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("firstRealtimeLoading", true).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstLaunch", true).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("areMentorsAllocated", false).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isAdmin", false).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isMentorLoggedIn", false).apply();
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("426988667812-meoa78skojkt8d3u0rs5mi9dd4i5nok3.apps.googleusercontent.com") // R.string.default_web_client_id
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getActivity(), googleSignInOptions);
+        googleSignInClient.signOut();
+
+        startActivity(new Intent(getActivity(), splash.class));
+        getActivity().finishAffinity();
     }
 }

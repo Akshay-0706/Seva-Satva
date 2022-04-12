@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -59,7 +60,6 @@ public class appIntro extends AppCompatActivity {
                     );
                     bottomSheetDialog.setContentView(drawer);
                     bottomSheetDialog.show();
-                    bottomSheetDialog.setCancelable(false);
                     drawer.findViewById(R.id.roleContinueBtn).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -67,7 +67,6 @@ public class appIntro extends AppCompatActivity {
                             int radioCheckID = radioGroup.getCheckedRadioButtonId();
                             RadioButton radioStudent = drawer.findViewById(R.id.radioStudent);
                             RadioButton radioMentor = drawer.findViewById(R.id.radioMentor);
-                            bottomSheetDialog.dismiss();
 
                             getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                                     .getBoolean("isUserStudent", true);
@@ -76,17 +75,21 @@ public class appIntro extends AppCompatActivity {
                                     .putBoolean("isFirstRunAppIntro", false).apply();
 
                             if (radioCheckID == radioStudent.getId()) {
+                                bottomSheetDialog.dismiss();
                                 Intent intent = new Intent(appIntro.this, studentLogin.class);
                                 appIntro.this.startActivity(intent);
                                 finish();
                             }
-                            else {
+                            else if (radioCheckID == radioMentor.getId()) {
                                 getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                                         .putBoolean("isUserStudent", false).apply();
+                                bottomSheetDialog.dismiss();
                                 Intent intent = new Intent(appIntro.this, mentorLogin.class);
                                 appIntro.this.startActivity(intent);
                                 finish();
                             }
+                            else
+                                Toast.makeText(appIntro.this, "Please select your role to proceed", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

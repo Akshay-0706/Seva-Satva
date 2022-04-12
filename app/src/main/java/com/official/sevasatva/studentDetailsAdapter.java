@@ -63,7 +63,6 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.i(TAG, String.valueOf(position) + " " + String.valueOf(previousExpanded));
         HashMap<String, String> hashMap = list.get(position);
         holder.courseCode.setText(hashMap.get("code"));
         holder.courseName.setText(hashMap.get("name"));
