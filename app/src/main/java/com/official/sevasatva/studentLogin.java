@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -56,6 +58,21 @@ public class studentLogin extends AppCompatActivity {
 
     boolean isNewStudent = true;
 
+    internetCheckListener internetCheckListener = new internetCheckListener();
+
+    @Override
+    protected void onStart() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(internetCheckListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(internetCheckListener);
+        super.onStop();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +81,28 @@ public class studentLogin extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
 
-        signIn();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("date", date).apply();
+
+                        signIn();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+
+                error -> {
+                }
+        );
+
+        int socketTimeOut = 50000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
 
     public void signIn() {
@@ -81,6 +119,7 @@ public class studentLogin extends AppCompatActivity {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
+                Log.d(TAG, "authenticate: Connected to google account");
                 Intent intent = result.getData();
                 Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(intent);
                 try {

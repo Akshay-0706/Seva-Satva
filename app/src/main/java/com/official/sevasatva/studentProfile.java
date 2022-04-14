@@ -144,6 +144,24 @@ public class studentProfile extends Fragment {
             }
         });
 
+        view.findViewById(R.id.studentProFeedback).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), studentProfileFeedback.class));
+                    }
+                }
+        );
+
+        view.findViewById(R.id.studentProFeedbackArrow).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), studentProfileFeedback.class));
+                    }
+                }
+        );
+
 //        proSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
 //            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

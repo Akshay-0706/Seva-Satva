@@ -32,12 +32,12 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
 
     private List<chatScreenModel> chatList;
     private final Context context;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
-    String todaysDate = dateFormat.format(new Date());
+    String todaysDate;
 
-    public chatScreenAdapter(List<chatScreenModel> chatList, Context context) {
+    public chatScreenAdapter(List<chatScreenModel> chatList, Context context, String todaysDate) {
         this.chatList = chatList;
         this.context = context;
+        this.todaysDate = todaysDate;
     }
 
     @NonNull

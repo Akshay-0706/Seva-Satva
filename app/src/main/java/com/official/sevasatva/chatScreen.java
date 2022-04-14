@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -20,19 +22,45 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class chatScreen extends AppCompatActivity {
+
+    internetCheckListener internetCheckListener = new internetCheckListener();
+
+    @Override
+    protected void onStart() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(internetCheckListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(internetCheckListener);
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +141,7 @@ public class chatScreen extends AppCompatActivity {
                     lottieAnimationView.setVisibility(View.VISIBLE);
                 }
 
-                chatScreenAdapter chatScreenAdapter = new chatScreenAdapter(chatList, context);
+                chatScreenAdapter chatScreenAdapter = new chatScreenAdapter(chatList, context, getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("date", "temp"));
                 chatRecyclerView.setAdapter(chatScreenAdapter);
                 chatRecyclerView.scrollToPosition(chatList.size() - 1);
             }
@@ -126,23 +154,50 @@ public class chatScreen extends AppCompatActivity {
     }
 
     public void sendMessage(String message, Context context) {
-        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
-        String currentDate = dateFormat.format(new Date());
-        String currentTime = timeFormat.format(new Date());
+//        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+
         HashMap<String, Object> map = new HashMap<>();
         DatabaseReference databaseReference;
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        map.put("date", currentDate);
         map.put("email", context.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("email", "mentor@spit.ac.in"));
         map.put("isStudent", context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true));
         map.put("msg", message);
         map.put("name", context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "Mentor"));
-        map.put("time", currentTime);
 
-        databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(timeStamp).setValue(map);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        String currentDate = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+                        String currentTime = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), false);
+                        String dateTimeStamp = jsonObject.getInt("hour") + ":" + jsonObject.getInt("minute") + ":" + jsonObject.getInt("seconds")
+                                + " " + jsonObject.getInt("day") + " " + jsonObject.getInt("month") + " " + jsonObject.getInt("year");
+
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss dd MM yyyy", Locale.ENGLISH);
+                        Date date = format.parse(dateTimeStamp);
+                        long timestamp = date.getTime();
+
+                        map.put("date", currentDate);
+                        map.put("time", currentTime);
+
+                        databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(String.valueOf(timestamp)).setValue(map);
+
+                    } catch (JSONException | ParseException e) {
+                        e.printStackTrace();
+                    }
+                },
+
+                error -> {
+                    Toast.makeText(this, "Unable to access current date!", Toast.LENGTH_LONG).show();
+                }
+        );
+
+        int socketTimeOut = 50000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
 
     }
 }

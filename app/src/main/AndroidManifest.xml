@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Official.SevaSatva">
         <activity
+            android:name=".studentProfileFeedback"
+            android:exported="false" />
+        <activity
             android:name=".studentNewsDetails"
             android:exported="false" />
         <activity

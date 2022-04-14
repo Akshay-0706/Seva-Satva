@@ -30,4 +30,5 @@
     <color name="chatMentorTextColor">#F44336</color>
     <color name="chatDeveloperTextColor">#00BCD4</color>
     <color name="adminBG">#1C2E46</color>
+    <color name="temp">#66687C</color>
 </resources>

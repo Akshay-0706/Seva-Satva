@@ -156,16 +156,16 @@
         <!--            app:layout_constraintTop_toBottomOf="@+id/constraintLayout5"-->
         <!--            app:layout_constraintVertical_bias="0.0">-->
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:background="@drawable/xtra_forward_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/divider2"
-            app:layout_constraintEnd_toEndOf="@+id/divider2"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/divider2" />
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView2"-->
+<!--            android:layout_width="22dp"-->
+<!--            android:layout_height="22dp"-->
+<!--            android:background="@drawable/xtra_forward_icon"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/divider2"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/divider2"-->
+<!--            app:layout_constraintHorizontal_bias="1.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/divider2" />-->
 
         <!--            <ImageView-->
         <!--                android:id="@+id/imageView4"-->
@@ -302,7 +302,7 @@
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
             app:layout_constraintBottom_toBottomOf="@+id/proAskMentorText"
-            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintEnd_toEndOf="@+id/divider2"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/proAskMentorText" />
@@ -329,13 +329,13 @@
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
             app:layout_constraintBottom_toBottomOf="@+id/proAboutUs"
-            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintEnd_toEndOf="@+id/proAskMentorIcon"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/proAboutUs" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/studentProFeedback"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -351,15 +351,15 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/studentProFeedbackArrow"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/textView6"
-            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintBottom_toBottomOf="@+id/studentProFeedback"
+            app:layout_constraintEnd_toEndOf="@+id/proAskMentorIcon"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView6" />
+            app:layout_constraintTop_toTopOf="@+id/studentProFeedback" />
 
         <TextView
             android:id="@+id/textView7"
@@ -375,7 +375,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
-            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/studentProFeedback"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
@@ -384,7 +384,7 @@
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
             app:layout_constraintBottom_toBottomOf="@+id/textView7"
-            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintEnd_toEndOf="@+id/proAskMentorIcon"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView7" />
@@ -412,7 +412,7 @@
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
             app:layout_constraintBottom_toBottomOf="@+id/textView8"
-            app:layout_constraintEnd_toEndOf="@+id/divider2"
+            app:layout_constraintEnd_toEndOf="@+id/proAskMentorIcon"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView8" />
