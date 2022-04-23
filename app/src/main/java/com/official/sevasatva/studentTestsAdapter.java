@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -107,6 +108,7 @@ public class studentTestsAdapter extends RecyclerView.Adapter<studentTestsAdapte
 
         ConstraintLayout studentTestsRecyclerItemsLayout;
         TextView title, marks, submitted, deadline;
+        ImageButton studentTestsDelete;
         LottieAnimationView testStatus;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -117,7 +119,11 @@ public class studentTestsAdapter extends RecyclerView.Adapter<studentTestsAdapte
             marks = itemView.findViewById(R.id.studentTestsMarks);
             submitted = itemView.findViewById(R.id.studentTestsStatus);
             deadline = itemView.findViewById(R.id.studentTestsDeadline);
+            studentTestsDelete = itemView.findViewById(R.id.studentTestsDelete);
             testStatus = itemView.findViewById(R.id.studentTestsOnline);
+
+
+            studentTestsDelete.setVisibility(context.getClass().equals(studentScreen.class) ? View.GONE : View.VISIBLE);
 
             studentTestsRecyclerItemsLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -141,8 +147,6 @@ public class studentTestsAdapter extends RecyclerView.Adapter<studentTestsAdapte
                     }
                 }
             });
-
-
         }
     }
 }

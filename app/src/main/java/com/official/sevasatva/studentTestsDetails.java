@@ -215,6 +215,7 @@ public class studentTestsDetails extends AppCompatActivity {
                             Toast.makeText(studentTestsDetails.this, "Uploaded successfully!", Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(studentTestsDetails.this, "Updated successfully!", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -226,7 +227,6 @@ public class studentTestsDetails extends AppCompatActivity {
                         .child(id).child("students")
                         .child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_"))
                         .setValue(students);
-
             } else {
                 Toast.makeText(studentTestsDetails.this, R.string.error_401, Toast.LENGTH_SHORT).show();
             }

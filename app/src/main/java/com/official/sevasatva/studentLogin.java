@@ -100,7 +100,7 @@ public class studentLogin extends AppCompatActivity {
                         String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
                         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("date", date).apply();
 
-                        getCategory();
+                        signIn();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -130,7 +130,17 @@ public class studentLogin extends AppCompatActivity {
                     category = (String) dataSnapshot.child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).getValue();
 
                 getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("category", category).apply();
-                signIn();
+
+                if (sharedPreferences.getBoolean("isFirstLaunch", true))
+                    fetchStudentDetails();
+                else {
+                    if (!getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
+                        getMentorDetails();
+                    else {
+                        startActivity(new Intent(studentLogin.this, studentScreen.class));
+                        finish();
+                    }
+                }
             }
         });
     }
@@ -186,17 +196,7 @@ public class studentLogin extends AppCompatActivity {
                         assert firebaseUser != null;
                         sharedPreferences.edit().putString("email", firebaseUser.getEmail()).apply();
                         sharedPreferences.edit().putString("image", firebaseUser.getPhotoUrl().toString()).apply();
-
-                        if (sharedPreferences.getBoolean("isFirstLaunch", true))
-                            fetchStudentDetails();
-                        else {
-                            if (!getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
-                                getMentorDetails();
-                            else {
-                                startActivity(new Intent(studentLogin.this, studentScreen.class));
-                                finish();
-                            }
-                        }
+                        getCategory();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -205,7 +205,6 @@ public class studentLogin extends AppCompatActivity {
                         Log.d(TAG, "onFailure: login failed" + e.getMessage());
                     }
                 });
-
     }
 
     private void fetchStudentDetails() {
