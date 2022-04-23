@@ -236,7 +236,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/poppins"
-            android:text="@string/home_temp_tests_info_text"
+            android:text="@string/loading_text"
             android:textColor="?attr/textColorLight"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"

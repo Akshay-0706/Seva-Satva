@@ -95,6 +95,7 @@
     <string name="chat_today">Today</string>
     <string name="chat_you">You</string>
 
+    <string name="loading_text">Loading…</string>
 
     <!--    String arrays-->
     <string-array name="Branches">

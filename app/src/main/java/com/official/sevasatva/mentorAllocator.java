@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class mentorAllocator extends AppCompatActivity {
 
-    String cn, cc, name = "", email = "", pass = "";
+    String cn, cc, desc, name = "", email = "", pass = "";
     int enrolled = 0, mentorDetailsIndex = 0, studentDataIndex = 0;
     int[] mentorsDetails;
     boolean addingMentor = false, editingAvailable = false, areAllocated = false, newLaunch = true;
@@ -70,6 +70,7 @@ public class mentorAllocator extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         cn = bundle.getString("name");
         cc = bundle.getString("code");
+        desc = bundle.getString("desc");
 
         setMentorsItems();
 
@@ -115,6 +116,7 @@ public class mentorAllocator extends AppCompatActivity {
                     for (Map.Entry<String, Object> entry : data.entrySet()) {
                         if (entry.getKey().equals("Mentors")) {
                             mentorsData = (Map<String, Object>) entry.getValue();
+                            mentorDetailsIndex = mentorsData.size();
                             for (Map.Entry<String, Object> entry2 : mentorsData.entrySet()) {
                                 mentorsData2 = (Map<String, Object>) entry2.getValue();
 
@@ -228,6 +230,10 @@ public class mentorAllocator extends AppCompatActivity {
         }
 
         requiredMentors.setText(String.valueOf(mentorsDetails.length));
+        if (mentorDetailsIndex != 0)
+            for (int i = 0; i < mentorsDetails[mentorDetailsIndex]; i++)
+                studentDataIndex++;
+
         editingAvailable = true;
 
     }
@@ -313,6 +319,8 @@ public class mentorAllocator extends AppCompatActivity {
         map2.put("name", name);
         map2.put("email", email);
         map2.put("cc", cc);
+        map2.put("cn", cn);
+        map2.put("desc", desc);
         map.put(timeStamp, map2);
         firebaseFirestore.collection("Courses").document("Mentors").set(map, SetOptions.merge());
 
@@ -324,13 +332,12 @@ public class mentorAllocator extends AppCompatActivity {
                     public void onSuccess(AuthResult authResult) {
                         Toast.makeText(mentorAllocator.this, "Mentor added", Toast.LENGTH_SHORT).show();
                         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("TAG", "onFailure: " + e);
-                Toast.makeText(mentorAllocator.this, "Unable to add mentor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mentorAllocator.this, "Mentor with this email already exits!", Toast.LENGTH_SHORT).show();
             }
         });
 

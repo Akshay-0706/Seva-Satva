@@ -196,7 +196,6 @@ public class mentorHomeAns extends AppCompatActivity {
 
     private void getInput() {
 
-
     }
 
     ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -230,7 +229,6 @@ public class mentorHomeAns extends AppCompatActivity {
                         R.layout.fragment_mentor_home_ans_attach_list_items,
                         attachments);
                 attachLists.setAdapter(arrayAdapter);
-
 
             } else {
                 Toast.makeText(mentorHomeAns.this, R.string.error_401, Toast.LENGTH_SHORT).show();

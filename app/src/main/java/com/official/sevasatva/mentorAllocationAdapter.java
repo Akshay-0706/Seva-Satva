@@ -58,6 +58,7 @@ public class mentorAllocationAdapter extends RecyclerView.Adapter<mentorAllocati
                     Intent intent = new Intent(viewGroup.getContext(), mentorAllocator.class);
                     intent.putExtra("name", list.get(getAdapterPosition()).getName());
                     intent.putExtra("code", list.get(getAdapterPosition()).getCode());
+                    intent.putExtra("desc", list.get(getAdapterPosition()).getDesc());
                     viewGroup.getContext().startActivity(intent);
                 }
             });

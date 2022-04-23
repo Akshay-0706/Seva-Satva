@@ -110,7 +110,6 @@ public class studentHomeAnsAdapter extends RecyclerView.Adapter<studentHomeAnsAd
                         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
                         if (attach != null)
                             for (int i = 0; i < attach.size(); i++) {
-                                int finalI = i;
                                 storageReference.child("Announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(ansList.get(getAdapterPosition()).getId())
                                         .child(attach.get(i)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override

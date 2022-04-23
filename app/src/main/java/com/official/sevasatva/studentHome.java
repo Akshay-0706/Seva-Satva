@@ -1,5 +1,7 @@
 package com.official.sevasatva;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +18,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -77,6 +99,7 @@ public class studentHome extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         ViewPager viewPager;
         viewPager = getView().findViewById(R.id.studentHomeViewPager);
 
@@ -108,13 +131,13 @@ public class studentHome extends Fragment {
         ((TextView) getView().findViewById(R.id.homeName)).setText(getFirstName());
 //        Toast.makeText(getContext(), getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
 //                .getString("desc", "Course description here"), Toast.LENGTH_SHORT).show();
-        ((TextView) getView().findViewById(R.id.homeCourseName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+        ((TextView) getView().findViewById(R.id.homeCourseName)).setText(getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("cn", "Course name here"));
-        ((TextView) getView().findViewById(R.id.homeCourseCode)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+        ((TextView) getView().findViewById(R.id.homeCourseCode)).setText(getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("cc", "Course code here"));
-        ((TextView) getView().findViewById(R.id.homeCourseDesc)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+        ((TextView) getView().findViewById(R.id.homeCourseDesc)).setText(getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("desc", "Course description here"));
-        ((TextView) getView().findViewById(R.id.homeCourseMentorName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+        ((TextView) getView().findViewById(R.id.homeCourseMentorName)).setText(getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("mentorName", "Not allocated yet"));
 
         getView().findViewById(R.id.homeAnsBtn).setOnClickListener(new View.OnClickListener() {
@@ -122,13 +145,77 @@ public class studentHome extends Fragment {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), studentHomeAns.class));
             }
-
         });
+
+        setTestStatus();
     }
 
     private String getFirstName() {
-        String fullName = getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("name", "User");
+        String fullName = getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "User");
         int index = fullName.indexOf(' ');
         return fullName.substring(0, index);
+    }
+
+    private void setTestStatus() {
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("tests").child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
+                .child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "temp").replaceAll("\\.", "_"))
+                .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                DataSnapshot dataSnapshot = null;
+                Map<String, Object> data;
+                if (task.getResult() != null)
+                    dataSnapshot = task.getResult();
+                data = (Map<String, Object>) dataSnapshot.getValue();
+
+                Map<String, Object> comintTest = (Map<String, Object>) data.get("comingTest");
+
+                if (comintTest != null) {
+                    String time = (String) comintTest.get("time");
+                    String date = (String) comintTest.get("date");
+
+                    try {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);
+                        Date deadline = simpleDateFormat.parse(time + " " + date);
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+                                response -> {
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        String currentDate = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+                                        String currentTime = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
+
+                                        Date current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(currentTime + " " + currentDate);
+
+                                        if (current.before(deadline))
+                                            ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText("Test is scheduled on " + date + " at " + time + ".");
+                                        else
+                                            ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
+
+                                    } catch (JSONException | ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                },
+
+                                error -> {
+                                    Toast.makeText(getContext(), "Unable to access current date!", Toast.LENGTH_LONG).show();
+                                }
+                        );
+
+                        int socketTimeOut = 50000;
+                        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        stringRequest.setRetryPolicy(policy);
+                        RequestQueue queue = Volley.newRequestQueue(getActivity());
+                        queue.add(stringRequest);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
+                }
+            }
+        });
     }
 }

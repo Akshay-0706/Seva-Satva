@@ -1,5 +1,7 @@
 package com.official.sevasatva;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,17 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,6 +82,7 @@ public class mentorDoubts extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_mentor_doubts, container, false);
+
     }
 
     @Override
@@ -93,6 +107,27 @@ public class mentorDoubts extends Fragment {
             }
         });
 
-        chatScreen.initChatScreen(chatRecyclerView, getActivity());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+                        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("date", date).apply();
+
+                        chatScreen.initChatScreen(chatRecyclerView, getActivity());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+
+                error -> {
+                }
+        );
+
+        int socketTimeOut = 50000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(stringRequest);
     }
 }

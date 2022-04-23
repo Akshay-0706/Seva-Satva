@@ -1,17 +1,27 @@
 package com.official.sevasatva;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,6 +70,7 @@ public class studentHomeAns extends AppCompatActivity {
             }
         });
 
+//        showNotification(this, "Title", "This is the message to display", new Intent(getApplicationContext(), studentHomeAns.class), 1);
         RecyclerView ansRecyclerView = findViewById(R.id.ansRecyclerView);
         getAnnouncements(ansRecyclerView, this);
 
@@ -94,6 +106,12 @@ public class studentHomeAns extends AppCompatActivity {
                         final ArrayList<String> attach = (ArrayList<String>) dataSnapshot.child("attach").getValue();
                         final String id = dataSnapshot.getKey();
 
+//                        Toast.makeText(context, "Changed!", Toast.LENGTH_SHORT).show();
+
+//                        int reqCode = 1;
+//                        Intent intent = new Intent(getApplicationContext(), studentHomeAns.class);
+//                        showNotification(context, title, desc, new Intent(getApplicationContext(), studentHomeAns.class), 1);
+
                         studentHomeAnsModel studentHomeAnsModel = new studentHomeAnsModel(title, desc, hasAttach, false, attach, id);
                         ansList.add(studentHomeAnsModel);
 
@@ -116,5 +134,80 @@ public class studentHomeAns extends AppCompatActivity {
 
             }
         });
+
+//        databaseReference.child("announcements")
+//                .child("SV10")
+//                .addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+////                Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show();
+//
+//                final String title = snapshot.child("title").getValue(String.class);
+//                final String desc = snapshot.child("desc").getValue(String.class);
+//                if (title == null)
+//                    Toast.makeText(context, "title", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show();
+//                new sendNotification(context, title, desc, new Intent(getApplicationContext(), studentHomeAns.class), 1);
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+////                Toast.makeText(context, "Changed", Toast.LENGTH_SHORT).show();
+////                showNotification(context, "Title", "This is the message to display", new Intent(getApplicationContext(), studentHomeAns.class), 1);
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
+
+//    public void showNotification(Context context, String title, String message, Intent intent, int reqCode) {
+//
+//        NotificationManager mNotificationManager;
+//
+//        NotificationCompat.Builder mBuilder =
+//                new NotificationCompat.Builder(context.getApplicationContext(), "notify_001");
+//        Intent ii = new Intent(context.getApplicationContext(), studentHomeAns.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, ii, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+//        bigText.bigText(message);
+//        bigText.setBigContentTitle(title);
+//
+//        mBuilder.setContentIntent(pendingIntent);
+//        mBuilder.setSmallIcon(R.drawable.xtra_app_icon);
+//        mBuilder.setContentTitle("New announcement added");
+//        mBuilder.setContentText("Your mentor has added new announcement, check it now!");
+//        mBuilder.setPriority(Notification.PRIORITY_MAX);
+//        mBuilder.setStyle(bigText);
+//
+//        mNotificationManager =
+//                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            String channelId = "Your_channel_id";
+//            NotificationChannel channel = new NotificationChannel(
+//                    channelId,
+//                    "Channel Announcements",
+//                    NotificationManager.IMPORTANCE_HIGH);
+//            mNotificationManager.createNotificationChannel(channel);
+//            mBuilder.setChannelId(channelId);
+//        }
+//
+//        mNotificationManager.notify(0, mBuilder.build());
+//
+//        Log.d("showNotification", "showNotification: " + reqCode);
+//    }
 }

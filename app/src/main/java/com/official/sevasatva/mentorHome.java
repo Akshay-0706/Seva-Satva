@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -148,6 +149,11 @@ public class mentorHome extends Fragment {
 
     private void setStudents() {
         studentsList.clear();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putInt("studentsCount", studentsData[0].size()).apply();
+        ((TextView) getView().findViewById(R.id.mentorHomeCourseStudents)).setText("Students: " + studentsData[0].size());
+        ((TextView) getView().findViewById(R.id.mentorHomeCourseName)).setText(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cn", "temp"));
+        ((TextView) getView().findViewById(R.id.mentorHomeCourseCode)).setText(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"));
+        ((TextView) getView().findViewById(R.id.mentorHomeCourseDesc)).setText(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("desc", "temp"));
 
         for (Map.Entry<String, Object> entry : studentsData[0].entrySet()) {
             final String data[] = new String[5];

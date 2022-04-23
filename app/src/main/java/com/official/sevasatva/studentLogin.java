@@ -308,12 +308,12 @@ public class studentLogin extends AppCompatActivity {
                         boolean found2 = false;
 
                         if (!areMentorsAllocated) {
-                            label:
-                            for (Map.Entry<String, Object> entry : data3.entrySet())
+                            for (Map.Entry<String, Object> entry : data3.entrySet()) {
+//                                Toast.makeText(studentLogin.this, entry.getKey().toString(), Toast.LENGTH_SHORT).show();
                                 if (entry.getKey().equals("Students")) {
                                     for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
                                         if (found2)
-                                            break label;
+                                            break;
                                         for (Map.Entry<String, Object> entry3 : ((Map<String, Object>) entry2.getValue()).entrySet())
                                             switch (entry3.getKey()) {
                                                 case "mentorName":
@@ -330,12 +330,15 @@ public class studentLogin extends AppCompatActivity {
                                                     break;
                                             }
                                     }
-                                } else if (entry.getKey().equals("areAllocated"))
+                                }
+                                if (entry.getKey().equals("areAllocated"))
                                     areMentorsAllocated = (boolean) entry.getValue();
+                            }
 
                             sharedPreferences.edit().putString("mentorName", mentorName).apply();
                             sharedPreferences.edit().putString("mentorEmail", mentorEmail).apply();
                             sharedPreferences.edit().putBoolean("areMentorsAllocated", areMentorsAllocated).apply();
+//                            Toast.makeText(studentLogin.this, "allocated: " + areMentorsAllocated, Toast.LENGTH_SHORT).show();
                         }
 
                         startActivity(new Intent(studentLogin.this, studentScreen.class));

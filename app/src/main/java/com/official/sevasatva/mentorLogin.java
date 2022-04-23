@@ -63,7 +63,6 @@ public class mentorLogin extends AppCompatActivity {
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         setContentView(R.layout.activity_mentor_login);
 
-
         if (getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isAdmin", false)) {
             startActivity(new Intent(mentorLogin.this, adminScreen.class));
             finish();
@@ -175,7 +174,7 @@ public class mentorLogin extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                         boolean found = false;
-                                        String name = "", code = "";
+                                        String name = "", code = "", courseName = "", courseDesc = "";
                                         DocumentSnapshot documentSnapshot = null;
                                         Map<String, Object> data = null;
                                         if (task.getResult() != null)
@@ -192,15 +191,20 @@ public class mentorLogin extends AppCompatActivity {
                                                     name = entry2.getValue().toString();
                                                 else if (entry2.getKey().equals("cc"))
                                                     code = entry2.getValue().toString();
+                                                else if (entry2.getKey().equals("cn"))
+                                                    courseName = entry2.getValue().toString();
+                                                else if (entry2.getKey().equals("desc"))
+                                                    courseDesc = entry2.getValue().toString();
                                                 else if (entry2.getValue().equals(email)) {
                                                     found = true;
-                                                    break;
                                                 }
                                             }
                                         }
 
                                         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("name", name).apply();
                                         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("cc", code).apply();
+                                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("cn", courseName).apply();
+                                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("desc", courseDesc).apply();
                                         startActivity(new Intent(mentorLogin.this, mentorScreen.class));
                                         finish();
                                     }

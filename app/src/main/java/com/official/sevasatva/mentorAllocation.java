@@ -97,8 +97,9 @@ public class mentorAllocation extends AppCompatActivity {
 
                 String name = jo.getString("name");
                 String code = jo.getString("code");
+                String desc = jo.getString("desc");
 
-                mentorAllocationModel mentorAllocationModel = new mentorAllocationModel(name, code);
+                mentorAllocationModel mentorAllocationModel = new mentorAllocationModel(name, code, desc);
                 list.add(mentorAllocationModel);
             }
         } catch (JSONException e) {

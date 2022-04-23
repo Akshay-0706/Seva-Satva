@@ -23,6 +23,8 @@
         <item name="inverted">@color/white</item>
         <item name="tabTextColor">@color/black</item>
         <item name="recieverChatBG">@color/receiverChatBG</item>
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
+        <item name="android:timePickerStyle">@style/MyTimePickerStyle</item>
     </style>
 
     <style name="appIntoBottomDrawerTheme" parent="Theme.Design.BottomSheetDialog">
@@ -45,4 +47,25 @@
         <item name="android:colorForeground">@color/textColorLightNight
         </item>
     </style>
+
+    <!--    <style name="AppBaseTheme" parent="android:Theme.Material.Light">-->
+    <!--        ....-->
+    <!--        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>-->
+    <!--    </style>-->
+
+    <!--    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">-->
+    <!--        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>-->
+    <!--    </style>-->
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@color/white</item>
+        <item name="android:windowBackground">@color/black</item>
+    </style>
+
+    <style name="MyTimePickerStyle" parent="@android:style/Widget.Material.Light.TimePicker">
+        <item name="android:numbersTextColor">@color/black</item>
+        <item name="android:headerBackground">@color/white</item>
+        <item name="android:windowBackground">@color/black</item>
+    </style>
+
 </resources>

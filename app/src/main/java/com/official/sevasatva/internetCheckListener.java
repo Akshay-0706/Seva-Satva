@@ -41,9 +41,10 @@ public class internetCheckListener extends BroadcastReceiver {
             exit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Activity) context).finishAndRemoveTask();
+                    ((Activity) context).finishAffinity();
                 }
             });
+
             retry.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

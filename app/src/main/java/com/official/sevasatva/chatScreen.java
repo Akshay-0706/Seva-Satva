@@ -141,7 +141,7 @@ public class chatScreen extends AppCompatActivity {
                     lottieAnimationView.setVisibility(View.VISIBLE);
                 }
 
-                chatScreenAdapter chatScreenAdapter = new chatScreenAdapter(chatList, context, getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("date", "temp"));
+                chatScreenAdapter chatScreenAdapter = new chatScreenAdapter(chatList, context, context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("date", "temp"));
                 chatRecyclerView.setAdapter(chatScreenAdapter);
                 chatRecyclerView.scrollToPosition(chatList.size() - 1);
             }
@@ -196,7 +196,7 @@ public class chatScreen extends AppCompatActivity {
         int socketTimeOut = 50000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         stringRequest.setRetryPolicy(policy);
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
 
     }

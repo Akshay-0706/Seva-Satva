@@ -66,7 +66,10 @@ public class getDateNTime {
             hour = 12;
 
         if (withSeconds)
-            return hour + ":" + minutes + ":" + seconds + " " + meridian;
+            if (seconds < 10)
+                return hour + ":" + minutes + ":0" + seconds + " " + meridian;
+            else
+                return hour + ":" + minutes + ":" + seconds + " " + meridian;
         else
             return hour + ":" + minutes + " " + meridian;
 
