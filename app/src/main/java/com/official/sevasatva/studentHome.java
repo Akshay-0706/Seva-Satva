@@ -209,6 +209,7 @@ public class studentHome extends Fragment {
                         RequestQueue queue = Volley.newRequestQueue(getActivity());
                         queue.add(stringRequest);
 
+
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

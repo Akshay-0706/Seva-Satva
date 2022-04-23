@@ -36,6 +36,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -43,8 +48,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class studentLogin extends AppCompatActivity {
 
@@ -88,7 +100,7 @@ public class studentLogin extends AppCompatActivity {
                         String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
                         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("date", date).apply();
 
-                        signIn();
+                        getCategory();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -103,6 +115,24 @@ public class studentLogin extends AppCompatActivity {
         stringRequest.setRetryPolicy(policy);
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(stringRequest);
+    }
+
+    private void getCategory() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("news").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                DataSnapshot dataSnapshot = null;
+                if (task.getResult() != null)
+                    dataSnapshot = task.getResult();
+                String category = "All";
+                if (dataSnapshot != null)
+                    category = (String) dataSnapshot.child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).getValue();
+
+                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("category", category).apply();
+                signIn();
+            }
+        });
     }
 
     public void signIn() {

@@ -151,67 +151,56 @@ public class studentNews extends Fragment {
         loadingDialog.setCancelable(false);
         loadingDialog.show();
 
-        String courseName = getContext().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("cn", "");
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("news").addValueEventListener(new ValueEventListener() {
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//        databaseReference.child("news").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                newsList.clear(); // clears and add specfic categories
+//                String category = "All";
+//                if (snapshot.hasChild(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")))
+//                    category = (String) snapshot.child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).getValue();
+
+        String category = getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("category", "All");
+
+        String url = "https://newsapi.org/v2/everything?language=en&sortBy=publishedAt&q=" + category + "&from=2022-04-03" + "&apiKey=c2c368b741844c39a08a194825a365e0";
+
+        String mainUrl = "https://newsapi.org/";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(mainUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        studentNewsRetrofit studentNewsRetrofit = retrofit.create(studentNewsRetrofit.class);
+        Call<studentNewsFetcherModel> call;
+
+        if (category.equals("All")) {
+            call = studentNewsRetrofit.getAllNews(url);
+        } else {
+            call = studentNewsRetrofit.getNewsByCategory(url);
+        }
+
+        call.enqueue(new Callback<studentNewsFetcherModel>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                DataSnapshot dataSnapshot = snapshot.child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"));
-                newsList.clear(); // clears and add specfic categories
-                String category = "All";
-                if (snapshot.hasChild(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")))
-                    category = (String) snapshot.child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).getValue();
+            public void onResponse(Call<studentNewsFetcherModel> call, Response<studentNewsFetcherModel> response) {
+                Log.i("Response", "onResponse: " + response);
 
-                String url = "https://newsapi.org/v2/everything?language=en&sortBy=publishedAt&q=" + category + "&from=2022-04-03" + "&apiKey=c2c368b741844c39a08a194825a365e0";
+                ArrayList<studentNewsModel> news = response.body().getArticles();
 
-                String mainUrl = "https://newsapi.org/";
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(mainUrl)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                studentNewsRetrofit studentNewsRetrofit = retrofit.create(studentNewsRetrofit.class);
-                Call<studentNewsFetcherModel> call;
-
-                if (category.equals("All")) {
-                    call = studentNewsRetrofit.getAllNews(url);
-                } else {
-                    call = studentNewsRetrofit.getNewsByCategory(url);
+                for (int i = 0; i < news.size(); i++) {
+                    studentNewsModel studentNewsModel = new studentNewsModel(news.get(i).getTitle(), news.get(i).getDescription(), news.get(i).getUrlToImage(), news.get(i).getContent(), news.get(i).getUrl());
+                    newsList.add(studentNewsModel);
                 }
 
-                call.enqueue(new Callback<studentNewsFetcherModel>() {
-                    @Override
-                    public void onResponse(Call<studentNewsFetcherModel> call, Response<studentNewsFetcherModel> response) {
-                        Log.i("Response", "onResponse: " + response);
-
-                        ArrayList<studentNewsModel> news = response.body().getArticles();
-
-                        for (int i = 0; i < news.size(); i++) {
-                            studentNewsModel studentNewsModel = new studentNewsModel(news.get(i).getTitle(), news.get(i).getDescription(), news.get(i).getUrlToImage(), news.get(i).getContent(), news.get(i).getUrl());
-                            newsList.add(studentNewsModel);
-                        }
-
-                        loadingDialog.dismiss();
-                        studentNewsAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onFailure(Call<studentNewsFetcherModel> call, Throwable t) {
-                        Toast.makeText(getContext(), "Failure to get API", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                loadingDialog.dismiss();
+                studentNewsAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onFailure(Call<studentNewsFetcherModel> call, Throwable t) {
+                Toast.makeText(getContext(), "Failure to get API", Toast.LENGTH_SHORT).show();
             }
-
         });
-
-
     }
-
 }
 
 
