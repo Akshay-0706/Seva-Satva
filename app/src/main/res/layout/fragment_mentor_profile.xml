@@ -281,7 +281,7 @@
 
 
         <TextView
-            android:id="@+id/proAskMentorText"
+            android:id="@+id/proContactOrganizer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -290,22 +290,22 @@
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/proAskMentorIcon"
+            app:layout_constraintEnd_toStartOf="@+id/proContactOrganizerArrow"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/divider2"
             app:layout_constraintTop_toBottomOf="@+id/divider2"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/proAskMentorIcon"
+            android:id="@+id/proContactOrganizerArrow"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/proAskMentorText"
+            app:layout_constraintBottom_toBottomOf="@+id/proContactOrganizer"
             app:layout_constraintEnd_toEndOf="@+id/divider2"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/proAskMentorText" />
+            app:layout_constraintTop_toTopOf="@+id/proContactOrganizer" />
 
         <TextView
             android:id="@+id/proAboutUs"
@@ -319,8 +319,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
-            app:layout_constraintTop_toBottomOf="@+id/proAskMentorText"
+            app:layout_constraintStart_toStartOf="@+id/proContactOrganizer"
+            app:layout_constraintTop_toBottomOf="@+id/proContactOrganizer"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
@@ -335,7 +335,7 @@
             app:layout_constraintTop_toTopOf="@+id/proAboutUs" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/mentorProFeedback"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -346,20 +346,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
+            app:layout_constraintStart_toStartOf="@+id/proContactOrganizer"
             app:layout_constraintTop_toBottomOf="@+id/proAboutUs"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/mentorProFeedbackArrow"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/textView6"
+            app:layout_constraintBottom_toBottomOf="@+id/mentorProFeedback"
             app:layout_constraintEnd_toEndOf="@+id/divider2"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView6" />
+            app:layout_constraintTop_toTopOf="@+id/mentorProFeedback" />
 
         <TextView
             android:id="@+id/textView7"
@@ -374,8 +374,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
-            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/proContactOrganizer"
+            app:layout_constraintTop_toBottomOf="@+id/mentorProFeedback"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
@@ -390,7 +390,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView7" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/mentorProLogout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -402,20 +402,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
+            app:layout_constraintStart_toStartOf="@+id/proContactOrganizer"
             app:layout_constraintTop_toBottomOf="@+id/textView7"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/mentorProLogoutArrow"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/textView8"
+            app:layout_constraintBottom_toBottomOf="@+id/mentorProLogout"
             app:layout_constraintEnd_toEndOf="@+id/divider2"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView8" />
+            app:layout_constraintTop_toTopOf="@+id/mentorProLogout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

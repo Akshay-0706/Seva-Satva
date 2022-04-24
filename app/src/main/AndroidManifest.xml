@@ -20,7 +20,7 @@
             android:name=".studentTestsDetails"
             android:exported="false" />
         <activity
-            android:name=".studentProfileFeedback"
+            android:name=".profileFeedback"
             android:exported="false" />
         <activity
             android:name=".studentNewsDetails"

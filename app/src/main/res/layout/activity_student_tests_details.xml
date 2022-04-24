@@ -61,7 +61,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/poppins"
-            android:text="Marks: 10"
+            android:text="Marks:"
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,19 +73,37 @@
 
         <TextView
             android:id="@+id/studentTestsDetailsStatus"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/poppins"
-            android:text="Status: Submitted on time"
+            android:text="Status:"
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsMarks"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/studentTestsDetailsStatusOn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text=""
+            android:textColor="@color/error"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/studentTestsDetailsStatus"
             app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsMarks"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -97,31 +115,55 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/poppins"
-            android:text="Deadline: 4 pm, 15 April 2022"
+            android:text="Deadline:"
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsStatus"
+            app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsStatusOn"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/studentTestsDetailsMarked"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/poppins"
-            android:text="Grades: Not yet"
+            android:text="Grades:"
             android:textColor="?attr/textColor"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/studentTestsDetailsMarkedEditText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/studentTestsDetailsMarkedEditText" />
+
+
+        <EditText
+            android:id="@+id/studentTestsDetailsMarkedEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="top"
+            android:hint="Click here to grade"
+            android:textColorHint="?attr/textColorLight"
+            android:textColor="?attr/textColor"
+            android:textSize="20sp"
+            android:textColorLink="@color/BGSec"
+            android:textColorHighlight="@color/BGSec"
+            android:maxLines="1"
+            android:background="@color/trans"
+            android:inputType="number"
+            android:textCursorDrawable="@drawable/xtra_cursor_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/studentTestsDetailsMarked"
             app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsDeadline"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -140,7 +182,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsMarked"
+            app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsMarkedEditText"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -151,14 +193,14 @@
             android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins"
-            android:text="2:03:45 pm, 15 April 2022"
+            android:text=""
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/studentTestsDetailsSubOnText"
-            app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsMarked"
+            app:layout_constraintTop_toBottomOf="@+id/studentTestsDetailsMarkedEditText"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView

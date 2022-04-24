@@ -46,7 +46,7 @@ public class chatNotificationService extends Service {
                         final String name = snapshot.child("name").getValue(String.class);
                         final String msg = snapshot.child("msg").getValue(String.class);
 
-                        if (start[0])
+                        if (start[0] && getApplicationContext().getClass().equals(chatScreen.class))
                             new sendNotification(context, name, msg, new Intent(getApplicationContext(), chatScreen.class), 1, true);
                     }
 

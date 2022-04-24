@@ -99,7 +99,6 @@ public class studentHome extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         ViewPager viewPager;
         viewPager = getView().findViewById(R.id.studentHomeViewPager);
 
@@ -157,7 +156,6 @@ public class studentHome extends Fragment {
     }
 
     private void setTestStatus() {
-
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("tests").child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
                 .child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "temp").replaceAll("\\.", "_"))
@@ -170,11 +168,11 @@ public class studentHome extends Fragment {
                     dataSnapshot = task.getResult();
                 data = (Map<String, Object>) dataSnapshot.getValue();
 
-                Map<String, Object> comintTest = (Map<String, Object>) data.get("comingTest");
+                if (data != null) {
+                    Map<String, Object> comingTest = (Map<String, Object>) data.get("comingTest");
 
-                if (comintTest != null) {
-                    String time = (String) comintTest.get("time");
-                    String date = (String) comintTest.get("date");
+                    String time = (String) comingTest.get("time");
+                    String date = (String) comingTest.get("date");
 
                     try {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);

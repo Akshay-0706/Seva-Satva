@@ -247,14 +247,16 @@ public class mentorHomeAns extends AppCompatActivity {
         map.put("hasAttach", hasAttachments);
         map.put("attach", attachments);
 
-        databaseReference.child("announcements").child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(timeStamp).setValue(map);
+        databaseReference.child("announcements").child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                .child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").replaceAll("\\.", "_")).child(timeStamp).setValue(map);
         sendFiles(timeStamp);
     }
 
     private void sendFiles(String timeStamp) {
         for (int i = 0; i < attachments.size(); i++) {
             firebaseStorage = FirebaseStorage.getInstance().getReference().getStorage();
-            storageReference = firebaseStorage.getReference().child("Announcements").child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(timeStamp).child(attachments.get(i));
+            storageReference = firebaseStorage.getReference().child("Announcements").child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                    .child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").replaceAll("\\.", "_")).child(timeStamp).child(attachments.get(i));
             storageReference.putFile(attachUris.get(i)).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {

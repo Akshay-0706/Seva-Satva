@@ -7,12 +7,9 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,28 +21,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
-import org.apache.commons.net.time.TimeTCPClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
-public class studentProfileFeedback extends AppCompatActivity {
+public class profileFeedback extends AppCompatActivity {
 
     internetCheckListener internetCheckListener = new internetCheckListener();
 
@@ -76,7 +61,7 @@ public class studentProfileFeedback extends AppCompatActivity {
             public void onClick(View v) {
                 if (!feedbackText.getText().toString().isEmpty()) {
                     sendFeedback(feedbackText.getText().toString().trim());
-                    Dialog successDialog = new Dialog(studentProfileFeedback.this);
+                    Dialog successDialog = new Dialog(profileFeedback.this);
                     successDialog.setContentView(R.layout.fragment_success);
                     successDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     successDialog.setCancelable(false);
@@ -91,7 +76,7 @@ public class studentProfileFeedback extends AppCompatActivity {
                         }
                     }, 3000);
                 } else
-                    Toast.makeText(studentProfileFeedback.this, "Feedback should not be empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(profileFeedback.this, "Feedback should not be empty!", Toast.LENGTH_SHORT).show();
             }
         });
     }

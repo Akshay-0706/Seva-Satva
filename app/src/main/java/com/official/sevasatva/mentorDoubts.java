@@ -112,7 +112,7 @@ public class mentorDoubts extends Fragment {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
-                        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("date", date).apply();
+                        getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("date", date).apply();
 
                         chatScreen.initChatScreen(chatRecyclerView, getActivity());
                     } catch (JSONException e) {

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,12 +34,14 @@ public class studentTestsDetailsAdapter extends RecyclerView.Adapter<studentTest
 
     List<String> documentsLists;
     String studentEmail;
+    String grades;
     String context;
     String id;
 
-    public studentTestsDetailsAdapter(List<String> documentsLists, String studentEmail, String context, String id) {
+    public studentTestsDetailsAdapter(List<String> documentsLists, String studentEmail, String grades, String context, String id) {
         this.documentsLists = documentsLists;
         this.studentEmail = studentEmail;
+        this.grades = grades;
         this.context = context;
         this.id = id;
     }
@@ -77,7 +80,11 @@ public class studentTestsDetailsAdapter extends RecyclerView.Adapter<studentTest
                 @Override
                 public void onClick(View v) {
                     if (context.equals("com.official.sevasatva.studentScreen")) {
-//                        Map<String, Object> map = new HashMap<>();
+                        if (!grades.equals("Not graded yet"))
+                            Toast.makeText(itemView.getContext(), "Grading is already done!", Toast.LENGTH_SHORT).show();
+                        else {
+
+                            //                        Map<String, Object> map = new HashMap<>();
 //                        map.put("submissions", documentsLists.remove(new String(documentsLists.get(getAdapterPosition()))));
 
 
@@ -85,34 +92,55 @@ public class studentTestsDetailsAdapter extends RecyclerView.Adapter<studentTest
 //                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_"))
 //                                .child(timeStamp).setValue(map);
 
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                        storageReference.child("Tests")
-                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10").replaceAll("\\.", "_"))
-                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").replaceAll("\\.", "_"))
-                                .child(documentsLists.get(getAdapterPosition())).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
+                            Toast.makeText(itemView.getContext(), "Deleting document...", Toast.LENGTH_SHORT).show();
 
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                            storageReference.child("Tests")
+                                    .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                    .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10").replaceAll("\\.", "_"))
+                                    .child(id)
+                                    .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").replaceAll("\\.", "_"))
+                                    .child(documentsLists.get(getAdapterPosition())).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
 
-                            }
-                        });
+                                    documentsLists.remove(documentsLists.get(getAdapterPosition()));
+                                    DatabaseReference databaseReference;
+                                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                                    databaseReference.child("tests")
+                                            .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                            .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10").replaceAll("\\.", "_"))
+                                            .child(id).child("students")
+                                            .child((studentEmail).replaceAll("\\.", "_"))
+                                            .child("documents").setValue(documentsLists);
 
-                        documentsLists.remove(documentsLists.get(getAdapterPosition()));
-                        DatabaseReference databaseReference;
-                        databaseReference = FirebaseDatabase.getInstance().getReference();
-                        databaseReference.child("tests")
-                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10").replaceAll("\\.", "_"))
-                                .child(id).child("students")
-                                .child((studentEmail).replaceAll("\\.", "_"))
-                                .child("submissions").setValue(documentsLists);
+                                    Toast.makeText(itemView.getContext(), "Document deleted", Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(itemView.getContext(), "Document deleted", Toast.LENGTH_SHORT).show();
+                                    if (documentsLists.isEmpty()) {
+                                        databaseReference.child("tests").child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
+                                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "temp").replaceAll("\\.", "_"))
+                                                .child(id).child("students")
+                                                .child(studentEmail.replaceAll("\\.", "_")).removeValue();
+
+//                                        databaseReference.child("tests").child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
+//                                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "temp").replaceAll("\\.", "_"))
+//                                                .child(id).child("students")
+//                                                .child(studentEmail.replaceAll("\\.", "_")).child("submissions")
+//                                                .setValue("Not submitted yet");
+//
+//                                        databaseReference.child("tests").child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
+//                                                .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "temp").replaceAll("\\.", "_"))
+//                                                .child(id).child("submitted").setValue(submitted - 1);
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(itemView.getContext(), "Unable to delete file", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
                     } else {
                         Toast.makeText(itemView.getContext(), "Download will start soon", Toast.LENGTH_SHORT).show();
                         downloadFile(documentsLists.get(getAdapterPosition()), getExtension(documentsLists.get(getAdapterPosition())));
@@ -148,7 +176,7 @@ public class studentTestsDetailsAdapter extends RecyclerView.Adapter<studentTest
 
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
             storageReference.child("Tests").child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                    .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10")).child(id)
+                    .child(itemView.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").replaceAll("\\.", "_")).child(id)
                     .child((studentEmail).replaceAll("\\.", "_"))
                     .child(fileName)
                     .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -169,24 +197,6 @@ public class studentTestsDetailsAdapter extends RecyclerView.Adapter<studentTest
                             Log.i("DOWNLOAD", "onFailure: " + e);
                         }
                     });
-
         }
-
-//        private String replaceLastDot(String fileName, boolean retrieve) {
-//            if (retrieve) {
-//                int index = fileName.lastIndexOf('_');
-//                if (index >= 0 && index < fileName.length())
-//                    return fileName.substring(0, index) + "." + fileName.substring(index + 1, fileName.length());
-//                else
-//                    return fileName;
-//            } else {
-//                int index = fileName.lastIndexOf('.');
-//                if (index >= 0 && index < fileName.length())
-//                    return fileName.substring(0, index) + "_" + fileName.substring(index + 1, fileName.length());
-//                else
-//                    return fileName;
-//            }
-//        }
     }
-
 }

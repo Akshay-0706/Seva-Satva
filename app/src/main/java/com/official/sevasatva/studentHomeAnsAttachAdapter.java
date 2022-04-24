@@ -37,7 +37,7 @@ public class studentHomeAnsAttachAdapter extends RecyclerView.Adapter<studentHom
     @Override
     public studentHomeAnsAttachAdapter.MyAttachViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new studentHomeAnsAttachAdapter.MyAttachViewHolder(LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.fragment_student_ans_attach_list_items, parent, false));
+                R.layout.fragment_student_ans_attach_list_items, parent, false));
     }
 
     @Override
@@ -95,15 +95,22 @@ public class studentHomeAnsAttachAdapter extends RecyclerView.Adapter<studentHom
         DownloadManager downloadmanager = (DownloadManager) context.
                 getSystemService(Context.DOWNLOAD_SERVICE);
 
+        String mentorEmail = "";
+        if (context.getClass().equals(studentScreen.class))
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        storageReference.child("Announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(id).child(fileName)
+        storageReference.child("Announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                .child(mentorEmail.replaceAll("\\.", "_")).child(id).child(fileName)
                 .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 DownloadManager.Request request = new DownloadManager.Request(uri);
 
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                request.setDestinationInExternalFilesDir(context, DIRECTORY_DOWNLOADS, removeExtension(fileName)+ fileExtension);
+                request.setDestinationInExternalFilesDir(context, DIRECTORY_DOWNLOADS, removeExtension(fileName) + fileExtension);
 
                 downloadmanager.enqueue(request);
                 Toast.makeText(context, "Download started", Toast.LENGTH_SHORT).show();

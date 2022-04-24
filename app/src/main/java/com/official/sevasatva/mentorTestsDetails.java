@@ -72,19 +72,14 @@ public class mentorTestsDetails extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 studentsList.clear();
 
-                submitted = (long) snapshot.child("submitted").getValue();
-                ((TextView) findViewById(R.id.mentorTestsDetailsStatus)).setText("Submitted: " + submitted + "/" + getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                        .getInt("studentsCount", 0));
-
-                if (snapshot.hasChild("students")
-                ) {
+                if (snapshot.hasChild("students")) {
                     lottieAnimationView.setVisibility(View.GONE);
                     for (DataSnapshot dataSnapshot : snapshot.child("students").getChildren()) {
 
                         String studentEmail = dataSnapshot.getKey();
                         Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                         mentorTestsDetailsModel mentorTestsDetailsModel = new mentorTestsDetailsModel(studentEmail, map.get("name").toString(), map.get("branch").toString(),
-                                map.get("class").toString(), map.get("uid").toString(), map.get("marks").toString(), map.get("status").toString());
+                                map.get("class").toString(), map.get("uid").toString(), map.get("grades").toString(), map.get("status").toString());
 
                         studentsList.add(mentorTestsDetailsModel);
 
@@ -93,10 +88,27 @@ public class mentorTestsDetails extends AppCompatActivity {
                             getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
                         }
                     }
+
+                    if (snapshot.hasChild("submitted"))
+                        databaseReference.child("tests")
+                                .child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                .child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_"))
+                                .child(id).child("submitted").setValue(snapshot.child("students").getChildrenCount());
                 } else {
                     loadingDialog.dismiss();
                     lottieAnimationView.setVisibility(View.VISIBLE);
+
+                    if (snapshot.hasChild("submitted"))
+                        databaseReference.child("tests")
+                                .child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                .child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_"))
+                                .child(id).child("submitted").setValue(0);
                 }
+
+                if (snapshot.hasChild("submitted"))
+                    submitted = (long) snapshot.child("submitted").getValue();
+                ((TextView) findViewById(R.id.mentorTestsDetailsStatus)).setText("Submitted: " + submitted + "/" + getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                        .getInt("studentsCount", 0));
 
                 mentorTestsDetailsAdapter mentorTestsDetailsAdapter = new mentorTestsDetailsAdapter(studentsList, id, deadline, marks);
                 mentorTestsDetailsRecyclerView.setAdapter(mentorTestsDetailsAdapter);

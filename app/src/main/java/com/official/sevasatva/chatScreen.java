@@ -110,30 +110,41 @@ public class chatScreen extends AppCompatActivity {
             loadingDialog.show();
         }
 
+        String mentorEmail = "";
+        if (context.getClass().equals(studentScreen.class))
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        String finalMentorEmail = mentorEmail;
         databaseReference.child("messages").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatList.clear();
                 if (snapshot.hasChild(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))) {
-                    lottieAnimationView.setVisibility(View.GONE);
+                    if (snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                    .hasChild(finalMentorEmail.replaceAll("\\.", "_"))) {
+                        lottieAnimationView.setVisibility(View.GONE);
 
-                    for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).getChildren()) {
+                        for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                .child(finalMentorEmail.replaceAll("\\.", "_")).getChildren()) {
 
-                        final String date = dataSnapshot.child("date").getValue(String.class);
-                        final String email = dataSnapshot.child("email").getValue(String.class);
-                        final Boolean isStudent = dataSnapshot.child("isStudent").getValue(Boolean.class);
-                        final String msg = dataSnapshot.child("msg").getValue(String.class);
-                        final String name = dataSnapshot.child("name").getValue(String.class);
-                        final String time = dataSnapshot.child("time").getValue(String.class);
-                        final String id = dataSnapshot.getKey();
+                            final String date = dataSnapshot.child("date").getValue(String.class);
+                            final String email = dataSnapshot.child("email").getValue(String.class);
+                            final Boolean isStudent = dataSnapshot.child("isStudent").getValue(Boolean.class);
+                            final String msg = dataSnapshot.child("msg").getValue(String.class);
+                            final String name = dataSnapshot.child("name").getValue(String.class);
+                            final String time = dataSnapshot.child("time").getValue(String.class);
+                            final String id = dataSnapshot.getKey();
 
-                        chatScreenModel chatScreenModel = new chatScreenModel(date, email, isStudent, msg, name, time, id);
-                        chatList.add(chatScreenModel);
+                            chatScreenModel chatScreenModel = new chatScreenModel(date, email, isStudent, msg, name, time, id);
+                            chatList.add(chatScreenModel);
 
-                        if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
-                            loadingDialog.dismiss();
-                            context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
+                            if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+                                loadingDialog.dismiss();
+                                context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
+                            }
                         }
                     }
                 } else {
@@ -156,6 +167,12 @@ public class chatScreen extends AppCompatActivity {
     public void sendMessage(String message, Context context) {
 //        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
 
+        String mentorEmail = "";
+        if (context.getClass().equals(studentScreen.class))
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+
         HashMap<String, Object> map = new HashMap<>();
         DatabaseReference databaseReference;
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -165,6 +182,7 @@ public class chatScreen extends AppCompatActivity {
         map.put("msg", message);
         map.put("name", context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "Mentor"));
 
+        String finalMentorEmail = mentorEmail;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
                 response -> {
                     try {
@@ -181,7 +199,8 @@ public class chatScreen extends AppCompatActivity {
                         map.put("date", currentDate);
                         map.put("time", currentTime);
 
-                        databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(String.valueOf(timestamp)).setValue(map);
+                        databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                .child(finalMentorEmail.replaceAll("\\.", "_")).child(String.valueOf(timestamp)).setValue(map);
 
                     } catch (JSONException | ParseException e) {
                         e.printStackTrace();

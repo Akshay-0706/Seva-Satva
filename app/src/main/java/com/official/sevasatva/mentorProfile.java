@@ -1,6 +1,9 @@
 package com.official.sevasatva;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,5 +80,83 @@ public class mentorProfile extends Fragment {
         ((TextView) getView().findViewById(R.id.mentorProName)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("name", "Mentor"));
         ((TextView) getView().findViewById(R.id.mentorProEmail)).setText(getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).getString("email", "Mentor email"));
 
+        view.findViewById(R.id.mentorProFeedback).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), profileFeedback.class));
+            }
+        });
+
+        view.findViewById(R.id.mentorProFeedbackArrow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), profileFeedback.class));
+            }
+        });
+
+        view.findViewById(R.id.mentorProLogout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
+        view.findViewById(R.id.mentorProLogoutArrow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
+        view.findViewById(R.id.proContactOrganizer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGmail();
+            }
+        });
+
+        view.findViewById(R.id.proContactOrganizerArrow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGmail();
+            }
+        });
+    }
+
+    private void openGmail() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        String[] recipients = {"admin.official@sevasatva.in"};//Add multiple recipients here
+        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+        intent.setType("text/html");
+        intent.setPackage("com.google.android.gm");//Added Gmail Package to forcefully open Gmail App
+        startActivity(Intent.createChooser(intent, "Send email"));
+    }
+
+    private void logout() {
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstRunAppIntro", true).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isUserStudent", true).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("firstRealtimeLoading", true).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstLaunch", true).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("areMentorsAllocated", false).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isAdmin", false).apply();
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isMentorLoggedIn", false).apply();
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("426988667812-meoa78skojkt8d3u0rs5mi9dd4i5nok3.apps.googleusercontent.com") // R.string.default_web_client_id
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getActivity(), googleSignInOptions);
+        googleSignInClient.signOut();
+
+        startActivity(new Intent(getActivity(), splash.class));
+        getActivity().finishAffinity();
     }
 }

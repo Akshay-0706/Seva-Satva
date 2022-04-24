@@ -2,10 +2,15 @@ package com.official.sevasatva;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -25,13 +31,20 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -69,33 +82,48 @@ public class studentTestsAdapter extends RecyclerView.Adapter<studentTestsAdapte
             holder.testStatus.setAnimation("test_offline.json");
 
         if (context.getClass().equals(mentorScreen.class)) {
-            holder.submitted.setText(studentTestsModel.getSubmitted());
+            {
+                holder.submitted.setText(studentTestsModel.getSubmitted());
+                holder.submittedText.setVisibility(View.GONE);
+            }
         } else {
+            holder.submittedText.setVisibility(View.VISIBLE);
             boolean found = false;
             int index = 0;
             if (studentTestsModel.getStudents() != null) {
                 Set<String> students = studentTestsModel.getStudents().keySet();
-                for (int i = 0; i < students.size(); i++) {
-                    if (students.equals(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                            .getString("email", "temp"))) {
+                for (String keys : students) {
+                    if (keys.equals(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                            .getString("email", "temp").replaceAll("\\.", "_"))) {
                         found = true;
-                        index = i;
                         break;
                     }
+                    index++;
                 }
             }
             if (found) {
                 String status = "";
-                Map<String, Object> studentsDetails = (Map<String, Object>) studentTestsModel.getStudents().get(index);
+                Map<String, Object> studentsDetails = (Map<String, Object>) studentTestsModel.getStudents()
+                        .get(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                                .getString("email", "temp").replaceAll("\\.", "_"));
+
                 for (Map.Entry<String, Object> entry : studentsDetails.entrySet()) {
                     if (entry.getKey().equals("status")) {
                         status = entry.getValue().toString();
                         break;
                     }
                 }
-                holder.submitted.setText("Status: " + status);
-            } else
-                holder.submitted.setText("Status: Not submitted");
+//                Spanned coloredStatus;
+                if (status.equals("On time"))
+                    holder.submittedText.setTextColor(ContextCompat.getColor(context, R.color.success));
+                else
+                    holder.submittedText.setTextColor(ContextCompat.getColor(context, R.color.error));
+
+                holder.submittedText.setText(status);
+            } else {
+                holder.submittedText.setText("Not submitted");
+                holder.submittedText.setTextColor(ContextCompat.getColor(context, R.color.error));
+            }
         }
     }
 
@@ -107,7 +135,7 @@ public class studentTestsAdapter extends RecyclerView.Adapter<studentTestsAdapte
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout studentTestsRecyclerItemsLayout;
-        TextView title, marks, submitted, deadline;
+        TextView title, marks, submitted, submittedText, deadline;
         ImageButton studentTestsDelete;
         LottieAnimationView testStatus;
 
@@ -118,10 +146,10 @@ public class studentTestsAdapter extends RecyclerView.Adapter<studentTestsAdapte
             title = itemView.findViewById(R.id.studentTestsTitle);
             marks = itemView.findViewById(R.id.studentTestsMarks);
             submitted = itemView.findViewById(R.id.studentTestsStatus);
+            submittedText = itemView.findViewById(R.id.studentTestsStatusText);
             deadline = itemView.findViewById(R.id.studentTestsDeadline);
             studentTestsDelete = itemView.findViewById(R.id.studentTestsDelete);
             testStatus = itemView.findViewById(R.id.studentTestsOnline);
-
 
             studentTestsDelete.setVisibility(context.getClass().equals(studentScreen.class) ? View.GONE : View.VISIBLE);
 
@@ -147,6 +175,85 @@ public class studentTestsAdapter extends RecyclerView.Adapter<studentTestsAdapte
                     }
                 }
             });
+
+            studentTestsDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Dialog confirmationDialog = new Dialog(context);
+                    confirmationDialog.setContentView(R.layout.fragment_confirmation);
+                    confirmationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    confirmationDialog.setCancelable(false);
+                    confirmationDialog.show();
+
+                    ((TextView) confirmationDialog.findViewById(R.id.confirmInfo)).setText("You are about to delete a test, all the data will be erased!");
+                    ((TextView) confirmationDialog.findViewById(R.id.confirmCourse)).setText("Selected test: ");
+                    ((TextView) confirmationDialog.findViewById(R.id.confirmCourseCode)).setText(testLists.get(getAdapterPosition()).getTitle());
+
+                    confirmationDialog.findViewById(R.id.confirmNoButton).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirmationDialog.dismiss();
+                        }
+                    });
+
+                    confirmationDialog.findViewById(R.id.confirmYesButton).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirmationDialog.dismiss();
+                            deleteTest();
+                        }
+                    });
+
+
+                }
+
+            });
+        }
+
+        private void deleteTest() {
+            Toast.makeText(context, "Deleting test, please wait...", Toast.LENGTH_SHORT).show();
+            FirebaseDatabase.getInstance().getReference().child("tests").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
+                    .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_"))
+                    .child(testLists.get(getAdapterPosition()).getId()).removeValue();
+
+
+            if (testLists.get(getAdapterPosition()).getStudents() != null) {
+
+                Set<Map.Entry<String, Object>> students = testLists.get(getAdapterPosition()).getStudents().entrySet();
+
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                Log.i("docs", "students: " + students);
+
+                for (Map.Entry<String, Object> entry : students) {
+                    Map<String, Object> map = (Map<String, Object>) entry.getValue();
+                    Log.i("docs", "entry: " + entry);
+                    for (Map.Entry<String, Object> entry2 : map.entrySet()) {
+                        Log.i("docs", "entry2: " + entry2);
+                        if (entry2.getKey().equals("documents")) {
+                            ArrayList<String> documents = (ArrayList<String>) entry2.getValue();
+                            for (String docs : documents) {
+                                Log.i("docs", "entry3: " + docs);
+                                storageReference.child("Tests").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                        .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_"))
+                                        .child(testLists.get(getAdapterPosition()).getId())
+                                        .child(entry.getKey())
+                                        .child(docs).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
+                            }
+                        }
+
+                    }
+                }
+            }
+            Toast.makeText(context, "Test deleted", Toast.LENGTH_SHORT).show();
         }
     }
 }

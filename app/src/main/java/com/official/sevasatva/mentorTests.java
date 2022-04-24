@@ -209,14 +209,20 @@ public class mentorTests extends Fragment {
                                             final String deadline = dataSnapshot.child("deadline").getValue(String.class);
                                             final Map<String, Object> students = (Map<String, Object>) dataSnapshot.child("students").getValue();
                                             final String id = dataSnapshot.getKey();
-                                            final String submitted = "Submitted: " + dataSnapshot.child("submitted").getValue(Long.class) + "/" + context.getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+
+                                            databaseReference.child("tests")
+                                                    .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                                    .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_"))
+                                                    .child(id).child("submitted").setValue(students == null ? 0 : students.size());
+
+                                            final String submitted = "Submitted: " + (students == null ? 0 : students.size()) + "/" + context.getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                                                     .getInt("studentsCount", 0);
                                             Date deadlineDate = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH).parse(deadline);
                                             boolean onlineStatus = current.before(deadlineDate);
                                             //                                        testLists.get(getAdapterPosition()).setOnlineStatus(false);
 //                                    notifyItemChanged(getAdapterPosition());
 
-                                                studentTestsModel studentTestsModel = new studentTestsModel(title, marks, submitted, deadline, onlineStatus, students, id);
+                                            studentTestsModel studentTestsModel = new studentTestsModel(title, marks, submitted, deadline, onlineStatus, students, id);
                                             testsList.add(studentTestsModel);
 
                                             if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {

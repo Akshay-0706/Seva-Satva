@@ -117,7 +117,7 @@ public class studentLogin extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void getCategory() {
+    private void getCategory(boolean isCalledFromBelow) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("news").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -131,15 +131,11 @@ public class studentLogin extends AppCompatActivity {
 
                 getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("category", category).apply();
 
-                if (sharedPreferences.getBoolean("isFirstLaunch", true))
-                    fetchStudentDetails();
+                if (!getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false) || isCalledFromBelow)
+                    getMentorDetails();
                 else {
-                    if (!getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
-                        getMentorDetails();
-                    else {
-                        startActivity(new Intent(studentLogin.this, studentScreen.class));
-                        finish();
-                    }
+                    startActivity(new Intent(studentLogin.this, studentScreen.class));
+                    finish();
                 }
             }
         });
@@ -192,11 +188,15 @@ public class studentLogin extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
                         assert firebaseUser != null;
                         sharedPreferences.edit().putString("email", firebaseUser.getEmail()).apply();
                         sharedPreferences.edit().putString("image", firebaseUser.getPhotoUrl().toString()).apply();
-                        getCategory();
+
+                        if (sharedPreferences.getBoolean("isFirstLaunch", true))
+                            fetchStudentDetails();
+                        else
+                            getCategory(false);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -300,7 +300,7 @@ public class studentLogin extends AppCompatActivity {
                                 sharedPreferences.edit().putString("cn", cn).apply();
                                 sharedPreferences.edit().putString("desc", desc).apply();
 
-                                getMentorDetails();
+                                getCategory(true);
                             }
                         }
                     });
@@ -376,11 +376,11 @@ public class studentLogin extends AppCompatActivity {
                 });
     }
 
-    private String[] getNameSurname(String email) {
-        String name = email.substring(0, email.indexOf("."));
-        name = name.substring(0, 1).toUpperCase() + name.substring(1);
-        String surname = email.substring(email.indexOf(".") + 1, email.indexOf("@"));
-        surname = surname.substring(0, 1).toUpperCase() + surname.substring(1);
-        return new String[]{name, surname};
-    }
+//    private String[] getNameSurname(String email) {
+//        String name = email.substring(0, email.indexOf("."));
+//        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+//        String surname = email.substring(email.indexOf(".") + 1, email.indexOf("@"));
+//        surname = surname.substring(0, 1).toUpperCase() + surname.substring(1);
+//        return new String[]{name, surname};
+//    }
 }

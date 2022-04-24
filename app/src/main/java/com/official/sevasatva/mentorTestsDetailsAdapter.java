@@ -1,6 +1,7 @@
 package com.official.sevasatva;
 
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -16,25 +18,37 @@ public class mentorTestsDetailsAdapter extends RecyclerView.Adapter<mentorTestsD
 
     List<mentorTestsDetailsModel> studentsList;
     String id, deadline;
-    int marks;
+    ViewGroup viewGroup;
+    String marks;
 
     public mentorTestsDetailsAdapter(List<mentorTestsDetailsModel> studentsList, String id, String deadline, int marks) {
         this.studentsList = studentsList;
         this.id = id;
         this.deadline = deadline;
-        this.marks = marks;
+        this.marks = String.valueOf(marks);
     }
 
     @NonNull
     @Override
     public mentorTestsDetailsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        viewGroup = parent;
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_mentor_tests_details_recycler_items, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull mentorTestsDetailsAdapter.MyViewHolder holder, int position) {
         holder.studentTestsName.setText(studentsList.get(position).studentName);
-        holder.studentTestsMarks.setText("Marks: " + studentsList.get(position).studentMarks);
+        holder.studentTestsMarks.setText("Grades: " + studentsList.get(position).getStudentMarks());
+        holder.mentorTestsDetailsStatusOn.setText(studentsList.get(position).getStudentStatus());
+
+        if (studentsList.get(position).getStudentStatus().equals("On time")) {
+            holder.gradientDrawable.setStroke(4, ContextCompat.getColor(viewGroup.getContext(), R.color.success));
+            holder.mentorTestsDetailsStatusOn.setTextColor(ContextCompat.getColor(viewGroup.getContext(), R.color.success));
+        }
+        else {
+            holder.gradientDrawable.setStroke(4, ContextCompat.getColor(viewGroup.getContext(), R.color.error));
+            holder.mentorTestsDetailsStatusOn.setTextColor(ContextCompat.getColor(viewGroup.getContext(), R.color.error));
+        }
     }
 
     @Override
@@ -45,13 +59,16 @@ public class mentorTestsDetailsAdapter extends RecyclerView.Adapter<mentorTestsD
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout mentorTestsDetailsRecyclerLayout;
-        TextView studentTestsName, studentTestsMarks;
+        GradientDrawable gradientDrawable;
+        TextView studentTestsName, studentTestsMarks, mentorTestsDetailsStatusOn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mentorTestsDetailsRecyclerLayout = itemView.findViewById(R.id.mentorTestsDetailsRecyclerLayout);
+            gradientDrawable = (GradientDrawable) mentorTestsDetailsRecyclerLayout.getBackground();
             studentTestsName = itemView.findViewById(R.id.studentTestsName);
             studentTestsMarks = itemView.findViewById(R.id.studentTestsMarks);
+            mentorTestsDetailsStatusOn = itemView.findViewById(R.id.mentorTestsDetailsStatusOn);
 
             mentorTestsDetailsRecyclerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

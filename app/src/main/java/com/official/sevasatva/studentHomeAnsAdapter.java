@@ -106,11 +106,13 @@ public class studentHomeAnsAdapter extends RecyclerView.Adapter<studentHomeAnsAd
                     public void onClick(View v) {
                         DatabaseReference databaseReference;
                         databaseReference = FirebaseDatabase.getInstance().getReference();
-                        databaseReference.child("announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(ansList.get(getAdapterPosition()).getId()).removeValue();
+                        databaseReference.child("announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").replaceAll("\\.", "_")).child(ansList.get(getAdapterPosition()).getId()).removeValue();
                         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
                         if (attach != null)
                             for (int i = 0; i < attach.size(); i++) {
-                                storageReference.child("Announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(ansList.get(getAdapterPosition()).getId())
+                                storageReference.child("Announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                        .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").replaceAll("\\.", "_")).child(ansList.get(getAdapterPosition()).getId())
                                         .child(attach.get(i)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {

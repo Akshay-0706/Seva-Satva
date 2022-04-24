@@ -2,20 +2,13 @@ package com.official.sevasatva;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,13 +110,19 @@ public class studentProfile extends Fragment {
         getView().findViewById(R.id.proAskMentorText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                if (getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
+                    startActivity(intent);
+                else
+                    Toast.makeText(getContext(), "Mentor is not allocated to you yet", Toast.LENGTH_SHORT).show();
             }
         });
         getView().findViewById(R.id.proAskMentorIcon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                if (getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
+                    startActivity(intent);
+                else
+                    Toast.makeText(getContext(), "Mentor is not allocated to you yet", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -148,7 +144,7 @@ public class studentProfile extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(getActivity(), studentProfileFeedback.class));
+                        startActivity(new Intent(getActivity(), profileFeedback.class));
                     }
                 }
         );
@@ -157,7 +153,7 @@ public class studentProfile extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(getActivity(), studentProfileFeedback.class));
+                        startActivity(new Intent(getActivity(), profileFeedback.class));
                     }
                 }
         );

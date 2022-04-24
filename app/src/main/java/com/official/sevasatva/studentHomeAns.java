@@ -91,20 +91,31 @@ public class studentHomeAns extends AppCompatActivity {
             loadingDialog.show();
         }
 
+        String mentorEmail = "";
+        if (context.getClass().equals(studentScreen.class))
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        String finalMentorEmail = mentorEmail;
         databaseReference.child("announcements").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ansList.clear();
                 if (snapshot.hasChild(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))) {
-                    lottieAnimationView.setVisibility(View.GONE);
-                    for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).getChildren()) {
 
-                        final String title = dataSnapshot.child("title").getValue(String.class);
-                        final String desc = dataSnapshot.child("desc").getValue(String.class);
-                        final Boolean hasAttach = dataSnapshot.child("hasAttach").getValue(Boolean.class);
-                        final ArrayList<String> attach = (ArrayList<String>) dataSnapshot.child("attach").getValue();
-                        final String id = dataSnapshot.getKey();
+                    if (snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                            .hasChild(finalMentorEmail.replaceAll("\\.", "_"))) {
+                        lottieAnimationView.setVisibility(View.GONE);
+                        for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                .child(finalMentorEmail.replaceAll("\\.", "_")).getChildren()) {
+
+                            final String title = dataSnapshot.child("title").getValue(String.class);
+                            final String desc = dataSnapshot.child("desc").getValue(String.class);
+                            final Boolean hasAttach = dataSnapshot.child("hasAttach").getValue(Boolean.class);
+                            final ArrayList<String> attach = (ArrayList<String>) dataSnapshot.child("attach").getValue();
+                            final String id = dataSnapshot.getKey();
 
 //                        Toast.makeText(context, "Changed!", Toast.LENGTH_SHORT).show();
 
@@ -112,12 +123,13 @@ public class studentHomeAns extends AppCompatActivity {
 //                        Intent intent = new Intent(getApplicationContext(), studentHomeAns.class);
 //                        showNotification(context, title, desc, new Intent(getApplicationContext(), studentHomeAns.class), 1);
 
-                        studentHomeAnsModel studentHomeAnsModel = new studentHomeAnsModel(title, desc, hasAttach, false, attach, id);
-                        ansList.add(studentHomeAnsModel);
+                            studentHomeAnsModel studentHomeAnsModel = new studentHomeAnsModel(title, desc, hasAttach, false, attach, id);
+                            ansList.add(studentHomeAnsModel);
 
-                        if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
-                            loadingDialog.dismiss();
-                            context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
+                            if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+                                loadingDialog.dismiss();
+                                context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
+                            }
                         }
                     }
                 } else {
