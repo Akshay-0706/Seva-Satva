@@ -135,4 +135,5 @@
     <string name="error_501">Please choose SPIT email only!</string>
 
     <string name="hello_blank_fragment">Hello</string>
+    <string name="about_us">About Us</string>
 </resources>
