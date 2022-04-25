@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView00"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:isScrollContainer="false"
+    tools:context=".aboutUs">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1980dp"
+        android:background="#FF1C2E46">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/home_heading_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/home_heading_bg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/proHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins"
+                android:text="About Us"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="350dp"
+            android:layout_below="@id/constraintLayout01"
+            android:layout_centerHorizontal="true"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/about_us" />
+
+        <TextView
+            android:id="@+id/des1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/animation_view"
+            android:fontFamily="@font/poppins"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:gravity="center"
+            android:text="Through this app, we plan to build a strong technical bridge between the mentor and the student, so that the Seva/Satva course is carried out fluently and in a hassle-free manner."
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/des1"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="30dp"
+            android:background="#717171" />
+
+        <View
+            android:id="@+id/card1"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_below="@id/divider"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/card_bg" />
+
+        <TextView
+            android:id="@+id/obj1"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/card1"
+            android:layout_alignBottom="@id/card1"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="5dp"
+            android:text="1. To achieve a Real-time system for Announcement declaration."
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif1"
+            android:layout_width="160dp"
+            android:layout_height="180dp"
+            android:layout_alignTop="@id/card1"
+            android:layout_alignBottom="@id/card1"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toEndOf="@+id/obj1"
+            android:scaleType="centerCrop"
+            android:src="@drawable/announcement" />
+
+
+        <View
+            android:id="@+id/card2"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_below="@id/card1"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/card_bg2" />
+
+        <TextView
+            android:id="@+id/obj2"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/card2"
+            android:layout_alignBottom="@id/card2"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center_vertical|end"
+            android:paddingStart="5dp"
+            android:paddingEnd="15dp"
+            android:text="2. A test platform to formally conduct SEVA/SATVA tests and exams."
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif2"
+            android:layout_width="160dp"
+            android:layout_height="180dp"
+            android:layout_alignTop="@id/card2"
+            android:layout_alignBottom="@id/card2"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toStartOf="@+id/obj2"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bulb" />
+
+        <View
+            android:id="@+id/card3"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_below="@id/card2"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/card_bg" />
+
+        <TextView
+            android:id="@+id/obj3"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/card3"
+            android:layout_alignBottom="@id/card3"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:paddingEnd="5dp"
+            android:text="3. Easy and user-friendly CRUD operations for the record of students enrolled in any particular course."
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif3"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_alignTop="@id/card3"
+            android:layout_alignBottom="@id/card3"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toEndOf="@+id/obj3"
+            android:scaleType="fitCenter"
+            android:src="@drawable/db" />
+
+        <View
+            android:id="@+id/card4"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_below="@id/card3"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/card_bg2" />
+
+        <TextView
+            android:id="@+id/obj4"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/card4"
+            android:layout_alignBottom="@id/card4"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center_vertical|end"
+            android:paddingStart="5dp"
+            android:paddingEnd="15dp"
+            android:text="4. Real-time Doubt section course exclusive for students and mentors"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif4"
+            android:layout_width="160dp"
+            android:layout_height="220dp"
+            android:layout_alignTop="@id/card4"
+            android:layout_alignBottom="@id/card4"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toStartOf="@+id/obj4"
+            android:scaleType="centerCrop"
+            android:src="@drawable/chat" />
+
+        <TextView
+            android:id="@+id/more_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/divider2"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/poppins"
+            android:text="More Info"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/card4"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="#717171" />
+
+        <TextView
+            android:id="@+id/more_info1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/more_info"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="Version"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/more_info2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/more_info1"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="Released On"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/more_info3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/more_info2"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="Android OS"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/more_info11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/more_info"
+            android:layout_alignTop="@id/more_info1"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="end"
+            android:text="1.0.0"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/more_info22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/more_info11"
+            android:layout_alignTop="@id/more_info2"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="end"
+            android:text="30 April 2022"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/more_info33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/more_info22"
+            android:layout_alignTop="@id/more_info3"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="end"
+            android:text="7 and up"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/contact_us"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/divider3"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/poppins"
+            android:text="Contact Us"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/desc1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/contact_us"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="In any case of query please feel free to contact us"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/desc2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/desc1"
+            android:layout_alignTop="@id/imageView"
+            android:layout_marginEnd="5dp"
+            android:layout_toEndOf="@id/imageView"
+            android:fontFamily="@font/poppins"
+            android:gravity="center_horizontal"
+            android:text="sssupport@sevasatva.com"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/more_info3"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="#717171" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/desc1"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_baseline_email_24" />
+
+        <TextView
+            android:id="@+id/desc3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/imageView"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/poppins"
+            android:text="If you are not satisfied with the resolution provided by us, then please write to our Grievance Officer at akshay.vhatkar@spit.ac.in"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+
+        <TextView
+            android:id="@+id/branding"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/desc3"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:text="©Powered By Team SEVA/SATVA"
+            android:textColor="#878787"
+            android:textSize="10sp" />
+
+
+    </RelativeLayout>
+
+
+</ScrollView>

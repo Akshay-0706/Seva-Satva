@@ -11,59 +11,57 @@
         android:id="@+id/confirmHeading"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/xtra_confirmation_dialog_heading_bg"
+        android:fontFamily="@font/poppins"
         android:gravity="center"
         android:padding="5dp"
         android:text="@string/confirmation_dialog_temp_heading_text"
-        android:background="@drawable/xtra_confirmation_dialog_heading_bg"
         android:textColor="?attr/inverted"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/confirmImage"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/xtra_warning_icon"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/confirmInfo"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.055"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/confirmInfo"-->
-<!--        app:layout_constraintVertical_bias="0.0" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/confirmImage"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@drawable/xtra_warning_icon"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/confirmInfo"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.055"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/confirmInfo"-->
+    <!--        app:layout_constraintVertical_bias="0.0" />-->
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/confirmImage"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:elevation="5dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/confirmInfo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/confirmInfo"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/confirmHeading"
+        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_rawRes="@raw/warning_anim" />
 
     <TextView
         android:id="@+id/confirmInfo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_width="242dp"
+        android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/poppins"
         android:text="@string/confirmation_dialog_temp_info_text"
+        android:textAlignment="center"
         android:textColor="?attr/textColorLight"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/confirmYesButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/confirmImage"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirmHeading"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -110,7 +108,8 @@
         android:layout_height="30dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/error"
+        android:background="@color/warning"
+        android:fontFamily="@font/poppins"
         android:text="@string/confirmation_dialog_temp_yes_text"
         android:textAllCaps="false"
         android:textColor="?attr/inverted"
@@ -119,7 +118,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirmHeading"
-        app:layout_constraintVertical_bias="1.0" >
+        app:layout_constraintVertical_bias="1.0">
 
     </androidx.appcompat.widget.AppCompatButton>
 
@@ -130,6 +129,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="20dp"
         android:background="@color/trans"
+        android:fontFamily="@font/poppins"
         android:text="@string/confirmation_dialog_temp_no_text"
         android:textAllCaps="false"
         android:textColor="?attr/textColor"

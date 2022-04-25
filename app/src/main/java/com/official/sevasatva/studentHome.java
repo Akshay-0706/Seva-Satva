@@ -2,21 +2,19 @@ package com.official.sevasatva;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -47,6 +45,7 @@ import java.util.TimerTask;
  * create an instance of this fragment.
  */
 public class studentHome extends Fragment {
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -99,6 +98,7 @@ public class studentHome extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         ViewPager viewPager;
         viewPager = getView().findViewById(R.id.studentHomeViewPager);
 
@@ -146,6 +146,14 @@ public class studentHome extends Fragment {
             }
         });
 
+        requireView().setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+            @Override
+            public void onSwipeLeft() {
+                // Whatever
+                startActivity(new Intent(getActivity(), studentHomeAns.class));
+            }
+        });
+
         setTestStatus();
     }
 
@@ -156,6 +164,7 @@ public class studentHome extends Fragment {
     }
 
     private void setTestStatus() {
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("tests").child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
                 .child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "temp").replaceAll("\\.", "_"))
@@ -167,12 +176,10 @@ public class studentHome extends Fragment {
                 if (task.getResult() != null)
                     dataSnapshot = task.getResult();
                 data = (Map<String, Object>) dataSnapshot.getValue();
-
                 if (data != null) {
-                    Map<String, Object> comingTest = (Map<String, Object>) data.get("comingTest");
-
-                    String time = (String) comingTest.get("time");
-                    String date = (String) comingTest.get("date");
+                    Map<String, Object> comintTest = (Map<String, Object>) data.get("comingTest");
+                    String time = (String) comintTest.get("time");
+                    String date = (String) comintTest.get("date");
 
                     try {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);
