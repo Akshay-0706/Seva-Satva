@@ -123,6 +123,13 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
+
+            String mentorEmail = "";
+            if (context.getClass().equals(mentorScreen.class))
+                mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "email");
+            else
+                mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "email");
+
             chatDateLayout = itemView.findViewById(R.id.chatDateLayout);
             chatDate = itemView.findViewById(R.id.chatDate);
 
@@ -136,9 +143,11 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
             senderMessage = itemView.findViewById(R.id.senderMessage);
             senderTime = itemView.findViewById(R.id.senderTime);
 
+            String finalMentorEmail = mentorEmail;
             senderMessage.setOnTouchListener(new View.OnTouchListener() {
+
                 private static final int COPY_DURATION = 1000;
-                private static final int DELETE_DURATION = 5000;
+                private static final int DELETE_DURATION = 3000;
                 private long startClickTime;
 
                 @Override
@@ -151,10 +160,10 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
                                 if (clickDuration >= DELETE_DURATION) {
                                     DatabaseReference databaseReference;
                                     databaseReference = FirebaseDatabase.getInstance().getReference();
-                                    databaseReference.child("messages").child(v.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10")).child(chatList.get(getAdapterPosition()).getId()).removeValue();
+                                    databaseReference.child("messages").child(v.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                            .child(finalMentorEmail.replaceAll("\\.", "_")).child(chatList.get(getAdapterPosition()).getId()).removeValue();
                                     Toast.makeText(v.getContext(), "Message deleted successfully!", Toast.LENGTH_SHORT).show();
-                                }
-                                else if (clickDuration >= COPY_DURATION) {
+                                } else if (clickDuration >= COPY_DURATION) {
                                     ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                                     ClipData clip = ClipData.newPlainText("Copied", senderMessage.getText().toString());
                                     clipboard.setPrimaryClip(clip);

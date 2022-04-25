@@ -97,6 +97,10 @@ public class chatScreen extends AppCompatActivity {
     }
 
     public void initChatScreen(RecyclerView chatRecyclerView, Context context) {
+
+        Toast.makeText(context, "Hold for 1 sec to copy a message", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Hold for 3 sec to delete your message", Toast.LENGTH_SHORT).show();
+
         final List<chatScreenModel> chatList = new ArrayList<>();
         chatRecyclerView.setHasFixedSize(true);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -111,10 +115,10 @@ public class chatScreen extends AppCompatActivity {
         }
 
         String mentorEmail = "";
-        if (context.getClass().equals(studentScreen.class))
-            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
+        if (context.getClass().equals(mentorScreen.class))
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "email");
         else
-            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "email");
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String finalMentorEmail = mentorEmail;
@@ -168,10 +172,10 @@ public class chatScreen extends AppCompatActivity {
 //        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
 
         String mentorEmail = "";
-        if (context.getClass().equals(studentScreen.class))
-            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
-        else
+        if (context.getClass().equals(mentorScreen.class))
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
 
         HashMap<String, Object> map = new HashMap<>();
         DatabaseReference databaseReference;
