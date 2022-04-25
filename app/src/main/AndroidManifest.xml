@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Official.SevaSatva">
         <activity
-            android:name=".aboutUs"
+            android:name=".profileAboutUs"
             android:exported="false" />
         <activity
             android:name=".mentorTestsDetails"

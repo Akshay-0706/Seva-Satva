@@ -97,6 +97,17 @@
 
     <string name="loading_text">Loading…</string>
 
+    <string name="about_us_heading">About Us</string>
+    <string name="about_us_main_text">Through this app, we plan to build a strong technical bridge between the mentor and the student, so that the Seva/Satva course is carried out fluently and in a hassle-free manner.</string>
+    <string name="about_us_ans_info_text">1. To achieve a Real-time system for Announcement declaration.</string>
+    <string name="about_us_tests_info_text">2. A test platform to formally conduct SEVA/SATVA tests and exams.</string>
+    <string name="about_us_course_info_text">3. Easy and user-friendly CRUD operations for the record of students enrolled in any particular course.</string>
+    <string name="about_us_chat_info_text">4. Real-time Doubt section course exclusive for students and mentors</string>
+    <string name="about_us_contact_us_text">In any case of query please feel free to contact us</string>
+    <string name="about_us_contact_developer_text">If you are not satisfied with the resolution provided by us, then please write to our Developer at <u>akshay0706vhatkar@gmail.com</u></string>
+    <string name="about_us_branding_text">©Powered By Team Seva/Satva</string>
+    <string name="about_us_support_email"><u>support.official@sevasatva.in</u></string>
+
     <!--    String arrays-->
     <string-array name="Branches">
         <item>COMPS</item>
@@ -135,5 +146,4 @@
     <string name="error_501">Please choose SPIT email only!</string>
 
     <string name="hello_blank_fragment">Hello</string>
-    <string name="about_us">About Us</string>
 </resources>

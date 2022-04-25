@@ -3,17 +3,18 @@ package com.official.sevasatva;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -53,7 +54,7 @@ public class adminScreen extends AppCompatActivity {
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                 .putBoolean("isAdmin", true).apply();
 
-        findViewById(R.id.allocate_mentors_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.adminAllocateMentorsButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isEnrollmentStopped)
@@ -93,7 +94,35 @@ public class adminScreen extends AppCompatActivity {
 
                 isEnrollmentStopped = isChecked;
             }
+        });
 
+        findViewById(R.id.adminContactDevelopersButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String[] recipients = {"akshay0706vhatkar@gmail.com", "ddpshah123@gmail.com", "meetshrimankar1@gmail.com"};//Add multiple recipients here
+                intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+                intent.setType("text/html");
+                intent.setPackage("com.google.android.gm");//Added Gmail Package to forcefully open Gmail App
+                startActivity(Intent.createChooser(intent, "Send email"));
+            }
+        });
+
+        findViewById(R.id.adminGetCourseDateButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String urlString = "https://docs.google.com/spreadsheets/d/1wt9ifWS34BlNn-QSjEZkuLYXjcsZlDKcJ_0n9YQ4Wr8/export?format=xlsx&gid=1090794568";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setPackage("com.android.chrome");
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    // Chrome browser presumably not installed so allow user to choose instead
+                    intent.setPackage(null);
+                    startActivity(intent);
+                }
+            }
         });
     }
 }

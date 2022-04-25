@@ -182,8 +182,6 @@ public class studentNews extends Fragment {
         call.enqueue(new Callback<studentNewsFetcherModel>() {
             @Override
             public void onResponse(Call<studentNewsFetcherModel> call, Response<studentNewsFetcherModel> response) {
-                Log.i("Response", "onResponse: " + response);
-
                 ArrayList<studentNewsModel> news = response.body().getArticles();
 
                 for (int i = 0; i < news.size(); i++) {

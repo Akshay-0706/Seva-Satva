@@ -308,7 +308,7 @@
             app:layout_constraintTop_toTopOf="@+id/proAskMentorText" />
 
         <TextView
-            android:id="@+id/proAboutUs"
+            android:id="@+id/studentProAboutUs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -317,22 +317,22 @@
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintEnd_toStartOf="@+id/studentProAboutUsArrow"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
             app:layout_constraintTop_toBottomOf="@+id/proAskMentorText"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/studentProAboutUsArrow"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/proAboutUs"
+            app:layout_constraintBottom_toBottomOf="@+id/studentProAboutUs"
             app:layout_constraintEnd_toEndOf="@+id/proAskMentorIcon"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/proAboutUs" />
+            app:layout_constraintTop_toTopOf="@+id/studentProAboutUs" />
 
         <TextView
             android:id="@+id/studentProFeedback"
@@ -344,10 +344,10 @@
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintEnd_toStartOf="@+id/studentProAboutUsArrow"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
-            app:layout_constraintTop_toBottomOf="@+id/proAboutUs"
+            app:layout_constraintTop_toBottomOf="@+id/studentProAboutUs"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
@@ -362,7 +362,7 @@
             app:layout_constraintTop_toTopOf="@+id/studentProFeedback" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/studentProShare"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -372,22 +372,22 @@
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintEnd_toStartOf="@+id/studentProAboutUsArrow"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
             app:layout_constraintTop_toBottomOf="@+id/studentProFeedback"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/studentProShareArrow"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:background="@drawable/xtra_forward_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/textView7"
+            app:layout_constraintBottom_toBottomOf="@+id/studentProShare"
             app:layout_constraintEnd_toEndOf="@+id/proAskMentorIcon"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView7" />
+            app:layout_constraintTop_toTopOf="@+id/studentProShare" />
 
         <TextView
             android:id="@+id/textView8"
@@ -400,10 +400,10 @@
             android:textColor="?attr/textColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintEnd_toStartOf="@+id/studentProAboutUsArrow"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/proAskMentorText"
-            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/studentProShare"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView

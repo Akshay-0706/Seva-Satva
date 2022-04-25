@@ -146,10 +146,9 @@ public class studentHome extends Fragment {
             }
         });
 
-        requireView().setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+        requireView().setOnTouchListener(new studentHomeOnSwipeTouchListener(getContext()) {
             @Override
             public void onSwipeLeft() {
-                // Whatever
                 startActivity(new Intent(getActivity(), studentHomeAns.class));
             }
         });
@@ -176,10 +175,12 @@ public class studentHome extends Fragment {
                 if (task.getResult() != null)
                     dataSnapshot = task.getResult();
                 data = (Map<String, Object>) dataSnapshot.getValue();
+
                 if (data != null) {
-                    Map<String, Object> comintTest = (Map<String, Object>) data.get("comingTest");
-                    String time = (String) comintTest.get("time");
-                    String date = (String) comintTest.get("date");
+
+                    Map<String, Object> comingTest = (Map<String, Object>) data.get("comingTest");
+                    String time = (String) comingTest.get("time");
+                    String date = (String) comingTest.get("date");
 
                     try {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);

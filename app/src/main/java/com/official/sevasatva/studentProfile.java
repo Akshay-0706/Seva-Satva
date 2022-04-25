@@ -158,6 +158,44 @@ public class studentProfile extends Fragment {
                 }
         );
 
+        view.findViewById(R.id.studentProAboutUs).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), profileAboutUs.class));
+                    }
+                }
+        );
+
+        view.findViewById(R.id.studentProAboutUsArrow).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), profileAboutUs.class));
+                    }
+                }
+        );
+
+        view.findViewById(R.id.studentProShare).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shareApp();
+                    }
+                }
+        );
+
+        view.findViewById(R.id.studentProShareArrow).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shareApp();
+                    }
+                }
+        );
+
+
+
 //        proSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
 //            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -168,6 +206,13 @@ public class studentProfile extends Fragment {
 //                proTheme.setVisibility(View.GONE);
 //            }
 //        });
+    }
+
+    private void shareApp() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, "Check out our Seva/Satva app!\nDownload it from https://playstorelink.com");
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, "Share this app"));
     }
 
     private void logout() {

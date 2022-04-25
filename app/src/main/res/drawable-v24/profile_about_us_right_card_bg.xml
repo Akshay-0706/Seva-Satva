@@ -4,6 +4,6 @@
     <!--    <gradient-->
     <!--        android:startColor="@color/iconColorLight"-->
     <!--        android:endColor="@color/iconColor"/>-->
-    <solid android:color="#FFFFFF"/>
-    <corners android:topRightRadius="30dp" android:bottomRightRadius="30dp"/>
+    <solid android:color="@color/white"/>
+    <corners android:topLeftRadius="30dp" android:bottomLeftRadius="30dp"/>
 </shape>

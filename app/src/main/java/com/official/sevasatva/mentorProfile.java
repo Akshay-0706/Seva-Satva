@@ -121,6 +121,49 @@ public class mentorProfile extends Fragment {
                 openGmail();
             }
         });
+
+        view.findViewById(R.id.mentorProAboutUs).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), profileAboutUs.class));
+                    }
+                }
+        );
+
+        view.findViewById(R.id.mentorProAboutUsArrow).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), profileAboutUs.class));
+                    }
+                }
+        );
+
+        view.findViewById(R.id.mentorProShare).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shareApp();
+                    }
+                }
+        );
+
+        view.findViewById(R.id.mentorProShareArrow).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shareApp();
+                    }
+                }
+        );
+    }
+
+    private void shareApp() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, "Check out our Seva/Satva app!\nDownload it from https://playstorelink.com");
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, "Share this app"));
     }
 
     private void openGmail() {
