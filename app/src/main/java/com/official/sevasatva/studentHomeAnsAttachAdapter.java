@@ -96,10 +96,10 @@ public class studentHomeAnsAttachAdapter extends RecyclerView.Adapter<studentHom
                 getSystemService(Context.DOWNLOAD_SERVICE);
 
         String mentorEmail = "";
-        if (context.getClass().equals(studentScreen.class))
-            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
-        else
+        if (context.getClass().equals(mentorScreen.class))
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         storageReference.child("Announcements").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))

@@ -76,10 +76,10 @@ public class studentHomeAns extends AppCompatActivity {
         }
 
         String mentorEmail = "";
-        if (context.getClass().equals(studentScreen.class))
-            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
-        else
+        if (context.getClass().equals(mentorScreen.class))
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String finalMentorEmail = mentorEmail;

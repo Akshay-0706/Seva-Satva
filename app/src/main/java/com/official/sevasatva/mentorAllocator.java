@@ -145,8 +145,15 @@ public class mentorAllocator extends AppCompatActivity {
                 }
 
                 if (newLaunch) {
-                    if (data != null)
-                        areAllocated = (boolean) data.get("areAllocated");
+                    if (data != null) {
+                        if (data.get("areAllocated") == null) {
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("areAllocated", false);
+                            firebaseFirestore.collection("Courses").document(cc).set(map, SetOptions.merge());
+                            areAllocated = false;
+                        } else
+                            areAllocated = (boolean) data.get("areAllocated");
+                    }
                     getStudentsEnrolled();
                 }
             }

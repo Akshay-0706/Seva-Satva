@@ -265,29 +265,30 @@ public class studentLogin extends AppCompatActivity {
 
                             boolean found = false;
 
-                            for (Map.Entry<String, Object> entry : data2.entrySet()) {
-                                if (found)
-                                    break;
-                                for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
-                                    switch (entry2.getKey()) {
-                                        case "cc":
-                                            cc = entry2.getValue().toString();
-                                            break;
-                                        case "cn":
-                                            cn = entry2.getValue().toString();
-                                            break;
-                                        case "desc":
-                                            desc = entry2.getValue().toString();
-                                            break;
-                                        case "email":
-                                            if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
-                                                isNewStudent = false;
-                                                found = true;
-                                            }
-                                            break;
+                            if (data2 != null)
+                                for (Map.Entry<String, Object> entry : data2.entrySet()) {
+                                    if (found)
+                                        break;
+                                    for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
+                                        switch (entry2.getKey()) {
+                                            case "cc":
+                                                cc = entry2.getValue().toString();
+                                                break;
+                                            case "cn":
+                                                cn = entry2.getValue().toString();
+                                                break;
+                                            case "desc":
+                                                desc = entry2.getValue().toString();
+                                                break;
+                                            case "email":
+                                                if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
+                                                    isNewStudent = false;
+                                                    found = true;
+                                                }
+                                                break;
+                                        }
                                     }
                                 }
-                            }
 
                             if (!isAllowed[0] && isNewStudent) {
                                 Toast.makeText(studentLogin.this, "Course enrollment has stopped!", Toast.LENGTH_LONG).show();

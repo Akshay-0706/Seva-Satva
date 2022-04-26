@@ -135,7 +135,7 @@ public class mentorLogin extends AppCompatActivity {
                         email + "&pass=" + pass, response -> {
             if (response.equals("Accepted")) {
                 FirebaseAuth auth = FirebaseAuth.getInstance();
-                auth.signInWithEmailAndPassword(email, pass)
+                auth.createUserWithEmailAndPassword(email, pass)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {

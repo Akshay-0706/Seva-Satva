@@ -98,9 +98,6 @@ public class chatScreen extends AppCompatActivity {
 
     public void initChatScreen(RecyclerView chatRecyclerView, Context context) {
 
-        Toast.makeText(context, "Hold for 1 sec to copy a message", Toast.LENGTH_SHORT).show();
-        Toast.makeText(context, "Hold for 3 sec to delete your message", Toast.LENGTH_SHORT).show();
-
         final List<chatScreenModel> chatList = new ArrayList<>();
         chatRecyclerView.setHasFixedSize(true);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));

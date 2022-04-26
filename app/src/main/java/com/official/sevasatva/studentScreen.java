@@ -49,9 +49,9 @@ public class studentScreen extends AppCompatActivity {
         replaceFragment(new studentHome());
         setNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
 
-        startService(new Intent(this,ansNotificationService.class));
-        startService(new Intent(this,chatNotificationService.class));
-        alarmReceiver.setAlarm(this);
+//        startService(new Intent(this,ansNotificationService.class));
+//        startService(new Intent(this,chatNotificationService.class));
+//        alarmReceiver.setAlarm(this);
 
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                 .putBoolean("isFirstLaunch", false).apply();

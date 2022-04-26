@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -125,10 +126,23 @@ public class studentTestsDetails extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.studentTestsDetailsMarkedEditText).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus && ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).getText().toString().equals("Not graded yet"))
+                {
+                    ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).setText("");
+                    InputMethodManager imm = (InputMethodManager)   getSystemService(studentTestsDetails.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+            }
+        });
+
         findViewById(R.id.studentTestsDetailsMarkedEditText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!(((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).getText().toString().isEmpty())) {
+
                     if (Integer.parseInt(((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).getText().toString()) <=
                             marks) {
                         Toast.makeText(studentTestsDetails.this, "Graded", Toast.LENGTH_SHORT).show();
