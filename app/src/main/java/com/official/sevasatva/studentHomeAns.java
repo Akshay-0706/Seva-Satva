@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,7 +77,7 @@ public class studentHomeAns extends AppCompatActivity {
         }
 
         String mentorEmail = "";
-        if (context.getClass().equals(mentorScreen.class))
+        if (context.getClass().equals(mentorHomeAns.class))
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
         else
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
@@ -92,6 +93,7 @@ public class studentHomeAns extends AppCompatActivity {
                     if (snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
                             .hasChild(finalMentorEmail.replaceAll("\\.", "_"))) {
                         lottieAnimationView.setVisibility(View.GONE);
+
                         for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
                                 .child(finalMentorEmail.replaceAll("\\.", "_")).getChildren()) {
 
@@ -115,6 +117,9 @@ public class studentHomeAns extends AppCompatActivity {
                                 context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
                             }
                         }
+                    } else {
+                        loadingDialog.dismiss();
+                        lottieAnimationView.setVisibility(View.VISIBLE);
                     }
                 } else {
                     loadingDialog.dismiss();

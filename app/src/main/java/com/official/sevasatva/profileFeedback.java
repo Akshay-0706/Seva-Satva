@@ -90,6 +90,7 @@ public class profileFeedback extends AppCompatActivity {
         map.put("uid", getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("uid", "temp"));
         map.put("cc", getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"));
         map.put("year", getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("year", "temp"));
+        map.put("isMentor", !getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true));
         map2.put("feedback", feedback);
 
 

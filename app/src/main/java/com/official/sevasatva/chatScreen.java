@@ -92,24 +92,24 @@ public class chatScreen extends AppCompatActivity {
             }
         });
 
-        initChatScreen(chatRecyclerView, this);
-
-    }
-
-    public void initChatScreen(RecyclerView chatRecyclerView, Context context) {
-
-        final List<chatScreenModel> chatList = new ArrayList<>();
-        chatRecyclerView.setHasFixedSize(true);
-        chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        LinearLayout lottieAnimationView = ((Activity) context).findViewById(R.id.chatEmptyAnimation);
-
-        Dialog loadingDialog = new Dialog(context);
-        if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+        Dialog loadingDialog = new Dialog(this);
+        if (getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
             loadingDialog.setContentView(R.layout.fragment_loading);
             loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             loadingDialog.setCancelable(false);
             loadingDialog.show();
         }
+
+        initChatScreen(chatRecyclerView, this, loadingDialog);
+
+    }
+
+    public void initChatScreen(RecyclerView chatRecyclerView, Context context, Dialog loadingDialog) {
+
+        final List<chatScreenModel> chatList = new ArrayList<>();
+        chatRecyclerView.setHasFixedSize(true);
+        chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayout lottieAnimationView = ((Activity) context).findViewById(R.id.chatEmptyAnimation);
 
         String mentorEmail = "";
         if (context.getClass().equals(mentorScreen.class))
@@ -125,7 +125,7 @@ public class chatScreen extends AppCompatActivity {
                 chatList.clear();
                 if (snapshot.hasChild(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))) {
                     if (snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                    .hasChild(finalMentorEmail.replaceAll("\\.", "_"))) {
+                            .hasChild(finalMentorEmail.replaceAll("\\.", "_"))) {
                         lottieAnimationView.setVisibility(View.GONE);
 
                         for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
@@ -147,6 +147,9 @@ public class chatScreen extends AppCompatActivity {
                                 context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
                             }
                         }
+                    } else {
+                        loadingDialog.dismiss();
+                        lottieAnimationView.setVisibility(View.VISIBLE);
                     }
                 } else {
                     loadingDialog.dismiss();

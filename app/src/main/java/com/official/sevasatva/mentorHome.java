@@ -101,12 +101,12 @@ public class mentorHome extends Fragment {
             }
         });
 
-        requireView().setOnTouchListener(new studentHomeOnSwipeTouchListener(getContext()) {
-            @Override
-            public void onSwipeLeft() {
-                startActivity(new Intent(getActivity(), mentorHomeAns.class));
-            }
-        });
+//        requireView().setOnTouchListener(new studentHomeOnSwipeTouchListener(getContext()) {
+//            @Override
+//            public void onSwipeLeft() {
+//                startActivity(new Intent(getActivity(), mentorHomeAns.class));
+//            }
+//        });
 
         mentorHomeRecyclerView = getView().findViewById(R.id.mentorHomeRecyclerView);
         getStudents();

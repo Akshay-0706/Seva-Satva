@@ -129,10 +129,9 @@ public class studentTestsDetails extends AppCompatActivity {
         findViewById(R.id.studentTestsDetailsMarkedEditText).setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).getText().toString().equals("Not graded yet"))
-                {
+                if (hasFocus && ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).getText().toString().equals("Not graded yet")) {
                     ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).setText("");
-                    InputMethodManager imm = (InputMethodManager)   getSystemService(studentTestsDetails.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(studentTestsDetails.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
             }

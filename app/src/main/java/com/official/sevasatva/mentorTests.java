@@ -190,67 +190,82 @@ public class mentorTests extends Fragment {
                         snapshot.hasChild(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))) {
                     lottieAnimationView.setVisibility(View.GONE);
 
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
-                            response -> {
-                                try {
-                                    testsList.clear();
-                                    JSONObject jsonObject = new JSONObject(response);
-                                    String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
-                                    String time = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
+                    if (snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                            .hasChild(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(finalKey, "SV10").replaceAll("\\.", "_"))) {
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+                                response -> {
+                                    try {
+                                        testsList.clear();
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+                                        String time = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
 
-                                    Date current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
+                                        Date current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
 
-                                    for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                                            .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(finalKey, "SV10").replaceAll("\\.", "_")).getChildren()) {
+                                        for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                                .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(finalKey, "SV10").replaceAll("\\.", "_")).getChildren()) {
 
-                                        if (!dataSnapshot.getKey().equals("comingTest")) {
-                                            final String title = dataSnapshot.child("title").getValue(String.class);
-                                            final String marks = String.valueOf(dataSnapshot.child("marks").getValue(Long.class));
-                                            final String deadline = dataSnapshot.child("deadline").getValue(String.class);
-                                            final Map<String, Object> students = (Map<String, Object>) dataSnapshot.child("students").getValue();
-                                            final String id = dataSnapshot.getKey();
+                                            if (!dataSnapshot.getKey().equals("comingTest")) {
+                                                final String title = dataSnapshot.child("title").getValue(String.class);
+                                                final String marks = String.valueOf(dataSnapshot.child("marks").getValue(Long.class));
+                                                final String deadline = dataSnapshot.child("deadline").getValue(String.class);
+                                                final Map<String, Object> students = (Map<String, Object>) dataSnapshot.child("students").getValue();
+                                                final String id = dataSnapshot.getKey();
 
-                                            databaseReference.child("tests")
-                                                    .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                                                    .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_"))
-                                                    .child(id).child("submitted").setValue(students == null ? 0 : students.size());
+                                                if (snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                                        .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(finalKey, "SV10").replaceAll("\\.", "_"))
+                                                        .child(id)
+                                                        .hasChild("submitted"))
+                                                    databaseReference.child("tests")
+                                                            .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                                                            .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(finalKey, "temp").replaceAll("\\.", "_"))
+                                                            .child(id).child("submitted").setValue(students == null ? 0 : students.size());
 
-                                            final String submitted = "Submitted: " + (students == null ? 0 : students.size()) + "/" + context.getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                                                    .getInt("studentsCount", 0);
-                                            Date deadlineDate = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH).parse(deadline);
-                                            boolean onlineStatus = current.before(deadlineDate);
-                                            //                                        testLists.get(getAdapterPosition()).setOnlineStatus(false);
+                                                final String submitted = "Submitted: " + (students == null ? 0 : students.size()) + "/" + context.getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                                                        .getInt("studentsCount", 0);
+                                                Date deadlineDate = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH).parse(deadline);
+                                                boolean onlineStatus = current.before(deadlineDate);
+                                                //                                        testLists.get(getAdapterPosition()).setOnlineStatus(false);
 //                                    notifyItemChanged(getAdapterPosition());
 
-                                            studentTestsModel studentTestsModel = new studentTestsModel(title, marks, submitted, deadline, onlineStatus, students, id);
-                                            testsList.add(studentTestsModel);
+                                                studentTestsModel studentTestsModel = new studentTestsModel(title, marks, submitted, deadline, onlineStatus, students, id);
+                                                testsList.add(studentTestsModel);
 
-                                            if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
-                                                loadingDialog.dismiss();
-                                                context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
+                                                if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+                                                    loadingDialog.dismiss();
+                                                    context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
+                                                }
                                             }
                                         }
+
+                                        if (!testsList.isEmpty()) {
+                                            studentTestsAdapter studentTestsAdapter = new studentTestsAdapter(testsList, context);
+                                            recyclerView.setAdapter(studentTestsAdapter);
+                                        } else {
+                                            loadingDialog.dismiss();
+                                            lottieAnimationView.setVisibility(View.VISIBLE);
+                                        }
+
+                                    } catch (JSONException | ParseException e) {
+                                        e.printStackTrace();
                                     }
+                                },
 
-                                    studentTestsAdapter studentTestsAdapter = new studentTestsAdapter(testsList, context);
-                                    recyclerView.setAdapter(studentTestsAdapter);
-
-                                } catch (JSONException | ParseException e) {
-                                    e.printStackTrace();
+                                error -> {
+                                    Toast.makeText(getContext(), "Unable to access current date!", Toast.LENGTH_LONG).show();
                                 }
-                            },
+                        );
 
-                            error -> {
-                                Toast.makeText(getContext(), "Unable to access current date!", Toast.LENGTH_LONG).show();
-                            }
-                    );
+                        int socketTimeOut = 50000;
+                        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        stringRequest.setRetryPolicy(policy);
+                        RequestQueue queue = Volley.newRequestQueue(context);
+                        queue.add(stringRequest);
 
-                    int socketTimeOut = 50000;
-                    RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    stringRequest.setRetryPolicy(policy);
-                    RequestQueue queue = Volley.newRequestQueue(context);
-                    queue.add(stringRequest);
-
+                    } else {
+                        loadingDialog.dismiss();
+                        lottieAnimationView.setVisibility(View.VISIBLE);
+                    }
 
                 } else {
                     loadingDialog.dismiss();

@@ -146,12 +146,12 @@ public class studentHome extends Fragment {
             }
         });
 
-        requireView().setOnTouchListener(new studentHomeOnSwipeTouchListener(getContext()) {
-            @Override
-            public void onSwipeLeft() {
-                startActivity(new Intent(getActivity(), studentHomeAns.class));
-            }
-        });
+//        requireView().setOnTouchListener(new studentHomeOnSwipeTouchListener(getContext()) {
+//            @Override
+//            public void onSwipeLeft() {
+//                startActivity(new Intent(getActivity(), studentHomeAns.class));
+//            }
+//        });
 
         setTestStatus();
     }

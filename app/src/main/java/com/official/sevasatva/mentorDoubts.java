@@ -2,6 +2,9 @@ package com.official.sevasatva;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -107,6 +110,14 @@ public class mentorDoubts extends Fragment {
             }
         });
 
+        Dialog loadingDialog = new Dialog(view.getContext());
+        if (view.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+            loadingDialog.setContentView(R.layout.fragment_loading);
+            loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            loadingDialog.setCancelable(false);
+            loadingDialog.show();
+        }
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
                 response -> {
                     try {
@@ -114,7 +125,8 @@ public class mentorDoubts extends Fragment {
                         String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
                         getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("date", date).apply();
 
-                        chatScreen.initChatScreen(chatRecyclerView, getActivity());
+//                        loadingDialog.dismiss();
+                        chatScreen.initChatScreen(chatRecyclerView, getActivity(), loadingDialog);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

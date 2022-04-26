@@ -37,9 +37,16 @@ public class ansNotificationService extends Service {
                 start[0] = true;
             }
         }, 2000);
-        
+
+        String mentorEmail = "";
+        if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true))
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+
         FirebaseDatabase.getInstance().getReference().child("announcements")
                 .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
+                .child(mentorEmail.replaceAll("\\.", "_"))
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {

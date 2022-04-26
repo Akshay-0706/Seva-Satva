@@ -40,6 +40,17 @@ public class mentorScreen extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (value.equals("home"))
+            super.onBackPressed();
+        else {
+            changeNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
+            replaceFragment(new mentorHome());
+            value = "home";
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_screen);
@@ -49,9 +60,9 @@ public class mentorScreen extends AppCompatActivity {
         replaceFragment(new mentorHome());
         setNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
 
-//        startService(new Intent(this,ansNotificationService.class));
-//        startService(new Intent(this,chatNotificationService.class));
-//        alarmReceiver.setAlarm(this);
+        startService(new Intent(this,ansNotificationService.class));
+        startService(new Intent(this,chatNotificationService.class));
+        alarmReceiver.setAlarm(this);
 
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                 .putBoolean("isFirstLaunch", false).apply();

@@ -38,15 +38,23 @@ public class chatNotificationService extends Service {
             }
         }, 2000);
 
+        String mentorEmail = "";
+        if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true))
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "SV10");
+        else
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
+
         FirebaseDatabase.getInstance().getReference().child("messages")
                 .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
+                .child(mentorEmail.replaceAll("\\.", "_"))
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         final String name = snapshot.child("name").getValue(String.class);
                         final String msg = snapshot.child("msg").getValue(String.class);
+                        final String email = snapshot.child("email").getValue(String.class);
 
-                        if (start[0] && getApplicationContext().getClass().equals(chatScreen.class))
+                        if (start[0] && !context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").equals(email))
                             new sendNotification(context, name, msg, new Intent(getApplicationContext(), chatScreen.class), 1, true);
                     }
 
