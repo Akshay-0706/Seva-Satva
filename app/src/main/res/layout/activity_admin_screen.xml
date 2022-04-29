@@ -11,18 +11,30 @@
         android:id="@+id/adminHeading"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
         android:fontFamily="@font/poppins"
         android:text="Admin Dashboard"
         android:textColor="?attr/textColor"
         android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/adminLogout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <ImageButton
+        android:id="@+id/adminLogout"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/xtra_logout_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/adminHeading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/adminHeading" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"

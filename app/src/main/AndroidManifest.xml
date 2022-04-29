@@ -15,57 +15,75 @@
         android:theme="@style/Theme.Official.SevaSatva">
         <activity
             android:name=".profileAboutUs"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".mentorTestsDetails"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".studentTestsDetails"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".profileFeedback"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".studentNewsDetails"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".mentorAllocator"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".mentorAllocation"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".adminScreen"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".mentorHomeAns"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".mentorScreen"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".chatScreen"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".studentHomeAns"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".studentScreen"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".studentLogin"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".studentDetails"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".mentorLogin"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".appIntro"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".splash"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -74,8 +92,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ansNotificationService" />
-        <service android:name=".chatNotificationService" />
+        <service android:name=".serviceAnsNotify" />
+        <service android:name=".serviceChatNotify" />
+        <service android:name=".serviceTestsNotify" />
 
         <receiver
             android:name=".alarmReceiver"

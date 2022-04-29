@@ -25,6 +25,7 @@
         <item name="recieverChatBG">@color/receiverChatBG</item>
         <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
         <item name="android:timePickerStyle">@style/MyTimePickerStyle</item>
+        <item name="colorAccent">@color/accent</item>
     </style>
 
     <style name="appIntoBottomDrawerTheme" parent="Theme.Design.BottomSheetDialog">

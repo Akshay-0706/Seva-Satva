@@ -8,6 +8,7 @@ public class studentHomeAnsModel {
 
     String title;
     String desc;
+    String date;
     Boolean hasAttach;
     Boolean isExpanded;
     ArrayList<String> attach;
@@ -18,9 +19,10 @@ public class studentHomeAnsModel {
     public studentHomeAnsModel() {
     }
 
-    public studentHomeAnsModel(String title, String desc, Boolean hasAttach, Boolean isExpanded,ArrayList<String> attach, String id) {
+    public studentHomeAnsModel(String title, String desc, String date, Boolean hasAttach, Boolean isExpanded,ArrayList<String> attach, String id) {
         this.title = title;
         this.desc = desc;
+        this.date = date;
         this.hasAttach = hasAttach;
         this.isExpanded = isExpanded;
         this.attach = attach;
@@ -37,6 +39,10 @@ public class studentHomeAnsModel {
 
     public String getDesc() {
         return desc;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public Boolean getHasAttach() {

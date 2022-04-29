@@ -216,20 +216,22 @@ public class studentProfile extends Fragment {
     }
 
     private void logout() {
-        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isFirstRunAppIntro", true).apply();
-        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isUserStudent", true).apply();
-        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("firstRealtimeLoading", true).apply();
-        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isFirstLaunch", true).apply();
-        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("areMentorsAllocated", false).apply();
-        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isAdmin", false).apply();
-        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isMentorLoggedIn", false).apply();
+//        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                .putBoolean("isFirstRunAppIntro", true).apply();
+//        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                .putBoolean("isUserStudent", true).apply();
+//        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                .putBoolean("firstRealtimeLoading", true).apply();
+//        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                .putBoolean("isFirstLaunch", true).apply();
+//        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                .putBoolean("areMentorsAllocated", false).apply();
+//        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                .putBoolean("isAdmin", false).apply();
+//        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+//                .putBoolean("isMentorLoggedIn", false).apply();
+
+        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().clear().apply();
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("426988667812-meoa78skojkt8d3u0rs5mi9dd4i5nok3.apps.googleusercontent.com") // R.string.default_web_client_id

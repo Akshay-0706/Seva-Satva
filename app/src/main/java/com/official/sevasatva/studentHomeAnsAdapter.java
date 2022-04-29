@@ -4,6 +4,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.net.Uri;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,14 +62,18 @@ public class studentHomeAnsAdapter extends RecyclerView.Adapter<studentHomeAnsAd
 
         if (list.getExpanded()) {
             holder.ansDesc.setVisibility(View.VISIBLE);
+            holder.ansDate.setVisibility(View.VISIBLE);
             holder.ansDesc.setText(list.getDesc());
-        } else holder.ansDesc.setVisibility(View.GONE);
+            holder.ansDate.setText(list.getDate());
+        } else {
+            holder.ansDesc.setVisibility(View.GONE);
+            holder.ansDate.setVisibility(View.GONE);
+        }
 
         if (list.getHasAttach() && list.getExpanded())
             holder.hasAttach.setVisibility(View.VISIBLE);
         else
             holder.hasAttach.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -77,7 +83,7 @@ public class studentHomeAnsAdapter extends RecyclerView.Adapter<studentHomeAnsAd
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        final private TextView ansTitle, ansDesc, hasAttach;
+        final private TextView ansTitle, ansDesc, ansDate, hasAttach;
         private ImageButton ansMentorDelete = null;
         RecyclerView ansAttachRecyclerView;
 
@@ -86,6 +92,7 @@ public class studentHomeAnsAdapter extends RecyclerView.Adapter<studentHomeAnsAd
 
             ansTitle = itemView.findViewById(R.id.ansTitle);
             ansDesc = itemView.findViewById(R.id.ansDesc);
+            ansDate = itemView.findViewById(R.id.ansDate);
             hasAttach = itemView.findViewById(R.id.ansAttach);
             ansAttachRecyclerView = itemView.findViewById(R.id.mentorHomeAnsAttachRecyclerView);
 

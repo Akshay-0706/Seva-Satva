@@ -15,6 +15,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,7 +34,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -370,6 +379,9 @@ public class mentorAllocator extends AppCompatActivity {
             iterator.next();
         }
 
+        String[] studentEmails = new String[mentorsDetails[mentorDetailsIndex]];
+        int studentEmailsIndex = 0;
+
         // Iterate through the map till the allocated students.
         for (int i = 0; i < mentorsDetails[mentorDetailsIndex]; i++) {
             Map.Entry<String, Object> entry = iterator.next();
@@ -377,8 +389,38 @@ public class mentorAllocator extends AppCompatActivity {
             Map<String, Object> subStudentData = (Map<String, Object>) entry.getValue();
             subStudentData.put("mentorName", name);
             subStudentData.put("mentorEmail", email);
+            studentEmails[studentEmailsIndex++] = "" + subStudentData.get("email");
             allocatedStudents.put(entry.getKey(), entry.getValue());
         }
+        String studentEmailsString = Arrays.toString(studentEmails);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwlaKsBo6JoKSO2Ww6d5359UGEW07uIBOLxYrkiZ0WMw0k5b0c-alh-Ha20SfTRz7zs/exec",
+                response -> {
+                },
+
+                error -> {
+                    Toast.makeText(this, "Unable to details in google sheet", Toast.LENGTH_SHORT).show();
+                }
+        ) {
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parmas = new HashMap<>();
+
+                parmas.put("action", "alcMentor");
+                parmas.put("emails", studentEmailsString.substring(1, studentEmailsString.length() - 1));
+                parmas.put("cc", cc);
+                parmas.put("mentor", name);
+
+                return parmas;
+            }
+        };
+
+        int socketTimeOut = 50000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
 
         allocatedMentor.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), allocatedMentorDetails);
         mentor.put("Mentors", allocatedMentor);

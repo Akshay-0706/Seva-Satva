@@ -65,7 +65,7 @@
     <string name="ans_heading">Announcements</string>
     <string name="ansTitle">Title</string>
     <string name="ansDesc">Description</string>
-    <string name="ansAttach"><u>View attachments</u></string>
+    <string name="ansAttach">View attachments</string>
     <string name="mentor_home_ans_create_ans_text">Create Announcement</string>
 
     <string name="news_heading">News</string>

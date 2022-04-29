@@ -16,7 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class ansNotificationService extends Service {
+public class serviceTestsNotify extends Service {
 
     Context context;
 
@@ -30,13 +30,13 @@ public class ansNotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         final boolean[] start = {false};
-        
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 start[0] = true;
             }
-        }, 2000);
+        }, 5000);
 
         String mentorEmail = "";
         if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true))
@@ -44,17 +44,17 @@ public class ansNotificationService extends Service {
         else
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
 
-        FirebaseDatabase.getInstance().getReference().child("announcements")
+        FirebaseDatabase.getInstance().getReference().child("tests")
                 .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
                 .child(mentorEmail.replaceAll("\\.", "_"))
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         final String title = snapshot.child("title").getValue(String.class);
-                        final String desc = snapshot.child("desc").getValue(String.class);
+                        final String desc = snapshot.child("deadline").getValue(String.class);
 
                         if (start[0])
-                            new sendNotification(context, title, desc, new Intent(getApplicationContext(), studentHomeAns.class), 2, false);
+                            new sendNotification(context, title, "Deadline: " + desc, new Intent(getApplicationContext(), studentHomeAns.class), 3);
                     }
 
                     @Override

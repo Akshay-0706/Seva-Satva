@@ -19,7 +19,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -111,7 +110,7 @@ public class mentorDoubts extends Fragment {
         });
 
         Dialog loadingDialog = new Dialog(view.getContext());
-        if (view.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+        if (view.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeChatLoading", true)) {
             loadingDialog.setContentView(R.layout.fragment_loading);
             loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             loadingDialog.setCancelable(false);
@@ -126,7 +125,7 @@ public class mentorDoubts extends Fragment {
                         getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("date", date).apply();
 
 //                        loadingDialog.dismiss();
-                        chatScreen.initChatScreen(chatRecyclerView, getActivity(), loadingDialog);
+                        chatScreen.getChats(chatRecyclerView, getActivity(), loadingDialog);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

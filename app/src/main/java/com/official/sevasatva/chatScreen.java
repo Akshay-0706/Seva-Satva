@@ -2,6 +2,7 @@ package com.official.sevasatva;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,15 +14,16 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,6 +50,10 @@ import java.util.Locale;
 public class chatScreen extends AppCompatActivity {
 
     internetCheckListener internetCheckListener = new internetCheckListener();
+    final List<chatScreenModel> chatList = new ArrayList<>();
+    chatScreenAdapter chatScreenAdapter;
+    Context chatContext;
+    String mentorEmail = "";
 
     @Override
     protected void onStart() {
@@ -93,25 +99,24 @@ public class chatScreen extends AppCompatActivity {
         });
 
         Dialog loadingDialog = new Dialog(this);
-        if (getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+        if (getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeChatLoading", true)) {
             loadingDialog.setContentView(R.layout.fragment_loading);
             loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             loadingDialog.setCancelable(false);
             loadingDialog.show();
         }
 
-        initChatScreen(chatRecyclerView, this, loadingDialog);
+        getChats(chatRecyclerView, this, loadingDialog);
 
     }
 
-    public void initChatScreen(RecyclerView chatRecyclerView, Context context, Dialog loadingDialog) {
+    public void getChats(RecyclerView chatRecyclerView, Context context, Dialog loadingDialog) {
+        chatContext = context;
 
-        final List<chatScreenModel> chatList = new ArrayList<>();
         chatRecyclerView.setHasFixedSize(true);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         LinearLayout lottieAnimationView = ((Activity) context).findViewById(R.id.chatEmptyAnimation);
 
-        String mentorEmail = "";
         if (context.getClass().equals(mentorScreen.class))
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "email");
         else
@@ -142,9 +147,9 @@ public class chatScreen extends AppCompatActivity {
                             chatScreenModel chatScreenModel = new chatScreenModel(date, email, isStudent, msg, name, time, id);
                             chatList.add(chatScreenModel);
 
-                            if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+                            if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeChatLoading", true)) {
                                 loadingDialog.dismiss();
-                                context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
+                                context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeChatLoading", false).apply();
                             }
                         }
                     } else {
@@ -156,7 +161,8 @@ public class chatScreen extends AppCompatActivity {
                     lottieAnimationView.setVisibility(View.VISIBLE);
                 }
 
-                chatScreenAdapter chatScreenAdapter = new chatScreenAdapter(chatList, context, context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("date", "temp"));
+                chatScreenAdapter = new chatScreenAdapter(chatList, context, context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("date", "temp"));
+                new ItemTouchHelper(simpleCallback).attachToRecyclerView(chatRecyclerView);
                 chatRecyclerView.setAdapter(chatScreenAdapter);
                 chatRecyclerView.scrollToPosition(chatList.size() - 1);
             }
@@ -167,6 +173,60 @@ public class chatScreen extends AppCompatActivity {
             }
         });
     }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            Toast.makeText(chatScreen.this, "on Move", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        @Override
+        public int getSwipeDirs(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            if (viewHolder.itemView.findViewById(R.id.receiverLayout).getVisibility() == View.VISIBLE)
+                return 0;
+            else
+                return super.getSwipeDirs(recyclerView, viewHolder);
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            Log.i("Dir", "onSwiped: " + swipeDir);
+            //Remove swiped item from list and notify the RecyclerView
+            Dialog confirmationDialog = new Dialog(chatContext);
+            confirmationDialog.setContentView(R.layout.fragment_confirmation);
+            confirmationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            confirmationDialog.setCancelable(false);
+            confirmationDialog.show();
+
+            ((TextView) confirmationDialog.findViewById(R.id.confirmInfo)).setText("Delete this message?");
+            ((TextView) confirmationDialog.findViewById(R.id.confirmInfo)).setTextSize(16);
+
+            confirmationDialog.findViewById(R.id.confirmCourse).setVisibility(View.INVISIBLE);
+            confirmationDialog.findViewById(R.id.confirmCourseCode).setVisibility(View.INVISIBLE);
+
+            confirmationDialog.findViewById(R.id.confirmNoButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    confirmationDialog.dismiss();
+                    chatScreenAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                }
+            });
+
+            confirmationDialog.findViewById(R.id.confirmYesButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    confirmationDialog.dismiss();
+                    Toast.makeText(chatContext, "Message deleted", Toast.LENGTH_SHORT).show();
+                    DatabaseReference databaseReference;
+                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                    databaseReference.child("messages").child(v.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                            .child(mentorEmail.replaceAll("\\.", "_")).child(chatList.get(viewHolder.getAdapterPosition()).getId()).removeValue();
+                }
+            });
+        }
+    };
 
     public void sendMessage(String message, Context context) {
 //        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bg"
     tools:context=".mentorHomeAns">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,11 +52,12 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
+        android:elevation="10dp"
         android:background="@drawable/mentor_home_ans_create_btn_bg"
         android:fontFamily="@font/poppins"
         android:text="@string/mentor_home_ans_create_ans_text"
         android:textAllCaps="false"
-        android:textColor="?attr/textColor"
+        android:textColor="?attr/inverted"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,6 +73,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
         android:visibility="gone"
+        android:elevation="5dp"
         android:background="@drawable/student_details_recycler_item_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

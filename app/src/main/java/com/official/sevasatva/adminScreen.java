@@ -14,6 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -61,6 +64,13 @@ public class adminScreen extends AppCompatActivity {
                     startActivity(new Intent(adminScreen.this, mentorAllocation.class));
                 else
                     Toast.makeText(adminScreen.this, "Stop the enrollment first!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        findViewById(R.id.adminLogout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
             }
         });
 
@@ -124,5 +134,21 @@ public class adminScreen extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void logout() {
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().clear().apply();
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("426988667812-meoa78skojkt8d3u0rs5mi9dd4i5nok3.apps.googleusercontent.com") // R.string.default_web_client_id
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+        googleSignInClient.signOut();
+
+        startActivity(new Intent(this, splash.class));
+        finishAffinity();
     }
 }

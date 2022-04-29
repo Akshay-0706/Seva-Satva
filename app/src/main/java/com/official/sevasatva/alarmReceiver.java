@@ -11,9 +11,9 @@ public class alarmReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Intent in = new Intent(context, ansNotificationService.class);
+        Intent in = new Intent(context, serviceAnsNotify.class);
         context.startService(in);
-         Intent in2 = new Intent(context, chatNotificationService.class);
+         Intent in2 = new Intent(context, serviceChatNotify.class);
         context.startService(in2);
         setAlarm(context);
     }

@@ -66,6 +66,7 @@ import java.util.Map;
  */
 public class mentorTests extends Fragment {
     Dialog createTestDialog;
+    Date current;
     String[] input = {"", ""};
     String[] dateTime = {"", ""};
 
@@ -167,7 +168,7 @@ public class mentorTests extends Fragment {
         LinearLayout lottieAnimationView = ((Activity) context).findViewById(R.id.testsAnimation);
 
         Dialog loadingDialog = new Dialog(context);
-        if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+        if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeTestsLoading", true)) {
             loadingDialog.setContentView(R.layout.fragment_loading);
             loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             loadingDialog.setCancelable(false);
@@ -200,7 +201,7 @@ public class mentorTests extends Fragment {
                                         String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
                                         String time = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
 
-                                        Date current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
+                                        current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
 
                                         for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
                                                 .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(finalKey, "SV10").replaceAll("\\.", "_")).getChildren()) {
@@ -231,9 +232,9 @@ public class mentorTests extends Fragment {
                                                 studentTestsModel studentTestsModel = new studentTestsModel(title, marks, submitted, deadline, onlineStatus, students, id);
                                                 testsList.add(studentTestsModel);
 
-                                                if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeLoading", true)) {
+                                                if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstRealtimeTestsLoading", true)) {
                                                     loadingDialog.dismiss();
-                                                    context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeLoading", false).apply();
+                                                    context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeTestsLoading", false).apply();
                                                 }
                                             }
                                         }
@@ -393,18 +394,18 @@ public class mentorTests extends Fragment {
                     dataSnapshot = task.getResult();
                 data = (Map<String, Object>) dataSnapshot.getValue();
 
-                Map<String, Object> comintTest = (Map<String, Object>) data.get("comingTest");
+                Map<String, Object> comingTest = (Map<String, Object>) data.get("comingTest");
 
-                if (comintTest != null) {
-                    String time = (String) comintTest.get("time");
-                    String date = (String) comintTest.get("date");
+                if (comingTest != null) {
+                    String time = (String) comingTest.get("time");
+                    String date = (String) comingTest.get("date");
 
                     try {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);
                         Date deadline = simpleDateFormat.parse(dateTime[0] + " " + dateTime[1]);
-                        Date current = simpleDateFormat.parse(time + " " + date);
+                        Date currentDeadline = simpleDateFormat.parse(time + " " + date);
 
-                        if (deadline.before(current)) {
+                        if (deadline.before(currentDeadline) || current.after(currentDeadline)) {
                             Toast.makeText(getContext(), "Here", Toast.LENGTH_SHORT).show();
                             map2.put("time", dateTime[0]);
                             map2.put("date", dateTime[1]);

@@ -12,7 +12,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 public class sendNotification {
-    sendNotification(Context context, String title, String message, Intent intent, int reqCode, boolean forChat) {
+    sendNotification(Context context, String title, String message, Intent intent, int reqCode) {
 
         NotificationManager mNotificationManager;
 
@@ -27,14 +27,20 @@ public class sendNotification {
 
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setSmallIcon(R.drawable.xtra_app_icon);
-        if (forChat)
+        if (context.getClass().equals(serviceChatNotify.class))
             mBuilder.setContentTitle("New message");
-        else
+        else if (context.getClass().equals(serviceAnsNotify.class))
             mBuilder.setContentTitle("New announcement added");
-        if (forChat)
-            mBuilder.setContentText("Someone just asked doubt, check it now!");
         else
+            mBuilder.setContentTitle("New tests created");
+
+        if (context.getClass().equals(serviceChatNotify.class))
+            mBuilder.setContentText("Someone just asked doubt, check it now!");
+        else if (context.getClass().equals(serviceAnsNotify.class))
             mBuilder.setContentText("Your mentor has added new announcement, check it now!");
+        else
+            mBuilder.setContentText("Your mentor has created a test, check it now!");
+
         mBuilder.setPriority(Notification.PRIORITY_MAX);
         mBuilder.setStyle(bigText);
 
@@ -44,12 +50,15 @@ public class sendNotification {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId;
             String channerName;
-            if (forChat) {
-                channerName = "Channel Messages";
+            if (context.getClass().equals(serviceChatNotify.class)) {
+                channerName = "Messages";
                 channelId = "seva_satva_messages";
-            } else {
-                channerName = "Channel Announcements";
+            } else if (context.getClass().equals(serviceAnsNotify.class)) {
+                channerName = "Announcements";
                 channelId = "seva_satva_announcements";
+            } else {
+                channerName = "Tests";
+                channelId = "seva_satva_tests";
             }
             NotificationChannel channel = new NotificationChannel(
                     channelId,

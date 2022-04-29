@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/student_details_recycler_item_bg"
@@ -97,11 +98,29 @@
             android:id="@+id/mentorHomeAnsAttachRecyclerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:visibility="gone"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintBottom_toTopOf="@+id/guidelineStudentBottom"
             app:layout_constraintEnd_toStartOf="@id/guidelineStudentEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"
             app:layout_constraintTop_toBottomOf="@+id/ansAttach" />
+
+        <TextView
+            android:id="@+id/ansDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="12:45 pm 29 September 2022"
+            android:textColor="?attr/textColorLight"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineStudentBottom"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineStudentEnd"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"
+            app:layout_constraintTop_toBottomOf="@+id/mentorHomeAnsAttachRecyclerView"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

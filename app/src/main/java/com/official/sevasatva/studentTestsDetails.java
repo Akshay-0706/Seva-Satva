@@ -96,7 +96,7 @@ public class studentTestsDetails extends AppCompatActivity {
             ((ImageButton) findViewById(R.id.studentTestsDetailsAddBtn)).setVisibility(View.GONE);
             ((TextView) findViewById(R.id.studentTestsDetailsSubTitle)).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.studentTestsDetailsSubTitle)).setText(bundle.getString("studentUID") + " - " +
-                    bundle.getString("studentClass") + bundle.getString("studentBranch"));
+                    bundle.getString("studentClass") + " " + bundle.getString("studentBranch"));
         }
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -174,7 +174,8 @@ public class studentTestsDetails extends AppCompatActivity {
                     if (snapshot.child("students").hasChild(studentEmail.replaceAll("\\.", "_"))) {
                         grades = snapshot.child("students").child(studentEmail.replaceAll("\\.", "_"))
                                 .child("grades").getValue(String.class);
-                        ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).setText(grades);
+                        if (isStudentSide || !grades.equals("Not graded yet"))
+                            ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).setText(grades);
 
                         String status = snapshot.child("students").child(studentEmail.replaceAll("\\.", "_"))
                                 .child("status").getValue(String.class);
@@ -190,12 +191,14 @@ public class studentTestsDetails extends AppCompatActivity {
 
 
                     } else {
-                        ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).setText("Not graded yet");
+                        if (isStudentSide)
+                            ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).setText("Not graded yet");
                         ((TextView) findViewById(R.id.studentTestsDetailsStatusOn)).setText("Not done yet");
                         ((TextView) findViewById(R.id.studentTestsDetailsSubOn)).setText("Not submitted yet");
                     }
                 } else {
-                    ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).setText("Not graded yet");
+                    if (isStudentSide)
+                        ((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).setText("Not graded yet");
                     ((TextView) findViewById(R.id.studentTestsDetailsStatusOn)).setText("Not done yet");
                     ((TextView) findViewById(R.id.studentTestsDetailsSubOn)).setText("Not submitted yet");
                 }

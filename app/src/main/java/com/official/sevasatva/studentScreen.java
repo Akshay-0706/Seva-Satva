@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.official.sevasatva.databinding.ActivityStudentScreenBinding;
 
@@ -60,43 +59,57 @@ public class studentScreen extends AppCompatActivity {
         replaceFragment(new studentHome());
         setNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
 
-        startService(new Intent(this,ansNotificationService.class));
-        startService(new Intent(this,chatNotificationService.class));
+        startService(new Intent(this, serviceAnsNotify.class));
+        startService(new Intent(this, serviceChatNotify.class));
+        startService(new Intent(this, serviceTestsNotify.class));
         alarmReceiver.setAlarm(this);
 
-        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isFirstLaunch", false).apply();
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLaunch", false).apply();
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeAnsLoading", true).apply();
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeChatLoading", true).apply();
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeTestsLoading", true).apply();
 
         findViewById(R.id.homeTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
-                replaceFragment(new studentHome());
-                value = "home";
+                if (!value.equals("home")) {
+                    changeNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
+                    replaceFragment(new studentHome());
+                    value = "home";
+                }
             }
         });
         findViewById(R.id.newsTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeNavTab((LinearLayout) findViewById(R.id.newsTab), (ImageView) findViewById(R.id.newsIcon), (TextView) findViewById(R.id.newsTabText), "News", R.drawable.xtra_news_icon, R.drawable.xtra_news_icon_selected);
-                replaceFragment(new studentNews());
-                value = "news";
+                if (!value.equals("news")) {
+                    changeNavTab((LinearLayout) findViewById(R.id.newsTab), (ImageView) findViewById(R.id.newsIcon), (TextView) findViewById(R.id.newsTabText), "News", R.drawable.xtra_news_icon, R.drawable.xtra_news_icon_selected);
+                    replaceFragment(new studentNews());
+                    value = "news";
+                }
             }
         });
         findViewById(R.id.testsTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeNavTab((LinearLayout) findViewById(R.id.testsTab), (ImageView) findViewById(R.id.testsIcon), (TextView) findViewById(R.id.testsTabText), "Tests", R.drawable.xtra_tests_icon, R.drawable.xtra_tests_icon_selected);
-                replaceFragment(new studentTests());
-                value = "tests";
+                if (!value.equals("tests")) {
+                    changeNavTab((LinearLayout) findViewById(R.id.testsTab), (ImageView) findViewById(R.id.testsIcon), (TextView) findViewById(R.id.testsTabText), "Tests", R.drawable.xtra_tests_icon, R.drawable.xtra_tests_icon_selected);
+                    replaceFragment(new studentTests());
+                    value = "tests";
+                }
             }
         });
         findViewById(R.id.proTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeNavTab((LinearLayout) findViewById(R.id.proTab), (ImageView) findViewById(R.id.proIcon), (TextView) findViewById(R.id.proTabText), "Profile", R.drawable.xtra_pro_icon, R.drawable.xtra_pro_icon_selected);
-                replaceFragment(new studentProfile());
-                value = "pro";
+                if (!value.equals("pro")) {
+                    changeNavTab((LinearLayout) findViewById(R.id.proTab), (ImageView) findViewById(R.id.proIcon), (TextView) findViewById(R.id.proTabText), "Profile", R.drawable.xtra_pro_icon, R.drawable.xtra_pro_icon_selected);
+                    replaceFragment(new studentProfile());
+                    value = "pro";
+                }
             }
         });
 

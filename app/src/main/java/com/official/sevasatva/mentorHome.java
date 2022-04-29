@@ -101,6 +101,8 @@ public class mentorHome extends Fragment {
             }
         });
 
+        ((TextView) getView().findViewById(R.id.mentorHomeName)).setText(getFirstName());
+
 //        requireView().setOnTouchListener(new studentHomeOnSwipeTouchListener(getContext()) {
 //            @Override
 //            public void onSwipeLeft() {
@@ -111,6 +113,12 @@ public class mentorHome extends Fragment {
         mentorHomeRecyclerView = getView().findViewById(R.id.mentorHomeRecyclerView);
         getStudents();
 
+    }
+
+    private String getFirstName() {
+        String fullName = getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "User");
+        int index = fullName.indexOf(' ');
+        return fullName.substring(0, index) + "!";
     }
 
     private void getStudents() {

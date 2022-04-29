@@ -123,7 +123,6 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-
             String mentorEmail = "";
             if (context.getClass().equals(mentorScreen.class))
                 mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "email");
@@ -144,80 +143,80 @@ public class chatScreenAdapter extends RecyclerView.Adapter<chatScreenAdapter.My
             senderTime = itemView.findViewById(R.id.senderTime);
 
             String finalMentorEmail = mentorEmail;
-            senderMessage.setOnTouchListener(new View.OnTouchListener() {
+//            senderMessage.setOnTouchListener(new View.OnTouchListener() {
+//
+//                private static final int COPY_DURATION = 1000;
+//                private static final int DELETE_DURATION = 3000;
+//                private long startClickTime;
+//
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//
+//                    switch (event.getAction()) {
+//                        case MotionEvent.ACTION_UP:
+//                            if (longClickActive) {
+//                                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+//                                if (clickDuration >= DELETE_DURATION) {
+//                                    DatabaseReference databaseReference;
+//                                    databaseReference = FirebaseDatabase.getInstance().getReference();
+//                                    databaseReference.child("messages").child(v.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+//                                            .child(finalMentorEmail.replaceAll("\\.", "_")).child(chatList.get(getAdapterPosition()).getId()).removeValue();
+//                                    Toast.makeText(v.getContext(), "Message deleted successfully!", Toast.LENGTH_SHORT).show();
+//                                } else if (clickDuration >= COPY_DURATION) {
+//                                    ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+//                                    ClipData clip = ClipData.newPlainText("Copied", senderMessage.getText().toString());
+//                                    clipboard.setPrimaryClip(clip);
+//                                    Toast.makeText(v.getContext(), "Copied to clipboard!", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                            longClickActive = false;
+//                            break;
+//                        case MotionEvent.ACTION_DOWN:
+//                            if (!longClickActive) {
+//                                longClickActive = true;
+//                                startClickTime = Calendar.getInstance().getTimeInMillis();
+//                            }
+//                            break;
+//                        case MotionEvent.ACTION_MOVE:
+//                            break;
+//                    }
+//                    return true;
+//                }
+//
+//            });
 
-                private static final int COPY_DURATION = 1000;
-                private static final int DELETE_DURATION = 3000;
-                private long startClickTime;
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_UP:
-                            if (longClickActive) {
-                                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                                if (clickDuration >= DELETE_DURATION) {
-                                    DatabaseReference databaseReference;
-                                    databaseReference = FirebaseDatabase.getInstance().getReference();
-                                    databaseReference.child("messages").child(v.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                                            .child(finalMentorEmail.replaceAll("\\.", "_")).child(chatList.get(getAdapterPosition()).getId()).removeValue();
-                                    Toast.makeText(v.getContext(), "Message deleted successfully!", Toast.LENGTH_SHORT).show();
-                                } else if (clickDuration >= COPY_DURATION) {
-                                    ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("Copied", senderMessage.getText().toString());
-                                    clipboard.setPrimaryClip(clip);
-                                    Toast.makeText(v.getContext(), "Copied to clipboard!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            longClickActive = false;
-                            break;
-                        case MotionEvent.ACTION_DOWN:
-                            if (!longClickActive) {
-                                longClickActive = true;
-                                startClickTime = Calendar.getInstance().getTimeInMillis();
-                            }
-                            break;
-                        case MotionEvent.ACTION_MOVE:
-                            break;
-                    }
-                    return true;
-                }
-
-            });
-
-            receiverMessage.setOnTouchListener(new View.OnTouchListener() {
-                private static final int COPY_DURATION = 1000;
-                private long startClickTime;
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_UP:
-                            if (longClickActive) {
-                                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                                if (clickDuration >= COPY_DURATION) {
-                                    ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("Copied", receiverMessage.getText().toString());
-                                    clipboard.setPrimaryClip(clip);
-                                    Toast.makeText(v.getContext(), "Copied to clipboard!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            longClickActive = false;
-                            break;
-                        case MotionEvent.ACTION_DOWN:
-                            if (!longClickActive) {
-                                longClickActive = true;
-                                startClickTime = Calendar.getInstance().getTimeInMillis();
-                            }
-                            break;
-                        case MotionEvent.ACTION_MOVE:
-                            break;
-                    }
-                    return true;
-                }
-            });
+//            receiverMessage.setOnTouchListener(new View.OnTouchListener() {
+//                private static final int COPY_DURATION = 1000;
+//                private long startClickTime;
+//
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//
+//                    switch (event.getAction()) {
+//                        case MotionEvent.ACTION_UP:
+//                            if (longClickActive) {
+//                                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+//                                if (clickDuration >= COPY_DURATION) {
+//                                    ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+//                                    ClipData clip = ClipData.newPlainText("Copied", receiverMessage.getText().toString());
+//                                    clipboard.setPrimaryClip(clip);
+//                                    Toast.makeText(v.getContext(), "Copied to clipboard!", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                            longClickActive = false;
+//                            break;
+//                        case MotionEvent.ACTION_DOWN:
+//                            if (!longClickActive) {
+//                                longClickActive = true;
+//                                startClickTime = Calendar.getInstance().getTimeInMillis();
+//                            }
+//                            break;
+//                        case MotionEvent.ACTION_MOVE:
+//                            break;
+//                    }
+//                    return true;
+//                }
+//            });
         }
     }
 }

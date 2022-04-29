@@ -60,46 +60,59 @@ public class mentorScreen extends AppCompatActivity {
         replaceFragment(new mentorHome());
         setNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
 
-        startService(new Intent(this,ansNotificationService.class));
-        startService(new Intent(this,chatNotificationService.class));
+        startService(new Intent(this, serviceAnsNotify.class));
+        startService(new Intent(this, serviceChatNotify.class));
+        startService(new Intent(this, serviceTestsNotify.class));
         alarmReceiver.setAlarm(this);
 
-        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isFirstLaunch", false).apply();
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLaunch", false).apply();
 
-        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                .putBoolean("isMentorLoggedIn", true).apply();
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isMentorLoggedIn", true).apply();
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeAnsLoading", true).apply();
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeChatLoading", true).apply();
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("firstRealtimeTestsLoading", true).apply();
 
         findViewById(R.id.homeTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
-                replaceFragment(new mentorHome());
-                value = "home";
+                if (!value.equals("home")) {
+                    changeNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
+                    replaceFragment(new mentorHome());
+                    value = "home";
+                }
             }
         });
         findViewById(R.id.doubtsTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeNavTab((LinearLayout) findViewById(R.id.doubtsTab), (ImageView) findViewById(R.id.doubtsIcon), (TextView) findViewById(R.id.doubtsTabText), "Doubts", R.drawable.xtra_doubts_icon, R.drawable.xtra_doubts_icon_selected);
-                replaceFragment(new mentorDoubts());
-                value = "doubts";
+                if (!value.equals("doubts")) {
+                    changeNavTab((LinearLayout) findViewById(R.id.doubtsTab), (ImageView) findViewById(R.id.doubtsIcon), (TextView) findViewById(R.id.doubtsTabText), "Doubts", R.drawable.xtra_doubts_icon, R.drawable.xtra_doubts_icon_selected);
+                    replaceFragment(new mentorDoubts());
+                    value = "doubts";
+                }
             }
         });
         findViewById(R.id.testsTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeNavTab((LinearLayout) findViewById(R.id.testsTab), (ImageView) findViewById(R.id.testsIcon), (TextView) findViewById(R.id.testsTabText), "Tests", R.drawable.xtra_tests_icon, R.drawable.xtra_tests_icon_selected);
-                replaceFragment(new mentorTests());
-                value = "tests";
+                if (!value.equals("tests")) {
+                    changeNavTab((LinearLayout) findViewById(R.id.testsTab), (ImageView) findViewById(R.id.testsIcon), (TextView) findViewById(R.id.testsTabText), "Tests", R.drawable.xtra_tests_icon, R.drawable.xtra_tests_icon_selected);
+                    replaceFragment(new mentorTests());
+                    value = "tests";
+                }
             }
         });
         findViewById(R.id.proTab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeNavTab((LinearLayout) findViewById(R.id.proTab), (ImageView) findViewById(R.id.proIcon), (TextView) findViewById(R.id.proTabText), "Profile", R.drawable.xtra_pro_icon, R.drawable.xtra_pro_icon_selected);
-                replaceFragment(new mentorProfile());
-                value = "pro";
+                if (!value.equals("pro")) {
+                    changeNavTab((LinearLayout) findViewById(R.id.proTab), (ImageView) findViewById(R.id.proIcon), (TextView) findViewById(R.id.proTabText), "Profile", R.drawable.xtra_pro_icon, R.drawable.xtra_pro_icon_selected);
+                    replaceFragment(new mentorProfile());
+                    value = "pro";
+                }
             }
         });
 

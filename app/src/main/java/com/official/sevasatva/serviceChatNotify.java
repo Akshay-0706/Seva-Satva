@@ -16,7 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class chatNotificationService extends Service {
+public class serviceChatNotify extends Service {
 
     Context context;
 
@@ -36,7 +36,7 @@ public class chatNotificationService extends Service {
             public void run() {
                 start[0] = true;
             }
-        }, 2000);
+        }, 5000);
 
         String mentorEmail = "";
         if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true))
@@ -55,7 +55,7 @@ public class chatNotificationService extends Service {
                         final String email = snapshot.child("email").getValue(String.class);
 
                         if (start[0] && !context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").equals(email))
-                            new sendNotification(context, name, msg, new Intent(getApplicationContext(), chatScreen.class), 1, true);
+                            new sendNotification(context, name, msg, new Intent(getApplicationContext(), chatScreen.class), 1);
                     }
 
                     @Override
