@@ -53,8 +53,12 @@ public class serviceTestsNotify extends Service {
                         final String title = snapshot.child("title").getValue(String.class);
                         final String desc = snapshot.child("deadline").getValue(String.class);
 
-                        if (start[0])
-                            new sendNotification(context, title, "Deadline: " + desc, new Intent(getApplicationContext(), studentHomeAns.class), 3);
+                        if (start[0]) {
+                            if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true))
+                                new sendNotification(context, title, "Deadline: " + desc, new Intent(getApplicationContext(), studentScreen.class), 3);
+                            else
+                                new sendNotification(context, title, "Deadline: " + desc, new Intent(getApplicationContext(), mentorScreen.class), 3);
+                        }
                     }
 
                     @Override

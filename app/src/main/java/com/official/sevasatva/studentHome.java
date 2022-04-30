@@ -181,44 +181,49 @@ public class studentHome extends Fragment {
                     Map<String, Object> comingTest = (Map<String, Object>) data.get("comingTest");
                     String time = (String) comingTest.get("time");
                     String date = (String) comingTest.get("date");
+                    String id = (String) comingTest.get("id");
 
-                    try {
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);
-                        Date deadline = simpleDateFormat.parse(time + " " + date);
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
-                                response -> {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(response);
-                                        String currentDate = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
-                                        String currentTime = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
+                    if (dataSnapshot.hasChild(id)) {
+                        try {
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);
+                            Date deadline = simpleDateFormat.parse(time + " " + date);
+                            StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+                                    response -> {
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response);
+                                            String currentDate = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+                                            String currentTime = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
 
-                                        Date current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(currentTime + " " + currentDate);
+                                            Date current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(currentTime + " " + currentDate);
 
-                                        if (current.before(deadline))
-                                            ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText("Test is scheduled on " + date + " at " + time + ".");
-                                        else
-                                            ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
+                                            if (current.before(deadline))
+                                                ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText("Test is scheduled on " + date + " at " + time + ".");
+                                            else
+                                                ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
 
-                                    } catch (JSONException | ParseException e) {
-                                        e.printStackTrace();
+                                        } catch (JSONException | ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                    },
+
+                                    error -> {
+                                        Toast.makeText(getContext(), "Unable to access current date!", Toast.LENGTH_LONG).show();
                                     }
-                                },
+                            );
 
-                                error -> {
-                                    Toast.makeText(getContext(), "Unable to access current date!", Toast.LENGTH_LONG).show();
-                                }
-                        );
-
-                        int socketTimeOut = 50000;
-                        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                        stringRequest.setRetryPolicy(policy);
-                        RequestQueue queue = Volley.newRequestQueue(getActivity());
-                        queue.add(stringRequest);
+                            int socketTimeOut = 50000;
+                            RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                            stringRequest.setRetryPolicy(policy);
+                            RequestQueue queue = Volley.newRequestQueue(getActivity());
+                            queue.add(stringRequest);
 
 
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else
+                        ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
+
                 } else {
                     ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
                 }

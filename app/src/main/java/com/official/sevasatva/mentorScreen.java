@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.official.sevasatva.databinding.ActivityMentorScreenBinding;
 
@@ -57,8 +58,24 @@ public class mentorScreen extends AppCompatActivity {
 
         binding = ActivityMentorScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         replaceFragment(new mentorHome());
         setNavTab((LinearLayout) findViewById(R.id.homeTab), (ImageView) findViewById(R.id.homeIcon), (TextView) findViewById(R.id.homeTabText), "Home", R.drawable.xtra_home_icon, R.drawable.xtra_home_icon_selected);
+
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            String intentValue = bundle.getString("value");
+//
+//            if (intentValue.equals("doubts")) {
+//                changeNavTab((LinearLayout) findViewById(R.id.doubtsTab), (ImageView) findViewById(R.id.doubtsIcon), (TextView) findViewById(R.id.doubtsTabText), "Doubts", R.drawable.xtra_doubts_icon, R.drawable.xtra_doubts_icon_selected);
+//                replaceFragment(new mentorDoubts());
+//                value = "doubts";
+//            } else if (intentValue.equals("tests")) {
+//                changeNavTab((LinearLayout) findViewById(R.id.testsTab), (ImageView) findViewById(R.id.testsIcon), (TextView) findViewById(R.id.testsTabText), "Tests", R.drawable.xtra_tests_icon, R.drawable.xtra_tests_icon_selected);
+//                replaceFragment(new mentorTests());
+//                value = "tests";
+//            }
+//        }
 
         startService(new Intent(this, serviceAnsNotify.class));
         startService(new Intent(this, serviceChatNotify.class));

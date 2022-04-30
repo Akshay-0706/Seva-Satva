@@ -50,6 +50,20 @@ public class studentScreen extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//
+//        if (intent != null) {
+//            String intentValue = intent.getStringExtra("value");
+//            if (intentValue != null && intentValue.equals("tests")) {
+//                changeNavTab((LinearLayout) findViewById(R.id.testsTab), (ImageView) findViewById(R.id.testsIcon), (TextView) findViewById(R.id.testsTabText), "Tests", R.drawable.xtra_tests_icon, R.drawable.xtra_tests_icon_selected);
+//                replaceFragment(new studentTests());
+//                value = "tests";
+//            }
+//        }
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,5 +1,10 @@
 package com.official.sevasatva;
 
+import static android.os.Build.BRAND;
+import static android.os.Build.MANUFACTURER;
+import static android.os.Build.MODEL;
+import static android.os.Build.PRODUCT;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -12,6 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -36,11 +42,22 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 
 public class mentorLogin extends AppCompatActivity {
 
     String email = "", pass = "";
+    boolean loginClicked = false;
 
     internetCheckListener internetCheckListener = new internetCheckListener();
 
@@ -62,6 +79,21 @@ public class mentorLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         setContentView(R.layout.activity_mentor_login);
+
+        findViewById(R.id.contactUs).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String[] recipient;
+
+                recipient = new String[]{getResources().getString(R.string.about_us_support_email)};
+
+                intent.putExtra(Intent.EXTRA_EMAIL, recipient);
+                intent.setType("text/html");
+                intent.setPackage("com.google.android.gm"); // Added Gmail Package to forcefully open Gmail App
+                startActivity(Intent.createChooser(intent, "Send email via"));
+            }
+        });
 
         if (getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isAdmin", false)) {
             startActivity(new Intent(mentorLogin.this, adminScreen.class));
@@ -119,10 +151,15 @@ public class mentorLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!(email.isEmpty() && pass.isEmpty())) {
-                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", email);
-                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("pass", pass);
-                    checkIfAdmin();
-                }
+                    if (!loginClicked) {
+                        loginClicked = true;
+                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", email);
+                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("pass", pass);
+                        checkIfAdmin();
+                    } else
+                        Toast.makeText(mentorLogin.this, "Logging in, please wait...", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(mentorLogin.this, "Enter credentials first", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -139,9 +176,8 @@ public class mentorLogin extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(mentorLogin.this, "Welcome back admin!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(mentorLogin.this, adminScreen.class));
-                                finish();
+                                sendAlertEmail();
+
                             }
                         });
 
@@ -163,7 +199,6 @@ public class mentorLogin extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                        Toast.makeText(mentorLogin.this, "Sign in successful!", Toast.LENGTH_SHORT).show();
                         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("email", email).apply();
                         assert firebaseUser != null;
 //                        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("image", firebaseUser.getPhotoUrl().toString()).apply();
@@ -200,6 +235,7 @@ public class mentorLogin extends AppCompatActivity {
                                                 }
                                             }
                                         }
+                                        Toast.makeText(mentorLogin.this, "Log in successful!", Toast.LENGTH_SHORT).show();
 
                                         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("name", name).apply();
                                         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("cc", code).apply();
@@ -213,11 +249,57 @@ public class mentorLogin extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "onFailure: " + e);
-                Toast.makeText(mentorLogin.this, "You are not allocated to any course yet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mentorLogin.this, "You are not allocated to any course yet!", Toast.LENGTH_SHORT).show();
+                loginClicked = false;
             }
         });
 
 
+    }
+
+    private void sendAlertEmail() {
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("akshay0706vhatkar@gmail.com", "qazxcvbnmlp");
+            }
+        });
+
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress("akshay0706vhatkar@gmail.com"));
+
+            message.setSubject("Admin log in detected!");
+            message.setText("Someone just logged in as an Admin!\n\nDevice info:\n" +
+                    MANUFACTURER + " " + BRAND + " " + PRODUCT + " " + MODEL);
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(message);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            thread.start();
+
+            Toast.makeText(mentorLogin.this, "Welcome back admin!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(mentorLogin.this, adminScreen.class));
+            finish();
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }

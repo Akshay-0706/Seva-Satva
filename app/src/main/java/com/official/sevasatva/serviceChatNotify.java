@@ -54,8 +54,12 @@ public class serviceChatNotify extends Service {
                         final String msg = snapshot.child("msg").getValue(String.class);
                         final String email = snapshot.child("email").getValue(String.class);
 
-                        if (start[0] && !context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").equals(email))
-                            new sendNotification(context, name, msg, new Intent(getApplicationContext(), chatScreen.class), 1);
+                        if (start[0] && !context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10").equals(email)) {
+                            if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true))
+                                new sendNotification(context, name, msg, new Intent(getApplicationContext(), chatScreen.class), 1);
+                            else
+                                new sendNotification(context, name, msg, new Intent(getApplicationContext(), mentorScreen.class), 1);
+                        }
                     }
 
                     @Override

@@ -168,8 +168,8 @@ public class mentorProfile extends Fragment {
 
     private void openGmail() {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        String[] recipients = {"admin.official@sevasatva.in"};//Add multiple recipients here
-        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+        String[] recipient = {"admin.official@sevasatva.in"};//Add multiple recipients here
+        intent.putExtra(Intent.EXTRA_EMAIL, recipient);
         intent.setType("text/html");
         intent.setPackage("com.google.android.gm");//Added Gmail Package to forcefully open Gmail App
         startActivity(Intent.createChooser(intent, "Send email"));

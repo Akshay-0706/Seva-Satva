@@ -432,7 +432,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/contactEmail"
+            android:id="@+id/supportEmailImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -447,7 +447,7 @@
             app:layout_constraintHorizontal_bias="0.0"/>
 
         <TextView
-            android:id="@+id/textView26"
+            android:id="@+id/supportEmailText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -455,13 +455,13 @@
             android:text="@string/about_us_support_email"
             android:textColor="?attr/inverted"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/contactEmail"
+            app:layout_constraintBottom_toBottomOf="@+id/supportEmailImage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/contactEmail"
-            app:layout_constraintTop_toTopOf="@+id/contactEmail" />
+            app:layout_constraintStart_toEndOf="@+id/supportEmailImage"
+            app:layout_constraintTop_toTopOf="@+id/supportEmailImage" />
 
         <TextView
-            android:id="@+id/textView27"
+            android:id="@+id/developerEmailText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -473,7 +473,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/contactEmail"
+            app:layout_constraintTop_toBottomOf="@+id/supportEmailImage"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
@@ -485,7 +485,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textView28"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView27"
+            app:layout_constraintTop_toBottomOf="@+id/developerEmailText"
             app:srcCompat="@drawable/xtra_app_icon" />
 
         <TextView
@@ -504,7 +504,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView27" />
+            app:layout_constraintTop_toBottomOf="@+id/developerEmailText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

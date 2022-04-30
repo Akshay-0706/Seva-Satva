@@ -73,24 +73,26 @@ public class appIntro extends AppCompatActivity {
                             getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                                     .getBoolean("isUserStudent", true);
 
-                            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-                                    .putBoolean("isFirstRunAppIntro", false).apply();
-
                             if (radioCheckID == radioStudent.getId()) {
+                                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                                        .putBoolean("isFirstRunAppIntro", false).apply();
+
                                 bottomSheetDialog.dismiss();
                                 Intent intent = new Intent(appIntro.this, studentLogin.class);
                                 appIntro.this.startActivity(intent);
                                 finish();
-                            }
-                            else if (radioCheckID == radioMentor.getId()) {
+                            } else if (radioCheckID == radioMentor.getId()) {
+                                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                                        .putBoolean("isFirstRunAppIntro", false).apply();
+
                                 getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                                         .putBoolean("isUserStudent", false).apply();
+
                                 bottomSheetDialog.dismiss();
                                 Intent intent = new Intent(appIntro.this, mentorLogin.class);
                                 appIntro.this.startActivity(intent);
                                 finish();
-                            }
-                            else
+                            } else
                                 Toast.makeText(appIntro.this, "Please select your role to proceed", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -139,8 +141,7 @@ public class appIntro extends AppCompatActivity {
                 nextBtn.setEnabled(true);
                 prevBtn.setEnabled(false);
                 prevBtn.setVisibility(View.INVISIBLE);
-            }
-            else {
+            } else {
                 nextBtn.setEnabled(true);
                 prevBtn.setEnabled(true);
                 prevBtn.setVisibility(View.VISIBLE);

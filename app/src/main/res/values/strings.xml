@@ -39,15 +39,18 @@
     <string name="student_details_heading">Select course</string>
     <string name="student_details_search">Search</string>
     <string name="student_details_select_text">Select</string>
-    <string name="student_details_temp_cc_text">SV12</string>
-    <string name="student_details_temp_cn_text">India\'s top 2 problems</string>
-    <string name="student_details_temp_desc_text">Lorem Ipsum</string>
+    <string name="student_details_temp_cc_text">Course code</string>
+    <string name="student_details_temp_cn_text">Course name</string>
+    <string name="student_details_temp_desc_text">Course description</string>
     <string name="student_details_mentor_text">Mentor:</string>
     <string name="student_details_temp_mentor_name_text">Not allocated yet</string>
 
     <string name="home_heading">Seva Satva</string>
     <string name="home_greeting">Hi,</string>
-    <string name="home_greeting_name">Akshay</string>
+    <string name="home_greeting_name">Mentor</string>
+    <string name="home_mentor_greeting">Welcome</string>
+    <string name="home_mentor_students_text">Students enrolled:</string>
+    <string name="home_mentor_student_text">Students</string>
     <string name="home_tests_text">Upcoming tests</string>
     <string name="home_temp_tests_info_text">No test scheduled in this week.</string>
     <string name="home_lec_text">Lectures schedule</string>
@@ -104,25 +107,9 @@
     <string name="about_us_course_info_text">3. Easy and user-friendly CRUD operations for the record of students enrolled in any particular course.</string>
     <string name="about_us_chat_info_text">4. Real-time Doubt section course exclusive for students and mentors</string>
     <string name="about_us_contact_us_text">In any case of query please feel free to contact us</string>
-    <string name="about_us_contact_developer_text">If you are not satisfied with the resolution provided by us, then please write to our Developer at <u>akshay0706vhatkar@gmail.com</u></string>
+    <string name="about_us_contact_developer_text">If you are not satisfied with the resolution provided by us, then please write to our Developer, Akshay Vhatkar at <u>akshay0706vhatkar@gmail.com</u></string>
     <string name="about_us_branding_text">©Powered By Team Seva/Satva</string>
     <string name="about_us_support_email"><u>support.official@sevasatva.in</u></string>
-
-    <!--    String arrays-->
-    <string-array name="Branches">
-        <item>COMPS</item>
-        <item>IT</item>
-        <item>EXTC</item>
-        <item>ETRX</item>
-        <item>MCA</item>
-    </string-array>
-
-    <string-array name="Classes">
-        <item>FE</item>
-        <item>SE</item>
-        <item>TE</item>
-        <item>BE</item>
-    </string-array>
 
     <!--    Error list-->
     <!--    100 series - Registration-->
@@ -145,5 +132,4 @@
     <string name="error_500">Loading time out</string>
     <string name="error_501">Please choose SPIT email only!</string>
 
-    <string name="hello_blank_fragment">Hello</string>
 </resources>

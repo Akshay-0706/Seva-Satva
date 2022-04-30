@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,6 +30,17 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class profileFeedback extends AppCompatActivity {
 
@@ -93,6 +105,46 @@ public class profileFeedback extends AppCompatActivity {
         map.put("isMentor", !getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true));
         map2.put("feedback", feedback);
 
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("akshay0706vhatkar@gmail.com", "qazxcvbnmlp");
+            }
+        });
+
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress("akshay0706vhatkar@gmail.com"));
+
+            message.setSubject("Feedback from Seva/Satva App");
+            message.setText(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "temp")
+                    + " has sent feedback for Seva/Satva App, check the user details by following this link:\n" +
+                    "https://console.firebase.google.com/project/seva-satva/firestore/data/~2FFeedbacks"
+                    + "\n\nFeedback contains:\n" + feedback);
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(message);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            thread.start();
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
                 response -> {

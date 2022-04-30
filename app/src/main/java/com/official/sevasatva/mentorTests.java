@@ -406,9 +406,9 @@ public class mentorTests extends Fragment {
                         Date currentDeadline = simpleDateFormat.parse(time + " " + date);
 
                         if (deadline.before(currentDeadline) || current.after(currentDeadline)) {
-                            Toast.makeText(getContext(), "Here", Toast.LENGTH_SHORT).show();
                             map2.put("time", dateTime[0]);
                             map2.put("date", dateTime[1]);
+                            map2.put("id", timeStamp);
 
                             databaseReference.child("tests").child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
                                     .child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_")).child("comingTest").setValue(map2);

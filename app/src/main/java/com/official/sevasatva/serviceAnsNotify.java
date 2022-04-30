@@ -30,7 +30,7 @@ public class serviceAnsNotify extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         final boolean[] start = {false};
-        
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -53,8 +53,13 @@ public class serviceAnsNotify extends Service {
                         final String title = snapshot.child("title").getValue(String.class);
                         final String desc = snapshot.child("desc").getValue(String.class);
 
-                        if (start[0])
-                            new sendNotification(context, title, desc, new Intent(getApplicationContext(), studentHomeAns.class), 2);
+                        if (start[0]) {
+                            if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true))
+                                new sendNotification(context, title, desc, new Intent(getApplicationContext(), studentHomeAns.class), 2);
+                            else
+                                new sendNotification(context, title, desc, new Intent(getApplicationContext(), mentorHomeAns.class), 2);
+
+                        }
                     }
 
                     @Override

@@ -2,7 +2,6 @@ package com.official.sevasatva;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,17 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -46,10 +39,6 @@ public class mentorHome extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public mentorHome() {
         // Required empty public constructor
@@ -77,8 +66,9 @@ public class mentorHome extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
     }
@@ -94,84 +84,72 @@ public class mentorHome extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getView().findViewById(R.id.homeMentorAnsBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), mentorHomeAns.class));
-            }
-        });
+        view.findViewById(R.id.homeMentorAnsBtn).setOnClickListener(v -> startActivity(new Intent(getActivity(), mentorHomeAns.class)));
 
-        ((TextView) getView().findViewById(R.id.mentorHomeName)).setText(getFirstName());
+        ((TextView) view.findViewById(R.id.mentorHomeName)).setText(getFirstName());
 
-//        requireView().setOnTouchListener(new studentHomeOnSwipeTouchListener(getContext()) {
-//            @Override
-//            public void onSwipeLeft() {
-//                startActivity(new Intent(getActivity(), mentorHomeAns.class));
-//            }
-//        });
-
-        mentorHomeRecyclerView = getView().findViewById(R.id.mentorHomeRecyclerView);
+        mentorHomeRecyclerView = view.findViewById(R.id.mentorHomeRecyclerView);
         getStudents();
 
     }
 
     private String getFirstName() {
-        String fullName = getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "User");
+        String fullName = requireActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "User");
         int index = fullName.indexOf(' ');
         return fullName.substring(0, index) + "!";
     }
 
+    @SuppressWarnings("unchecked")
     private void getStudents() {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Courses").document(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        boolean found = false;
-                        DocumentSnapshot documentSnapshot = null;
-                        Map<String, Object> data = null;
-                        if (task.getResult() != null)
-                            documentSnapshot = task.getResult();
-                        if (documentSnapshot.getData() != null)
-                            data = documentSnapshot.getData();
+        firestore.collection("Courses").document(requireActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).get()
+                .addOnCompleteListener(task -> {
+                    boolean found = false;
+                    DocumentSnapshot documentSnapshot = null;
+                    Map<String, Object> data = null;
+                    if (task.getResult() != null)
+                        documentSnapshot = task.getResult();
+                    assert documentSnapshot != null;
+                    if (documentSnapshot.getData() != null)
+                        data = documentSnapshot.getData();
 
-                        for (Map.Entry<String, Object> entry : data.entrySet()) {
-                            if (found)
-                                break;
+                    for (Map.Entry<String, Object> entry : data.entrySet()) {
+                        if (found)
+                            break;
 
-                            if (entry.getKey().equals("Mentors")) {
-                                for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
-                                    if (found)
+                        if (entry.getKey().equals("Mentors")) {
+                            for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
+                                if (found)
+                                    break;
+
+                                for (Map.Entry<String, Object> entry3 : ((Map<String, Object>) entry2.getValue()).entrySet()) {
+                                    if (entry3.getKey().equals("students"))
+                                        studentsData[0] = (Map<String, Object>) entry3.getValue();
+
+                                    if (entry3.getKey().equals("email") && entry3.getValue().equals(requireActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
+                                        found = true;
                                         break;
-
-                                    for (Map.Entry<String, Object> entry3 : ((Map<String, Object>) entry2.getValue()).entrySet()) {
-                                        if (entry3.getKey().equals("students"))
-                                            studentsData[0] = (Map<String, Object>) entry3.getValue();
-
-                                        if (entry3.getKey().equals("email") && entry3.getValue().equals(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
-                                            found = true;
-                                            break;
-                                        }
                                     }
                                 }
                             }
                         }
-
-                        setStudents();
                     }
+
+                    setStudents();
                 });
     }
 
+    @SuppressWarnings("unchecked")
     private void setStudents() {
         studentsList.clear();
-        getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putInt("studentsCount", studentsData[0].size()).apply();
-        ((TextView) getView().findViewById(R.id.mentorHomeCourseStudents)).setText("Students: " + studentsData[0].size());
-        ((TextView) getView().findViewById(R.id.mentorHomeCourseName)).setText(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cn", "temp"));
-        ((TextView) getView().findViewById(R.id.mentorHomeCourseCode)).setText(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"));
-        ((TextView) getView().findViewById(R.id.mentorHomeCourseDesc)).setText(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("desc", "temp"));
+        requireActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putInt("studentsCount", studentsData[0].size()).apply();
+        ((TextView) requireActivity().findViewById(R.id.mentorHomeCourseStudents)).setText(getResources().getString(R.string.home_mentor_students_text) + " " + studentsData[0].size());
+        ((TextView) requireActivity().findViewById(R.id.mentorHomeCourseName)).setText(requireActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cn", "temp"));
+        ((TextView) requireActivity().findViewById(R.id.mentorHomeCourseCode)).setText(requireActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"));
+        ((TextView) requireActivity().findViewById(R.id.mentorHomeCourseDesc)).setText(requireActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("desc", "temp"));
 
         for (Map.Entry<String, Object> entry : studentsData[0].entrySet()) {
-            final String data[] = new String[5];
+            final String[] data = new String[5];
             for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
                 if (entry2.getKey().equals("name"))
                     data[0] = entry2.getValue().toString();

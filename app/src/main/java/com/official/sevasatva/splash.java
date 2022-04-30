@@ -23,7 +23,6 @@ public class splash extends AppCompatActivity {
         slashText.animate().alpha(1).setDuration(1000);
         satvaText.animate().alpha(1).setDuration(1500);
 
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
