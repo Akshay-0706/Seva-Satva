@@ -18,7 +18,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:elevation="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView15"
+            app:layout_constraintBottom_toTopOf="@+id/alertMessage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
             app:lottie_rawRes="@raw/internet_check_anim" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/alertMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -58,13 +58,14 @@
             android:weightSum="2">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/internetCheckExit"
+                android:id="@+id/alertNegative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/student_profile_feedback_main_btn_bg"
+                android:background="@color/trans"
                 android:text="Exit"
+                android:textStyle="bold"
                 android:layout_margin="20dp"
-                android:textColor="?attr/inverted"
+                android:textColor="?attr/textColor"
                 android:layout_weight="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -73,11 +74,12 @@
                 app:layout_constraintVertical_bias="1.0" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/internetCheckRetry"
+                android:id="@+id/alertPositive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/student_profile_feedback_main_btn_bg"
                 android:text="Retry"
+                android:textStyle="bold"
                 android:textColor="?attr/inverted"
                 android:layout_weight="1"
                 android:layout_marginEnd="20dp"

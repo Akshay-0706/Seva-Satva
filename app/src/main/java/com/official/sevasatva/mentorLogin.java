@@ -176,8 +176,18 @@ public class mentorLogin extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                sendAlertEmail();
-
+                                if (task.isSuccessful()) {
+                                    sendAlertEmail();
+                                } else {
+                                    auth.signOut();
+                                    auth.signInWithEmailAndPassword(email, pass)
+                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    sendAlertEmail();
+                                                }
+                                            });
+                                }
                             }
                         });
 
@@ -297,6 +307,8 @@ public class mentorLogin extends AppCompatActivity {
             Toast.makeText(mentorLogin.this, "Welcome back admin!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(mentorLogin.this, adminScreen.class));
             finish();
+
+            Log.i("Device", "sendAlertEmail: " + MANUFACTURER);
 
         } catch (MessagingException e) {
             e.printStackTrace();

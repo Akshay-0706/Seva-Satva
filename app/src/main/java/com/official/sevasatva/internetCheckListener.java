@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -23,7 +22,7 @@ public class internetCheckListener extends BroadcastReceiver {
 
 //            AlertDialog alertDialog = builder.create();
             Dialog internetCheckDialog = new Dialog(context);
-            internetCheckDialog.setContentView(R.layout.fragment_internet_check);
+            internetCheckDialog.setContentView(R.layout.fragment_alert);
             internetCheckDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             internetCheckDialog.setCancelable(false);
             internetCheckDialog.show();
@@ -32,8 +31,8 @@ public class internetCheckListener extends BroadcastReceiver {
 //            alertDialog.setCancelable(false);
 //            alertDialog.getWindow().setGravity(Gravity.CENTER);
 
-            AppCompatButton exit = internetCheckDialog.findViewById(R.id.internetCheckExit);
-            AppCompatButton retry = internetCheckDialog.findViewById(R.id.internetCheckRetry);
+            AppCompatButton exit = internetCheckDialog.findViewById(R.id.alertNegative);
+            AppCompatButton retry = internetCheckDialog.findViewById(R.id.alertPositive);
 
             if (context.getClass().equals(studentLogin.class))
                 retry.setVisibility(View.GONE);
@@ -41,6 +40,7 @@ public class internetCheckListener extends BroadcastReceiver {
             exit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    internetCheckDialog.dismiss();
                     ((Activity) context).finishAffinity();
                 }
             });

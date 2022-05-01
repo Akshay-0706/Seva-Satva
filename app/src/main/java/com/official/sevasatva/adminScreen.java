@@ -20,6 +20,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -86,33 +92,63 @@ public class adminScreen extends AppCompatActivity {
 
 
         SwitchMaterial switchMaterial = findViewById(R.id.adminStopEnrollmentSwitch);
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//        databaseReference.child("flags").child("areStudentsAllowed").get().addOnCompleteListener(
+//                new OnCompleteListener<DataSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                        isEnrollmentStopped = (boolean) task.getResult().getValue();
+//                        switchMaterial.setChecked(isEnrollmentStopped);
+//                    }
+//                }
+//        );
+        databaseReference.child("flags").child("areStudentsAllowed").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot documentSnapshot = null;
-                Map<String, Object> data = null;
-                if (task.getResult() != null)
-                    documentSnapshot = task.getResult();
-                if (documentSnapshot.getData() != null)
-                    data = documentSnapshot.getData();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                isEnrollmentStopped = (boolean) snapshot.getValue();
+                switchMaterial.setChecked(isEnrollmentStopped);
 
-                switchMaterial.setChecked(!(boolean) data.get("areStudentsAllowed"));
+                if (isEnrollmentStopped)
+                    Toast.makeText(adminScreen.this, "Enrollment allowed!", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(adminScreen.this, "Enrollment stopped!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
+//        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+//        firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                DocumentSnapshot documentSnapshot = null;
+//                Map<String, Object> data = null;
+//                if (task.getResult() != null)
+//                    documentSnapshot = task.getResult();
+//                if (documentSnapshot.getData() != null)
+//                    data = documentSnapshot.getData();
+//
+//                switchMaterial.setChecked(!(boolean) data.get("areStudentsAllowed"));
+//            }
+//        });
 
         switchMaterial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("areStudentsAllowed", !isChecked);
-                firestore.collection("Courses").document("Flags").set(map, SetOptions.merge());
-                if (isChecked)
-                    Toast.makeText(adminScreen.this, "Enrollment stopped!", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(adminScreen.this, "Enrollment allowed!", Toast.LENGTH_SHORT).show();
 
-                isEnrollmentStopped = isChecked;
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference.child("flags").child("areStudentsAllowed").setValue(isChecked);
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("areStudentsAllowed", !isChecked);
+//                firestore.collection("Courses").document("Flags").set(map, SetOptions.merge());
+//                if (isChecked)
+//                    Toast.makeText(adminScreen.this, "Enrollment stopped!", Toast.LENGTH_SHORT).show();
+//                else
+//                    Toast.makeText(adminScreen.this, "Enrollment allowed!", Toast.LENGTH_SHORT).show();
+
+//                isEnrollmentStopped = isChecked;
             }
         });
 
@@ -147,6 +183,9 @@ public class adminScreen extends AppCompatActivity {
     }
 
     private void logout() {
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
 
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().clear().apply();
 

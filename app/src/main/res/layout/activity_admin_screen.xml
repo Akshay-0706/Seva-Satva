@@ -55,7 +55,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/poppins"
-            android:text="Stop enrollment"
+            android:text="Allow enrollment"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:theme="@style/adminSwitch"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins"
-            android:text="Restricts students from enrolling into any of the course."
+            android:text="Allows students to enroll into any of the course."
             android:textColor="@color/textColorLightNight"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/adminStopEnrollmentSwitch"
@@ -237,7 +237,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView14" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/alertMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
@@ -261,7 +261,7 @@
             app:layout_constraintEnd_toEndOf="@+id/adminStopEnrollmentSwitch"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/adminStopEnrollmentSwitch"
-            app:layout_constraintTop_toBottomOf="@+id/textView15"
+            app:layout_constraintTop_toBottomOf="@+id/alertMessage"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

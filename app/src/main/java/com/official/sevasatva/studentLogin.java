@@ -238,76 +238,90 @@ public class studentLogin extends AppCompatActivity {
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-            firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    DocumentSnapshot documentSnapshot = null;
-                    Map<String, Object> data = null;
-                    if (task.getResult() != null)
-                        documentSnapshot = task.getResult();
-                    if (documentSnapshot.getData() != null)
-                        data = documentSnapshot.getData();
-
-                    final boolean[] isAllowed = {true};
-                    isAllowed[0] = (boolean) data.get("areStudentsAllowed");
-
-                    firestore.collection("Courses").document("Students").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.child("flags").child("areStudentsAllowed").get().addOnCompleteListener(
+                    new OnCompleteListener<DataSnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot documentSnapshot = null;
-                            Map<String, Object> data2 = null;
-                            if (task.getResult() != null)
-                                documentSnapshot = task.getResult();
-                            if (documentSnapshot.getData() != null)
-                                data2 = documentSnapshot.getData();
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                        isEnrollmentStopped = (boolean) task.getResult().getValue();
+//                        switchMaterial.setChecked(isEnrollmentStopped);
 
-                            String cc = "", cn = "", desc = "";
+                            final boolean[] isAllowed = {true};
+                            isAllowed[0] = (boolean) task.getResult().getValue();
+//                    }
+//                }
+//        );
+//
+//            firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    DocumentSnapshot documentSnapshot = null;
+//                    Map<String, Object> data = null;
+//                    if (task.getResult() != null)
+//                        documentSnapshot = task.getResult();
+//                    if (documentSnapshot.getData() != null)
+//                        data = documentSnapshot.getData();
+//
+//                    final boolean[] isAllowed = {true};
+//                    isAllowed[0] = (boolean) data.get("areStudentsAllowed");
 
-                            boolean found = false;
+                            firestore.collection("Courses").document("Students").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    DocumentSnapshot documentSnapshot = null;
+                                    Map<String, Object> data2 = null;
+                                    if (task.getResult() != null)
+                                        documentSnapshot = task.getResult();
+                                    if (documentSnapshot.getData() != null)
+                                        data2 = documentSnapshot.getData();
 
-                            if (data2 != null)
-                                for (Map.Entry<String, Object> entry : data2.entrySet()) {
-                                    if (found)
-                                        break;
-                                    for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
-                                        switch (entry2.getKey()) {
-                                            case "cc":
-                                                cc = entry2.getValue().toString();
+                                    String cc = "", cn = "", desc = "";
+
+                                    boolean found = false;
+
+                                    if (data2 != null)
+                                        for (Map.Entry<String, Object> entry : data2.entrySet()) {
+                                            if (found)
                                                 break;
-                                            case "cn":
-                                                cn = entry2.getValue().toString();
-                                                break;
-                                            case "desc":
-                                                desc = entry2.getValue().toString();
-                                                break;
-                                            case "email":
-                                                if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
-                                                    isNewStudent = false;
-                                                    found = true;
+                                            for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
+                                                switch (entry2.getKey()) {
+                                                    case "cc":
+                                                        cc = entry2.getValue().toString();
+                                                        break;
+                                                    case "cn":
+                                                        cn = entry2.getValue().toString();
+                                                        break;
+                                                    case "desc":
+                                                        desc = entry2.getValue().toString();
+                                                        break;
+                                                    case "email":
+                                                        if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
+                                                            isNewStudent = false;
+                                                            found = true;
+                                                        }
+                                                        break;
                                                 }
-                                                break;
+                                            }
                                         }
+
+                                    if (!isAllowed[0] && isNewStudent) {
+                                        Toast.makeText(studentLogin.this, "Course enrollment has stopped!", Toast.LENGTH_LONG).show();
+                                        finishAndRemoveTask();
+                                    } else if (isNewStudent) {
+                                        startActivity(new Intent(studentLogin.this, studentDetails.class));
+                                        finish();
+                                    } else {
+                                        sharedPreferences.edit().putString("cc", cc).apply();
+                                        sharedPreferences.edit().putString("cn", cn).apply();
+                                        sharedPreferences.edit().putString("desc", desc).apply();
+
+                                        getCategory(true);
                                     }
                                 }
+                            });
 
-                            if (!isAllowed[0] && isNewStudent) {
-                                Toast.makeText(studentLogin.this, "Course enrollment has stopped!", Toast.LENGTH_LONG).show();
-                                finishAndRemoveTask();
-                            } else if (isNewStudent) {
-                                startActivity(new Intent(studentLogin.this, studentDetails.class));
-                                finish();
-                            } else {
-                                sharedPreferences.edit().putString("cc", cc).apply();
-                                sharedPreferences.edit().putString("cn", cn).apply();
-                                sharedPreferences.edit().putString("desc", desc).apply();
-
-                                getCategory(true);
-                            }
                         }
                     });
-
-                }
-            });
 
 
         } catch (
