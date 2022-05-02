@@ -2,17 +2,24 @@ package com.official.sevasatva;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -54,6 +61,8 @@ public class adminScreen extends AppCompatActivity {
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                 .putBoolean("isAdmin", true).apply();
 
+        checkFlags();
+
         findViewById(R.id.adminAllocateMentorsButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +99,7 @@ public class adminScreen extends AppCompatActivity {
                 startCourse = (boolean) snapshot.getValue();
                 switchCourse.setChecked(startCourse);
 
-                if (enrollmentAllowed)
+                if (startCourse)
                     Toast.makeText(adminScreen.this, "Course started!", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(adminScreen.this, "Course ended!", Toast.LENGTH_SHORT).show();
@@ -204,5 +213,79 @@ public class adminScreen extends AppCompatActivity {
 
         startActivity(new Intent(this, splash.class));
         finishAffinity();
+    }
+
+    private void checkFlags() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("flags").get().addOnCompleteListener(
+                task -> {
+                    String version = "", startCourse = "", underMaintenance = "";
+
+                    DataSnapshot dataSnapshot = task.getResult();
+                    version = (String) dataSnapshot.child("version").getValue();
+                    underMaintenance = (boolean) dataSnapshot.child("underMaintenance").getValue() ? "true" : "false";
+
+                    Dialog alertDialog = new Dialog(adminScreen.this);
+                    alertDialog.setContentView(R.layout.fragment_alert);
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog.setCancelable(false);
+                    LottieAnimationView alertDialogAnim = (LottieAnimationView) alertDialog.findViewById(R.id.lottieAnimationView);
+
+                        if (!version.equals(BuildConfig.VERSION_NAME)) {
+                            alertDialogAnim.setAnimation("app_update.json");
+                            ((AppCompatButton) alertDialog.findViewById(R.id.alertPositive)).setText("Update");
+                            ((TextView) alertDialog.findViewById(R.id.alertMessage)).setText("An update is available, please update the app to continue.");
+                            alertDialog.show();
+
+                            alertDialog.findViewById(R.id.alertNegative).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alertDialog.dismiss();
+                                    finishAffinity();
+                                }
+                            });
+
+                            alertDialog.findViewById(R.id.alertPositive).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alertDialog.dismiss();
+                                    String urlString = "https://youtu.be/dQw4w9WgXcQ";
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                    intent.setPackage("com.google.android.youtube");
+                                    try {
+                                        Toast.makeText(adminScreen.this, "Got you!", Toast.LENGTH_SHORT).show();
+                                        startActivity(intent);
+                                        finishAffinity();
+                                    } catch (ActivityNotFoundException ex) {
+                                        // Chrome browser presumably not installed so allow user to choose instead
+                                        intent.setPackage(null);
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
+
+                        } else {
+                            if (!underMaintenance.equals("false")) {
+                                alertDialogAnim.setAnimation("app_maintenance.json");
+                                alertDialog.findViewById(R.id.alertPositive).setVisibility(View.GONE);
+                                ((TextView) alertDialog.findViewById(R.id.alertMessage)).setText("App is under maintenance, try again after some time.");
+                                ((AppCompatButton) alertDialog.findViewById(R.id.alertNegative)).setTextColor(ContextCompat.getColor(adminScreen.this, R.color.white));
+                                alertDialog.findViewById(R.id.alertNegative).setBackground(getDrawable(R.drawable.student_profile_feedback_main_btn_bg));
+                                alertDialog.show();
+
+                                alertDialog.findViewById(R.id.alertNegative).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        alertDialog.dismiss();
+                                        finishAffinity();
+                                    }
+                                });
+                            }
+                        }
+
+                }
+        );
     }
 }
