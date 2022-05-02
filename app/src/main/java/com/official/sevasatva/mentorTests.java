@@ -143,7 +143,7 @@ public class mentorTests extends Fragment {
 ////                        String dateTimeStamp = jsonObject.getInt("hour") + ":" + jsonObject.getInt("minute") + ":" + jsonObject.getInt("seconds")
 ////                                + " " + jsonObject.getInt("day") + " " + jsonObject.getInt("month") + " " + jsonObject.getInt("year");
 //
-////                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH);
+////                        SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss a dd MMMM yyyy", Locale.ENGLISH);
 ////                        Date date = format.parse(dateTimeStamp);
 //                        String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
 //                        String time = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), false);
@@ -186,10 +186,12 @@ public class mentorTests extends Fragment {
         databaseReference.child("tests").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                testsList.clear();
 
                 if (context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", true) &&
                         snapshot.hasChild(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))) {
                     lottieAnimationView.setVisibility(View.GONE);
+                    testsList.clear();
 
                     if (snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
                             .hasChild(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(finalKey, "SV10").replaceAll("\\.", "_"))) {
@@ -201,7 +203,7 @@ public class mentorTests extends Fragment {
                                         String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
                                         String time = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
 
-                                        current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
+                                        current = new SimpleDateFormat("hh:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
 
                                         for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
                                                 .child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(finalKey, "SV10").replaceAll("\\.", "_")).getChildren()) {
@@ -224,10 +226,11 @@ public class mentorTests extends Fragment {
 
                                                 final String submitted = "Submitted: " + (students == null ? 0 : students.size()) + "/" + context.getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                                                         .getInt("studentsCount", 0);
-                                                Date deadlineDate = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH).parse(deadline);
+                                                Date deadlineDate = new SimpleDateFormat("hh:mm a dd MMMM yyyy", Locale.ENGLISH).parse(deadline);
+                                                Log.i("date", "onDataChange: current: " + current);
+                                                Log.i("date", "onDataChange: deadlin: " + deadlineDate);
+
                                                 boolean onlineStatus = current.before(deadlineDate);
-                                                //                                        testLists.get(getAdapterPosition()).setOnlineStatus(false);
-//                                    notifyItemChanged(getAdapterPosition());
 
                                                 studentTestsModel studentTestsModel = new studentTestsModel(title, marks, submitted, deadline, onlineStatus, students, id);
                                                 testsList.add(studentTestsModel);
@@ -245,6 +248,8 @@ public class mentorTests extends Fragment {
                                         } else {
                                             loadingDialog.dismiss();
                                             lottieAnimationView.setVisibility(View.VISIBLE);
+                                            studentTestsAdapter studentTestsAdapter = new studentTestsAdapter(testsList, context);
+                                            recyclerView.setAdapter(studentTestsAdapter);
                                         }
 
                                     } catch (JSONException | ParseException e) {
@@ -266,14 +271,16 @@ public class mentorTests extends Fragment {
                     } else {
                         loadingDialog.dismiss();
                         lottieAnimationView.setVisibility(View.VISIBLE);
+                        studentTestsAdapter studentTestsAdapter = new studentTestsAdapter(testsList, context);
+                        recyclerView.setAdapter(studentTestsAdapter);
                     }
 
                 } else {
                     loadingDialog.dismiss();
                     lottieAnimationView.setVisibility(View.VISIBLE);
+                    studentTestsAdapter studentTestsAdapter = new studentTestsAdapter(testsList, context);
+                    recyclerView.setAdapter(studentTestsAdapter);
                 }
-
-
             }
 
             @Override
@@ -360,8 +367,41 @@ public class mentorTests extends Fragment {
             public void onClick(View v) {
                 if (!input[0].equals("") && !input[1].equals("") && !dateTime[0].equals("") && !dateTime[1].equals("")) {
                     Toast.makeText(getContext(), "Creating test, please wait...", Toast.LENGTH_SHORT).show();
-                    createTestDialog.dismiss();
-                    createTest();
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+                            response -> {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+                                    String time = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
+
+                                    current = new SimpleDateFormat("hh:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a dd MMMM yyyy", Locale.ENGLISH);
+                                    Date deadline = simpleDateFormat.parse(dateTime[0] + " " + dateTime[1]);
+
+                                    if (deadline.before(current))
+                                        Toast.makeText(getContext(), "Deadline cannot be before today's date!", Toast.LENGTH_SHORT).show();
+                                    else {
+                                        createTestDialog.dismiss();
+                                        createTest();
+                                    }
+                                } catch (JSONException | ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            },
+
+                            error -> {
+                                Toast.makeText(getContext(), "Unable to access current date!", Toast.LENGTH_LONG).show();
+                            }
+                    );
+
+                    int socketTimeOut = 50000;
+                    RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    stringRequest.setRetryPolicy(policy);
+                    RequestQueue queue = Volley.newRequestQueue(getContext());
+                    queue.add(stringRequest);
+
+
                 } else
                     Toast.makeText(getContext(), "Please give all inputs", Toast.LENGTH_SHORT).show();
             }
@@ -401,11 +441,11 @@ public class mentorTests extends Fragment {
                     String date = (String) comingTest.get("date");
 
                     try {
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a dd MMMM yyyy", Locale.ENGLISH);
                         Date deadline = simpleDateFormat.parse(dateTime[0] + " " + dateTime[1]);
                         Date currentDeadline = simpleDateFormat.parse(time + " " + date);
 
-                        if (deadline.before(currentDeadline) || current.after(currentDeadline)) {
+                        if (current.after(currentDeadline) || deadline.before(currentDeadline)) {
                             map2.put("time", dateTime[0]);
                             map2.put("date", dateTime[1]);
                             map2.put("id", timeStamp);
@@ -420,6 +460,7 @@ public class mentorTests extends Fragment {
                 } else {
                     map2.put("time", dateTime[0]);
                     map2.put("date", dateTime[1]);
+                    map2.put("id", timeStamp);
 
                     databaseReference.child("tests").child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
                             .child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp").replaceAll("\\.", "_")).child("comingTest").setValue(map2);
@@ -451,7 +492,7 @@ public class mentorTests extends Fragment {
     }
 
     private void getTime() {
-        int hour = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
+        int hour = Integer.parseInt(new SimpleDateFormat("hh").format(Calendar.getInstance().getTime()));
         int minute = Integer.parseInt(new SimpleDateFormat("mm").format(Calendar.getInstance().getTime()));
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {

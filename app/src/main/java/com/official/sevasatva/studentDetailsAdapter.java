@@ -47,6 +47,7 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
     private static final String TAG = "Position";
     ArrayList<HashMap<String, String>> list;
     SharedPreferences sharedPreferences;
+    String selectedCourseCode, selectedCourseName;
 
     int previousExpanded = -1;
     ViewGroup viewGroup;
@@ -126,8 +127,7 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
                         hashMap2 = list.get(previousExpanded);
 
                     String isExpanded2;
-                    if (hashMap2 != null)
-                    {
+                    if (hashMap2 != null) {
                         isExpanded2 = hashMap2.get("isExpanded");
                         assert isExpanded2 != null;
                         if (isExpanded2.equals("false"))
@@ -176,6 +176,8 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
             sharedPreferences.edit().putString("cc", cc).apply();
             sharedPreferences.edit().putString("cn", cn).apply();
             sharedPreferences.edit().putString("desc", desc).apply();
+            selectedCourseCode = cc;
+            selectedCourseName = cn;
 
             loadingDialog.setContentView(R.layout.fragment_loading);
             loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -262,7 +264,6 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 //                        });
 
 
-
                     },
                     error -> {
                         Toast.makeText(viewGroup.getContext(), "An error occured: " + error.getMessage(), Toast.LENGTH_LONG).show();
@@ -313,6 +314,9 @@ public class studentDetailsAdapter extends RecyclerView.Adapter<studentDetailsAd
 
                 viewGroup.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("category", category).apply();
 
+                new serviceMail(sharedPreferences.getString("email", "temp"), "Welcome!",
+                        "Welcome to the course " + selectedCourseName + " (" + selectedCourseCode + ")\n" +
+                                "You have successfully enrolled into this course!");
 
                 Intent intent = new Intent(viewGroup.getContext(), studentScreen.class);
                 viewGroup.getContext().startActivity(intent);

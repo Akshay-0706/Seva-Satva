@@ -28,7 +28,7 @@ public class mentorTestsDetails extends AppCompatActivity {
     RecyclerView mentorTestsDetailsRecyclerView;
     List<mentorTestsDetailsModel> studentsList = new ArrayList<>();
 
-    String id, deadline;
+    String id, title, deadline;
     long submitted;
     int marks;
 
@@ -39,9 +39,10 @@ public class mentorTestsDetails extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
+        title = bundle.getString("title");
         marks = Integer.parseInt(bundle.getString("marks"));
         deadline = bundle.getString("deadline");
-        ((TextView) findViewById(R.id.mentorTestsDetailsTitle)).setText(bundle.getString("title"));
+        ((TextView) findViewById(R.id.mentorTestsDetailsTitle)).setText(title);
         ((TextView) findViewById(R.id.mentorTestsDetailsMarks)).setText("Marks: " + marks);
         ((TextView) findViewById(R.id.mentorTestsDetailsDeadline)).setText("Deadline: " + deadline);
 
@@ -110,7 +111,7 @@ public class mentorTestsDetails extends AppCompatActivity {
                 ((TextView) findViewById(R.id.mentorTestsDetailsStatus)).setText("Submitted: " + submitted + "/" + getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                         .getInt("studentsCount", 0));
 
-                mentorTestsDetailsAdapter mentorTestsDetailsAdapter = new mentorTestsDetailsAdapter(studentsList, id, deadline, marks);
+                mentorTestsDetailsAdapter mentorTestsDetailsAdapter = new mentorTestsDetailsAdapter(studentsList, id, title, deadline, marks);
                 mentorTestsDetailsRecyclerView.setAdapter(mentorTestsDetailsAdapter);
             }
 

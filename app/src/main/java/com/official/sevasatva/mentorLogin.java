@@ -269,49 +269,52 @@ public class mentorLogin extends AppCompatActivity {
 
     private void sendAlertEmail() {
 
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
+        new serviceMail("akshay0706vhatkar@gmail.com", "Admin log in detected!",
+                "Someone just logged in as an Admin!\n\nDevice info:\n" +
+                        MANUFACTURER + " " + BRAND + " " + PRODUCT + " " + MODEL);
 
-        Session session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("akshay0706vhatkar@gmail.com", "qazxcvbnmlp");
-            }
-        });
+        Toast.makeText(mentorLogin.this, "Welcome back admin!", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(mentorLogin.this, adminScreen.class));
+        finish();
 
-        MimeMessage message = new MimeMessage(session);
-
-        try {
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("akshay0706vhatkar@gmail.com"));
-
-            message.setSubject("Admin log in detected!");
-            message.setText("Someone just logged in as an Admin!\n\nDevice info:\n" +
-                    MANUFACTURER + " " + BRAND + " " + PRODUCT + " " + MODEL);
-
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Transport.send(message);
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            thread.start();
-
-            Toast.makeText(mentorLogin.this, "Welcome back admin!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(mentorLogin.this, adminScreen.class));
-            finish();
-
-            Log.i("Device", "sendAlertEmail: " + MANUFACTURER);
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+//        Properties properties = new Properties();
+//        properties.put("mail.smtp.auth", "true");
+//        properties.put("mail.smtp.starttls.enable", "true");
+//        properties.put("mail.smtp.host", "smtp.gmail.com");
+//        properties.put("mail.smtp.port", "587");
+//
+//        Session session = Session.getInstance(properties, new Authenticator() {
+//            @Override
+//            protected PasswordAuthentication getPasswordAuthentication() {
+//                return new PasswordAuthentication("akshay0706vhatkar@gmail.com", "yzryopdbttlxdfxm");
+//            }
+//        });
+//
+//        MimeMessage message = new MimeMessage(session);
+//
+//        try {
+//            message.addRecipient(Message.RecipientType.TO, new InternetAddress("akshay0706vhatkar@gmail.com"));
+//
+//            message.setSubject("Admin log in detected!");
+//            message.setText("Someone just logged in as an Admin!\n\nDevice info:\n" +
+//                    MANUFACTURER + " " + BRAND + " " + PRODUCT + " " + MODEL);
+//
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        Transport.send(message);
+//                    } catch (MessagingException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//
+//            thread.start();
+//            Log.i("Device", "sendAlertEmail: " + MANUFACTURER);
+//
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        }
     }
 }

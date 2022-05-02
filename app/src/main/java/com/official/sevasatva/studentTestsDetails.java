@@ -68,6 +68,7 @@ public class studentTestsDetails extends AppCompatActivity {
     String title, deadline, fileName;
     String context;
     String studentEmail;
+    String testName;
     String id;
     String key = "";
     String grades = "Not graded yet";
@@ -93,6 +94,7 @@ public class studentTestsDetails extends AppCompatActivity {
         } else {
             studentEmail = bundle.getString("studentEmail");
             title = bundle.getString("studentName");
+            testName = bundle.getString("title");
             ((ImageButton) findViewById(R.id.studentTestsDetailsAddBtn)).setVisibility(View.GONE);
             ((TextView) findViewById(R.id.studentTestsDetailsSubTitle)).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.studentTestsDetailsSubTitle)).setText(bundle.getString("studentUID") + " - " +
@@ -145,6 +147,8 @@ public class studentTestsDetails extends AppCompatActivity {
                     if (Integer.parseInt(((EditText) findViewById(R.id.studentTestsDetailsMarkedEditText)).getText().toString()) <=
                             marks) {
                         Toast.makeText(studentTestsDetails.this, "Graded", Toast.LENGTH_SHORT).show();
+                        new serviceMail(studentEmail.replaceAll("_", "."), "Graded!", "Your mentor has graded you for " + testName + ", check it out!");
+
                         databaseReference.child("tests").child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp"))
                                 .child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString(key, "temp").replaceAll("\\.", "_"))
                                 .child(id).child("students").child(studentEmail.replaceAll("\\.", "_")).child("grades")
@@ -322,8 +326,8 @@ public class studentTestsDetails extends AppCompatActivity {
                                         String date = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
                                         String time = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
 
-                                        Date current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
-                                        Date deadlineDate = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH).parse(deadline);
+                                        Date current = new SimpleDateFormat("hh:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(time + " " + date);
+                                        Date deadlineDate = new SimpleDateFormat("hh:mm a dd MMMM yyyy", Locale.ENGLISH).parse(deadline);
 
                                         students.put("submissions", time + " " + date);
                                         if (current.before(deadlineDate))

@@ -17,13 +17,14 @@ import java.util.List;
 public class mentorTestsDetailsAdapter extends RecyclerView.Adapter<mentorTestsDetailsAdapter.MyViewHolder> {
 
     List<mentorTestsDetailsModel> studentsList;
-    String id, deadline;
+    String id, title, deadline;
     ViewGroup viewGroup;
     String marks;
 
-    public mentorTestsDetailsAdapter(List<mentorTestsDetailsModel> studentsList, String id, String deadline, int marks) {
+    public mentorTestsDetailsAdapter(List<mentorTestsDetailsModel> studentsList, String id, String title, String deadline, int marks) {
         this.studentsList = studentsList;
         this.id = id;
+        this.title = title;
         this.deadline = deadline;
         this.marks = String.valueOf(marks);
     }
@@ -44,8 +45,7 @@ public class mentorTestsDetailsAdapter extends RecyclerView.Adapter<mentorTestsD
         if (studentsList.get(position).getStudentStatus().equals("On time")) {
             holder.gradientDrawable.setStroke(4, ContextCompat.getColor(viewGroup.getContext(), R.color.success));
             holder.mentorTestsDetailsStatusOn.setTextColor(ContextCompat.getColor(viewGroup.getContext(), R.color.success));
-        }
-        else {
+        } else {
             holder.gradientDrawable.setStroke(4, ContextCompat.getColor(viewGroup.getContext(), R.color.error));
             holder.mentorTestsDetailsStatusOn.setTextColor(ContextCompat.getColor(viewGroup.getContext(), R.color.error));
         }
@@ -76,6 +76,7 @@ public class mentorTestsDetailsAdapter extends RecyclerView.Adapter<mentorTestsD
                     Intent intent = new Intent(itemView.getContext(), studentTestsDetails.class);
                     intent.putExtra("context", itemView.getContext().getClass().getName());
                     intent.putExtra("id", id);
+                    intent.putExtra("title", title);
                     intent.putExtra("deadline", deadline);
                     intent.putExtra("marks", marks);
                     intent.putExtra("studentEmail", studentsList.get(getAdapterPosition()).studentEmail);

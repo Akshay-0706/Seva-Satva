@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
@@ -17,8 +16,6 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,26 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 public class adminScreen extends AppCompatActivity {
 
-    boolean isEnrollmentStopped = false;
+    boolean enrollmentAllowed = false, startCourse = false;
 
     internetCheckListener internetCheckListener = new internetCheckListener();
 
@@ -76,7 +57,7 @@ public class adminScreen extends AppCompatActivity {
         findViewById(R.id.adminAllocateMentorsButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isEnrollmentStopped)
+                if (!enrollmentAllowed)
                     startActivity(new Intent(adminScreen.this, mentorAllocation.class));
                 else
                     Toast.makeText(adminScreen.this, "Stop the enrollment first!", Toast.LENGTH_SHORT).show();
@@ -91,24 +72,43 @@ public class adminScreen extends AppCompatActivity {
         });
 
 
-        SwitchMaterial switchMaterial = findViewById(R.id.adminStopEnrollmentSwitch);
+        SwitchMaterial switchCourse = findViewById(R.id.adminStartCourseSwitch);
+        SwitchMaterial switchEnrollment = findViewById(R.id.adminStopEnrollmentSwitch);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 //        databaseReference.child("flags").child("areStudentsAllowed").get().addOnCompleteListener(
 //                new OnCompleteListener<DataSnapshot>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<DataSnapshot> task) {
 //                        isEnrollmentStopped = (boolean) task.getResult().getValue();
-//                        switchMaterial.setChecked(isEnrollmentStopped);
+//                        switchEnrollment.setChecked(isEnrollmentStopped);
 //                    }
 //                }
 //        );
+        databaseReference.child("flags").child("startCourse").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                startCourse = (boolean) snapshot.getValue();
+                switchCourse.setChecked(startCourse);
+
+                if (enrollmentAllowed)
+                    Toast.makeText(adminScreen.this, "Course started!", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(adminScreen.this, "Course ended!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         databaseReference.child("flags").child("areStudentsAllowed").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                isEnrollmentStopped = (boolean) snapshot.getValue();
-                switchMaterial.setChecked(isEnrollmentStopped);
+                enrollmentAllowed = (boolean) snapshot.getValue();
+                switchEnrollment.setChecked(enrollmentAllowed);
 
-                if (isEnrollmentStopped)
+                if (enrollmentAllowed)
                     Toast.makeText(adminScreen.this, "Enrollment allowed!", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(adminScreen.this, "Enrollment stopped!", Toast.LENGTH_SHORT).show();
@@ -119,6 +119,9 @@ public class adminScreen extends AppCompatActivity {
 
             }
         });
+
+
+
 //        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 //        firestore.collection("Courses").document("Flags").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 //            @Override
@@ -130,27 +133,29 @@ public class adminScreen extends AppCompatActivity {
 //                if (documentSnapshot.getData() != null)
 //                    data = documentSnapshot.getData();
 //
-//                switchMaterial.setChecked(!(boolean) data.get("areStudentsAllowed"));
+//                switchEnrollment.setChecked(!(boolean) data.get("areStudentsAllowed"));
 //            }
 //        });
 
-        switchMaterial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchCourse.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference.child("flags").child("startCourse").setValue(isChecked);
+            }
+        });
+
+        switchEnrollment.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference.child("flags").child("areStudentsAllowed").setValue(isChecked);
-//                Map<String, Object> map = new HashMap<>();
-//                map.put("areStudentsAllowed", !isChecked);
-//                firestore.collection("Courses").document("Flags").set(map, SetOptions.merge());
-//                if (isChecked)
-//                    Toast.makeText(adminScreen.this, "Enrollment stopped!", Toast.LENGTH_SHORT).show();
-//                else
-//                    Toast.makeText(adminScreen.this, "Enrollment allowed!", Toast.LENGTH_SHORT).show();
-
-//                isEnrollmentStopped = isChecked;
             }
         });
+
+
 
         findViewById(R.id.adminContactDevelopersButton).setOnClickListener(new View.OnClickListener() {
             @Override

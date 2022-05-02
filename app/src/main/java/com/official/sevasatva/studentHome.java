@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -179,51 +180,60 @@ public class studentHome extends Fragment {
                 if (data != null) {
 
                     Map<String, Object> comingTest = (Map<String, Object>) data.get("comingTest");
-                    String time = (String) comingTest.get("time");
-                    String date = (String) comingTest.get("date");
-                    String id = (String) comingTest.get("id");
 
-                    if (dataSnapshot.hasChild(id)) {
-                        try {
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a dd MMMM yyyy", Locale.ENGLISH);
-                            Date deadline = simpleDateFormat.parse(time + " " + date);
-                            StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
-                                    response -> {
-                                        try {
-                                            JSONObject jsonObject = new JSONObject(response);
-                                            String currentDate = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
-                                            String currentTime = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), true);
+                    if (comingTest != null) {
+                        String time = (String) comingTest.get("time");
+                        String date = (String) comingTest.get("date");
+                        String id = (String) comingTest.get("id");
+                        Log.i("status", "onComplete: here");
+                        if (dataSnapshot.hasChild(id)) {
+                            Log.i("status", "onComplete: inside");
 
-                                            Date current = new SimpleDateFormat("HH:mm:ss a dd MMMM yyyy", Locale.ENGLISH).parse(currentTime + " " + currentDate);
+                            try {
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a dd MMMM yyyy", Locale.ENGLISH);
+                                Date deadline = simpleDateFormat.parse(time + " " + date);
+                                StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+                                        response -> {
+                                            try {
+                                                JSONObject jsonObject = new JSONObject(response);
+                                                String currentDate = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+                                                String currentTime = getDateNTime.getTime(jsonObject.getString("time"), 0, false);
 
-                                            if (current.before(deadline))
-                                                ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText("Test is scheduled on " + date + " at " + time + ".");
-                                            else
-                                                ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
+                                                Date current = new SimpleDateFormat("hh:mm a dd MMMM yyyy", Locale.ENGLISH).parse(currentTime + " " + currentDate);
 
-                                        } catch (JSONException | ParseException e) {
-                                            e.printStackTrace();
+                                                if (current.before(deadline)) {
+                                                    Log.i("status", "onComplete: if");
+                                                    ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText("Test is scheduled on " + date + " at " + time + ".");
+                                                } else {
+                                                    Log.i("status", "onComplete: else");
+                                                    ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
+                                                }
+
+                                            } catch (JSONException | ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        },
+
+                                        error -> {
+                                            Toast.makeText(getContext(), "Unable to access current date!", Toast.LENGTH_LONG).show();
                                         }
-                                    },
+                                );
 
-                                    error -> {
-                                        Toast.makeText(getContext(), "Unable to access current date!", Toast.LENGTH_LONG).show();
-                                    }
-                            );
-
-                            int socketTimeOut = 50000;
-                            RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                            stringRequest.setRetryPolicy(policy);
-                            RequestQueue queue = Volley.newRequestQueue(getActivity());
-                            queue.add(stringRequest);
+                                int socketTimeOut = 50000;
+                                RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                stringRequest.setRetryPolicy(policy);
+                                RequestQueue queue = Volley.newRequestQueue(getActivity());
+                                queue.add(stringRequest);
 
 
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else
+                            ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
                     } else
                         ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
-
                 } else {
                     ((TextView) getView().findViewById(R.id.homeTestsInfo)).setText(R.string.home_temp_tests_info_text);
                 }
