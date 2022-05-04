@@ -162,7 +162,7 @@ public class studentNews extends Fragment {
 
         String category = getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("category", "All");
 
-        String url = "https://newsapi.org/v2/everything?language=en&sortBy=publishedAt&q=" + category + "&from=2022-04-03" + "&apiKey=c2c368b741844c39a08a194825a365e0";
+        String url = "https://newsapi.org/v2/everything?language=en&sortBy=publishedAt&q=" + category + "&from=2022-05-04" + "&apiKey=c2c368b741844c39a08a194825a365e0";
 
         String mainUrl = "https://newsapi.org/";
 
