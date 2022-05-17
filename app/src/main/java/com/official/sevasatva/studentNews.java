@@ -28,7 +28,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -159,10 +162,13 @@ public class studentNews extends Fragment {
 //                String category = "All";
 //                if (snapshot.hasChild(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")))
 //                    category = (String) snapshot.child(getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).getValue();
+        long DAY_IN_MS = 1000 * 60 * 60 * 24;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        String fiveDaysBeforeDate = dateFormat.format(new Date(System.currentTimeMillis() - (5 * DAY_IN_MS)));
 
         String category = getActivity().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("category", "All");
 
-        String url = "https://newsapi.org/v2/everything?language=en&sortBy=publishedAt&q=" + category + "&from=2022-05-04" + "&apiKey=c2c368b741844c39a08a194825a365e0";
+        String url = "https://newsapi.org/v2/everything?language=en&sortBy=publishedAt&q=" + category + "&from=" + fiveDaysBeforeDate + "&apiKey=c2c368b741844c39a08a194825a365e0";
 
         String mainUrl = "https://newsapi.org/";
 

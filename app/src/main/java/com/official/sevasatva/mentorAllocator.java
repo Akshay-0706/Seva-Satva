@@ -125,7 +125,8 @@ public class mentorAllocator extends AppCompatActivity {
                     for (Map.Entry<String, Object> entry : data.entrySet()) {
                         if (entry.getKey().equals("Mentors")) {
                             mentorsData = (Map<String, Object>) entry.getValue();
-                            mentorDetailsIndex = mentorsData.size() - 1;
+                            if (mentorsData.size() != 0)
+                                mentorDetailsIndex = mentorsData.size() - 1;
                             for (Map.Entry<String, Object> entry2 : mentorsData.entrySet()) {
                                 mentorsData2 = (Map<String, Object>) entry2.getValue();
 
@@ -246,7 +247,7 @@ public class mentorAllocator extends AppCompatActivity {
 
         requiredMentors.setText(String.valueOf(mentorsDetails.length));
 
-        if (mentorDetailsIndex != 0)
+        if (mentorDetailsIndex > 0)
             for (int i = 0; i < mentorsDetails[mentorDetailsIndex]; i++)
                 studentDataIndex++;
 

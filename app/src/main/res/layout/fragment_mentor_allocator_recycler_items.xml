@@ -47,9 +47,8 @@
         android:text="Mentor"
         android:textColor="?attr/textColor"
         android:textSize="20sp"
-        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineStudentBottom"
-        app:layout_constraintEnd_toStartOf="@+id/mentorAllocatorEditBtn"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineStudentEnd"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"
         app:layout_constraintTop_toTopOf="@+id/guidelineStudentTop"
@@ -103,22 +102,21 @@
 
 
 
-    <ImageButton
-        android:id="@+id/mentorAllocatorEditBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:background="@color/trans"
-        android:fontFamily="@font/poppins"
-        android:src="@drawable/xtra_edit_icon"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineStudentBottom"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineStudentEnd"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"
-        app:layout_constraintTop_toTopOf="@+id/guidelineStudentTop"
-        app:layout_constraintVertical_bias="0.0"
-        app:tint="@color/black" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/mentorAllocatorEditBtn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_weight="1"-->
+<!--        android:background="@color/trans"-->
+<!--        android:fontFamily="@font/poppins"-->
+<!--        android:src="@drawable/xtra_edit_icon"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/guidelineStudentBottom"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/guidelineStudentEnd"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guidelineStudentStart"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/guidelineStudentTop"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        app:tint="@color/black" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

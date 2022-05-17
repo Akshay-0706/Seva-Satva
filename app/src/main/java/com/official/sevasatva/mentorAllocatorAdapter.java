@@ -39,11 +39,11 @@ public class mentorAllocatorAdapter extends RecyclerView.Adapter<mentorAllocator
         if (allocatorModel.getExpanded()) {
             holder.email.setVisibility(View.VISIBLE);
             holder.pass.setVisibility(View.VISIBLE);
-            holder.mentorAllocatorEditBtn.setVisibility(View.VISIBLE);
+//            holder.mentorAllocatorEditBtn.setVisibility(View.VISIBLE);
         } else {
             holder.email.setVisibility(View.GONE);
             holder.pass.setVisibility(View.GONE);
-            holder.mentorAllocatorEditBtn.setVisibility(View.GONE);
+//            holder.mentorAllocatorEditBtn.setVisibility(View.GONE);
         }
     }
 
@@ -56,7 +56,7 @@ public class mentorAllocatorAdapter extends RecyclerView.Adapter<mentorAllocator
 
         ConstraintLayout mentorAllocatorLayout;
         TextView name, email, pass, studentCount;
-        ImageButton mentorAllocatorEditBtn;
+//        ImageButton mentorAllocatorEditBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,7 +66,7 @@ public class mentorAllocatorAdapter extends RecyclerView.Adapter<mentorAllocator
             email = itemView.findViewById(R.id.mentorAllocatorEmail);
             pass = itemView.findViewById(R.id.mentorAllocatorPass);
             studentCount = itemView.findViewById(R.id.mentorAllocatorStudentCount);
-            mentorAllocatorEditBtn = itemView.findViewById(R.id.mentorAllocatorEditBtn);
+//            mentorAllocatorEditBtn = itemView.findViewById(R.id.mentorAllocatorEditBtn);
 
             mentorAllocatorLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

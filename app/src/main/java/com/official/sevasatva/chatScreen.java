@@ -229,7 +229,11 @@ public class chatScreen extends AppCompatActivity {
     };
 
     public void sendMessage(String message, Context context) {
-//        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        String currentDate = dateFormat.format(new Date());
+        String currentTime = timeFormat.format(new Date());
 
         String mentorEmail = "";
         if (context.getClass().equals(mentorScreen.class))
@@ -245,42 +249,48 @@ public class chatScreen extends AppCompatActivity {
         map.put("isStudent", context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isUserStudent", true));
         map.put("msg", message);
         map.put("name", context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("name", "Mentor"));
+        map.put("date", currentDate);
+        map.put("time", currentTime);
 
-        String finalMentorEmail = mentorEmail;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        String currentDate = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
-                        String currentTime = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), false);
-                        String dateTimeStamp = jsonObject.getInt("hour") + ":" + jsonObject.getInt("minute") + ":" + jsonObject.getInt("seconds")
-                                + " " + jsonObject.getInt("day") + " " + jsonObject.getInt("month") + " " + jsonObject.getInt("year");
+        databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                .child(mentorEmail.replaceAll("\\.", "_")).child(String.valueOf(timeStamp)).setValue(map);
 
-                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss dd MM yyyy", Locale.ENGLISH);
-                        Date date = format.parse(dateTimeStamp);
-                        long timestamp = date.getTime();
 
-                        map.put("date", currentDate);
-                        map.put("time", currentTime);
-
-                        databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                                .child(finalMentorEmail.replaceAll("\\.", "_")).child(String.valueOf(timestamp)).setValue(map);
-
-                    } catch (JSONException | ParseException e) {
-                        e.printStackTrace();
-                    }
-                },
-
-                error -> {
-                    Toast.makeText(this, "Unable to access current date!", Toast.LENGTH_LONG).show();
-                }
-        );
-
-        int socketTimeOut = 50000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(stringRequest);
+//        String finalMentorEmail = mentorEmail;
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://www.timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata",
+//                response -> {
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(response);
+//                        String currentDate = jsonObject.getString("day") + " " + getDateNTime.getMonth(jsonObject.getInt("month")) + " " + jsonObject.getInt("year");
+//                        String currentTime = getDateNTime.getTime(jsonObject.getString("time"), jsonObject.getInt("seconds"), false);
+//                        String dateTimeStamp = jsonObject.getInt("hour") + ":" + jsonObject.getInt("minute") + ":" + jsonObject.getInt("seconds")
+//                                + " " + jsonObject.getInt("day") + " " + jsonObject.getInt("month") + " " + jsonObject.getInt("year");
+//
+//                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss dd MM yyyy", Locale.ENGLISH);
+//                        Date date = format.parse(dateTimeStamp);
+//                        long timestamp = date.getTime();
+//
+//                        map.put("date", currentDate);
+//                        map.put("time", currentTime);
+//
+//                        databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+//                                .child(finalMentorEmail.replaceAll("\\.", "_")).child(String.valueOf(timestamp)).setValue(map);
+//
+//                    } catch (JSONException | ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                },
+//
+//                error -> {
+//                    Toast.makeText(this, "Unable to access current date!", Toast.LENGTH_LONG).show();
+//                }
+//        );
+//
+//        int socketTimeOut = 50000;
+//        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+//        stringRequest.setRetryPolicy(policy);
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        queue.add(stringRequest);
 
     }
 }
