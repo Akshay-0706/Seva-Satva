@@ -70,8 +70,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class studentLogin extends AppCompatActivity {
 
-    private GoogleSignInClient googleSignInClient;
-
     private FirebaseAuth firebaseAuth;
 
     SharedPreferences sharedPreferences;
@@ -129,24 +127,21 @@ public class studentLogin extends AppCompatActivity {
 
     private void getCategory(boolean isCalledFromBelow) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("news").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                DataSnapshot dataSnapshot = null;
-                if (task.getResult() != null)
-                    dataSnapshot = task.getResult();
-                String category = "All";
-                if (dataSnapshot != null)
-                    category = (String) dataSnapshot.child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).getValue();
+        databaseReference.child("news").get().addOnCompleteListener(task -> {
+            DataSnapshot dataSnapshot = null;
+            if (task.getResult() != null)
+                dataSnapshot = task.getResult();
+            String category = "All";
+            if (dataSnapshot != null)
+                category = (String) dataSnapshot.child(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).getValue();
 
-                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("category", category).apply();
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putString("category", category).apply();
 
-                if (!getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false) || isCalledFromBelow)
-                    getMentorDetails();
-                else {
-                    startActivity(new Intent(studentLogin.this, studentScreen.class));
-                    finish();
-                }
+            if (!getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false) || isCalledFromBelow)
+                getMentorDetails();
+            else {
+                startActivity(new Intent(studentLogin.this, studentScreen.class));
+                finish();
             }
         });
     }
@@ -156,36 +151,33 @@ public class studentLogin extends AppCompatActivity {
                 .requestIdToken("426988667812-meoa78skojkt8d3u0rs5mi9dd4i5nok3.apps.googleusercontent.com") // R.string.default_web_client_id
                 .requestEmail()
                 .build();
-        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         resultLauncher.launch(new Intent(googleSignInClient.getSignInIntent()));
     }
 
-    ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == Activity.RESULT_OK) {
-                Log.d(TAG, "authenticate: Connected to google account");
-                Intent intent = result.getData();
-                Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(intent);
-                try {
-                    GoogleSignInAccount account = accountTask.getResult(ApiException.class);
-                    String email = account.getEmail();
-                    assert email != null;
-                    if (email.contains("@spit.ac.in"))
-                        authenticate(account);
-                    else {
-                        googleSignInClient.signOut();
-                        Toast.makeText(studentLogin.this, R.string.error_501, Toast.LENGTH_SHORT).show();
-                        signIn();
-                    }
-                } catch (Exception e) {
-                    Log.d(TAG, "onActivityResult: " + e.getMessage());
-                }
-            } else {
-                Toast.makeText(studentLogin.this, R.string.error_100, Toast.LENGTH_SHORT).show();
-                signIn();
+    ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            Log.d(TAG, "authenticate: Connected to google account");
+            Intent intent = result.getData();
+            Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(intent);
+            try {
+                GoogleSignInAccount account = accountTask.getResult(ApiException.class);
+                String email = account.getEmail();
+                assert email != null;
+//                    if (email.contains("@spit.ac.in"))
+                    authenticate(account);
+//                    else {
+//                        googleSignInClient.signOut();
+//                        Toast.makeText(studentLogin.this, R.string.error_501, Toast.LENGTH_SHORT).show();
+//                        signIn();
+//                    }
+            } catch (Exception e) {
+                Log.d(TAG, "onActivityResult: " + e.getMessage());
             }
+        } else {
+            Toast.makeText(studentLogin.this, R.string.error_100, Toast.LENGTH_SHORT).show();
+            signIn();
         }
     });
 
@@ -194,30 +186,22 @@ public class studentLogin extends AppCompatActivity {
         AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithCredential(authCredential)
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                        assert firebaseUser != null;
-                        sharedPreferences.edit().putString("email", firebaseUser.getEmail()).apply();
-                        sharedPreferences.edit().putString("image", firebaseUser.getPhotoUrl().toString()).apply();
+                .addOnSuccessListener(authResult -> {
+                    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                    assert firebaseUser != null;
+                    sharedPreferences.edit().putString("email", firebaseUser.getEmail()).apply();
+                    sharedPreferences.edit().putString("image", firebaseUser.getPhotoUrl().toString()).apply();
 
-                        checkFlags();
-                    }
+                    checkFlags();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "onFailure: login failed" + e.getMessage());
-                    }
-                });
+                .addOnFailureListener(e -> Log.d(TAG, "onFailure: login failed" + e.getMessage()));
     }
 
     private void checkFlags() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("flags").get().addOnCompleteListener(
                 task -> {
-                    String version = "", startCourse = "", underMaintenance = "";
+                    String version, startCourse, underMaintenance;
 
                     DataSnapshot dataSnapshot = task.getResult();
                     version = (String) dataSnapshot.child("version").getValue();
@@ -228,7 +212,7 @@ public class studentLogin extends AppCompatActivity {
                     alertDialog.setContentView(R.layout.fragment_alert);
                     alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     alertDialog.setCancelable(false);
-                    LottieAnimationView alertDialogAnim = (LottieAnimationView) alertDialog.findViewById(R.id.lottieAnimationView);
+                    LottieAnimationView alertDialogAnim = alertDialog.findViewById(R.id.lottieAnimationView);
 
                     if (startCourse.equals("false")) {
                         alertDialogAnim.setAnimation("course_ended.json");
@@ -238,12 +222,9 @@ public class studentLogin extends AppCompatActivity {
                         alertDialog.findViewById(R.id.alertNegative).setBackground(getDrawable(R.drawable.student_profile_feedback_main_btn_bg));
                         alertDialog.show();
 
-                        alertDialog.findViewById(R.id.alertNegative).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alertDialog.dismiss();
-                                finishAffinity();
-                            }
+                        alertDialog.findViewById(R.id.alertNegative).setOnClickListener(v -> {
+                            alertDialog.dismiss();
+                            finishAffinity();
                         });
                     } else {
                         if (!version.equals(BuildConfig.VERSION_NAME)) {
@@ -252,32 +233,26 @@ public class studentLogin extends AppCompatActivity {
                             ((TextView) alertDialog.findViewById(R.id.alertMessage)).setText("An update is available, please update the app to continue.");
                             alertDialog.show();
 
-                            alertDialog.findViewById(R.id.alertNegative).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.dismiss();
-                                    finishAffinity();
-                                }
+                            alertDialog.findViewById(R.id.alertNegative).setOnClickListener(v -> {
+                                alertDialog.dismiss();
+                                finishAffinity();
                             });
 
-                            alertDialog.findViewById(R.id.alertPositive).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.dismiss();
-                                    String urlString = "https://youtu.be/dQw4w9WgXcQ";
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            alertDialog.findViewById(R.id.alertPositive).setOnClickListener(v -> {
+                                alertDialog.dismiss();
+                                String urlString = "https://youtu.be/dQw4w9WgXcQ";
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                                    intent.setPackage("com.google.android.youtube");
-                                    try {
-                                        Toast.makeText(studentLogin.this, "Got you!", Toast.LENGTH_SHORT).show();
-                                        startActivity(intent);
-                                        finishAffinity();
-                                    } catch (ActivityNotFoundException ex) {
-                                        // Chrome browser presumably not installed so allow user to choose instead
-                                        intent.setPackage(null);
-                                        startActivity(intent);
-                                    }
+                                intent.setPackage("com.google.android.youtube");
+                                try {
+                                    Toast.makeText(studentLogin.this, "Got you!", Toast.LENGTH_SHORT).show();
+                                    startActivity(intent);
+                                    finishAffinity();
+                                } catch (ActivityNotFoundException ex) {
+                                    // Chrome browser presumably not installed so allow user to choose instead
+                                    intent.setPackage(null);
+                                    startActivity(intent);
                                 }
                             });
 
@@ -295,12 +270,9 @@ public class studentLogin extends AppCompatActivity {
                                 alertDialog.findViewById(R.id.alertNegative).setBackground(getDrawable(R.drawable.student_profile_feedback_main_btn_bg));
                                 alertDialog.show();
 
-                                alertDialog.findViewById(R.id.alertNegative).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        alertDialog.dismiss();
-                                        finishAffinity();
-                                    }
+                                alertDialog.findViewById(R.id.alertNegative).setOnClickListener(v -> {
+                                    alertDialog.dismiss();
+                                    finishAffinity();
                                 });
                             }
                         }
@@ -342,14 +314,12 @@ public class studentLogin extends AppCompatActivity {
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference.child("flags").child("areStudentsAllowed").get().addOnCompleteListener(
-                    new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    task -> {
 //                        isEnrollmentStopped = (boolean) task.getResult().getValue();
 //                        switchMaterial.setChecked(isEnrollmentStopped);
 
-                            final boolean[] isAllowed = {true};
-                            isAllowed[0] = (boolean) task.getResult().getValue();
+                        final boolean[] isAllowed = {true};
+                        isAllowed[0] = (boolean) task.getResult().getValue();
 //                    }
 //                }
 //        );
@@ -367,62 +337,58 @@ public class studentLogin extends AppCompatActivity {
 //                    final boolean[] isAllowed = {true};
 //                    isAllowed[0] = (boolean) data.get("areStudentsAllowed");
 
-                            firestore.collection("Courses").document("Students").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    DocumentSnapshot documentSnapshot = null;
-                                    Map<String, Object> data2 = null;
-                                    if (task.getResult() != null)
-                                        documentSnapshot = task.getResult();
-                                    if (documentSnapshot.getData() != null)
-                                        data2 = documentSnapshot.getData();
+                        firestore.collection("Courses").document("Students").get().addOnCompleteListener(task1 -> {
+                            DocumentSnapshot documentSnapshot = null;
+                            Map<String, Object> data2 = null;
+                            if (task1.getResult() != null)
+                                documentSnapshot = task1.getResult();
+                            if (documentSnapshot.getData() != null)
+                                data2 = documentSnapshot.getData();
 
-                                    String cc = "", cn = "", desc = "";
+                            String cc = "", cn = "", desc = "";
 
-                                    boolean found = false;
+                            boolean found = false;
 
-                                    if (data2 != null)
-                                        for (Map.Entry<String, Object> entry : data2.entrySet()) {
-                                            if (found)
+                            if (data2 != null)
+                                for (Map.Entry<String, Object> entry : data2.entrySet()) {
+                                    if (found)
+                                        break;
+                                    for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
+                                        switch (entry2.getKey()) {
+                                            case "cc":
+                                                cc = entry2.getValue().toString();
                                                 break;
-                                            for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
-                                                switch (entry2.getKey()) {
-                                                    case "cc":
-                                                        cc = entry2.getValue().toString();
-                                                        break;
-                                                    case "cn":
-                                                        cn = entry2.getValue().toString();
-                                                        break;
-                                                    case "desc":
-                                                        desc = entry2.getValue().toString();
-                                                        break;
-                                                    case "email":
-                                                        if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
-                                                            isNewStudent = false;
-                                                            found = true;
-                                                        }
-                                                        break;
+                                            case "cn":
+                                                cn = entry2.getValue().toString();
+                                                break;
+                                            case "desc":
+                                                desc = entry2.getValue().toString();
+                                                break;
+                                            case "email":
+                                                if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
+                                                    isNewStudent = false;
+                                                    found = true;
                                                 }
-                                            }
+                                                break;
                                         }
-
-                                    if (!isAllowed[0] && isNewStudent) {
-                                        Toast.makeText(studentLogin.this, "Course enrollment has stopped!", Toast.LENGTH_LONG).show();
-                                        finishAndRemoveTask();
-                                    } else if (isNewStudent) {
-                                        startActivity(new Intent(studentLogin.this, studentDetails.class));
-                                        finish();
-                                    } else {
-                                        sharedPreferences.edit().putString("cc", cc).apply();
-                                        sharedPreferences.edit().putString("cn", cn).apply();
-                                        sharedPreferences.edit().putString("desc", desc).apply();
-
-                                        getCategory(true);
                                     }
                                 }
-                            });
 
-                        }
+                            if (!isAllowed[0] && isNewStudent) {
+                                Toast.makeText(studentLogin.this, "Course enrollment has stopped!", Toast.LENGTH_LONG).show();
+                                finishAndRemoveTask();
+                            } else if (isNewStudent) {
+                                startActivity(new Intent(studentLogin.this, studentDetails.class));
+                                finish();
+                            } else {
+                                sharedPreferences.edit().putString("cc", cc).apply();
+                                sharedPreferences.edit().putString("cn", cn).apply();
+                                sharedPreferences.edit().putString("desc", desc).apply();
+
+                                getCategory(true);
+                            }
+                        });
+
                     });
 
 
@@ -439,57 +405,54 @@ public class studentLogin extends AppCompatActivity {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
         firestore.collection("Courses").document(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "temp")).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot documentSnapshot = null;
-                        Map<String, Object> data3 = null;
-                        if (task.getResult() != null)
-                            documentSnapshot = task.getResult();
-                        if (documentSnapshot.getData() != null)
-                            data3 = documentSnapshot.getData();
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = null;
+                    Map<String, Object> data3 = null;
+                    if (task.getResult() != null)
+                        documentSnapshot = task.getResult();
+                    if (documentSnapshot.getData() != null)
+                        data3 = documentSnapshot.getData();
 
-                        String mentorName = "", mentorEmail = "";
-                        boolean areMentorsAllocated = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false);
-                        boolean found2 = false;
+                    String mentorName = "", mentorEmail = "";
+                    boolean areMentorsAllocated = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false);
+                    boolean found2 = false;
 
-                        if (!areMentorsAllocated) {
-                            for (Map.Entry<String, Object> entry : data3.entrySet()) {
+                    if (!areMentorsAllocated) {
+                        for (Map.Entry<String, Object> entry : data3.entrySet()) {
 //                                Toast.makeText(studentLogin.this, entry.getKey().toString(), Toast.LENGTH_SHORT).show();
-                                if (entry.getKey().equals("Students")) {
-                                    for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
-                                        if (found2)
-                                            break;
-                                        for (Map.Entry<String, Object> entry3 : ((Map<String, Object>) entry2.getValue()).entrySet())
-                                            switch (entry3.getKey()) {
-                                                case "mentorName":
-                                                    mentorName = entry3.getValue().toString();
-                                                    break;
-                                                case "mentorEmail":
-                                                    mentorEmail = entry3.getValue().toString();
-                                                    break;
-                                                case "email":
-                                                    if (entry3.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
-                                                        isNewStudent = false;
-                                                        found2 = true;
-                                                    }
-                                                    break;
-                                            }
-                                    }
+                            if (entry.getKey().equals("Students")) {
+                                for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
+                                    if (found2)
+                                        break;
+                                    for (Map.Entry<String, Object> entry3 : ((Map<String, Object>) entry2.getValue()).entrySet())
+                                        switch (entry3.getKey()) {
+                                            case "mentorName":
+                                                mentorName = entry3.getValue().toString();
+                                                break;
+                                            case "mentorEmail":
+                                                mentorEmail = entry3.getValue().toString();
+                                                break;
+                                            case "email":
+                                                if (entry3.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
+                                                    isNewStudent = false;
+                                                    found2 = true;
+                                                }
+                                                break;
+                                        }
                                 }
-                                if (entry.getKey().equals("areAllocated"))
-                                    areMentorsAllocated = (boolean) entry.getValue();
                             }
-
-                            sharedPreferences.edit().putString("mentorName", mentorName).apply();
-                            sharedPreferences.edit().putString("mentorEmail", mentorEmail).apply();
-                            sharedPreferences.edit().putBoolean("areMentorsAllocated", areMentorsAllocated).apply();
-//                            Toast.makeText(studentLogin.this, "allocated: " + areMentorsAllocated, Toast.LENGTH_SHORT).show();
+                            if (entry.getKey().equals("areAllocated"))
+                                areMentorsAllocated = (boolean) entry.getValue();
                         }
 
-                        startActivity(new Intent(studentLogin.this, studentScreen.class));
-                        finish();
+                        sharedPreferences.edit().putString("mentorName", mentorName).apply();
+                        sharedPreferences.edit().putString("mentorEmail", mentorEmail).apply();
+                        sharedPreferences.edit().putBoolean("areMentorsAllocated", areMentorsAllocated).apply();
+//                            Toast.makeText(studentLogin.this, "allocated: " + areMentorsAllocated, Toast.LENGTH_SHORT).show();
                     }
+
+                    startActivity(new Intent(studentLogin.this, studentScreen.class));
+                    finish();
                 });
     }
 

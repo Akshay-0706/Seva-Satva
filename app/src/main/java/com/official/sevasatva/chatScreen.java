@@ -24,28 +24,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 public class chatScreen extends AppCompatActivity {
 
@@ -78,23 +67,15 @@ public class chatScreen extends AppCompatActivity {
         EditText text = findViewById(R.id.chatEditText);
         RecyclerView chatRecyclerView = findViewById(R.id.chatRecyclerView);
 
-        chatBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        chatBackButton.setOnClickListener(v -> onBackPressed());
 
-        chatSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!text.getText().toString().isEmpty()) {
-                    final Animation animation = AnimationUtils.loadAnimation(chatScreen.this, R.anim.btn_effect);
-                    chatSendButton.startAnimation(animation);
+        chatSendButton.setOnClickListener(v -> {
+            if (!text.getText().toString().isEmpty()) {
+                final Animation animation = AnimationUtils.loadAnimation(chatScreen.this, R.anim.btn_effect);
+                chatSendButton.startAnimation(animation);
 
-                    sendMessage(text.getText().toString().trim(), chatScreen.this);
-                    text.setText("");
-                }
+                sendMessage(text.getText().toString().trim(), chatScreen.this);
+                text.setText("");
             }
         });
 
@@ -135,6 +116,7 @@ public class chatScreen extends AppCompatActivity {
 
                         for (DataSnapshot dataSnapshot : snapshot.child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
                                 .child(finalMentorEmail.replaceAll("\\.", "_")).getChildren()) {
+                            Log.i("Data snapshot check", "Snapshot: " + dataSnapshot);
 
                             final String date = dataSnapshot.child("date").getValue(String.class);
                             final String email = dataSnapshot.child("email").getValue(String.class);
@@ -177,7 +159,7 @@ public class chatScreen extends AppCompatActivity {
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
         @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             Toast.makeText(chatScreen.this, "on Move", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -191,7 +173,7 @@ public class chatScreen extends AppCompatActivity {
         }
 
         @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
             Log.i("Dir", "onSwiped: " + swipeDir);
             //Remove swiped item from list and notify the RecyclerView
             Dialog confirmationDialog = new Dialog(chatContext);
@@ -206,24 +188,18 @@ public class chatScreen extends AppCompatActivity {
             confirmationDialog.findViewById(R.id.confirmCourse).setVisibility(View.INVISIBLE);
             confirmationDialog.findViewById(R.id.confirmCourseCode).setVisibility(View.INVISIBLE);
 
-            confirmationDialog.findViewById(R.id.confirmNoButton).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    confirmationDialog.dismiss();
-                    chatScreenAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
-                }
+            confirmationDialog.findViewById(R.id.confirmNoButton).setOnClickListener(v -> {
+                confirmationDialog.dismiss();
+                chatScreenAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
             });
 
-            confirmationDialog.findViewById(R.id.confirmYesButton).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    confirmationDialog.dismiss();
-                    Toast.makeText(chatContext, "Message deleted", Toast.LENGTH_SHORT).show();
-                    DatabaseReference databaseReference;
-                    databaseReference = FirebaseDatabase.getInstance().getReference();
-                    databaseReference.child("messages").child(v.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                            .child(mentorEmail.replaceAll("\\.", "_")).child(chatList.get(viewHolder.getAdapterPosition()).getId()).removeValue();
-                }
+            confirmationDialog.findViewById(R.id.confirmYesButton).setOnClickListener(v -> {
+                confirmationDialog.dismiss();
+                Toast.makeText(chatContext, "Message deleted", Toast.LENGTH_SHORT).show();
+                DatabaseReference databaseReference;
+                databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference.child("messages").child(v.getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                        .child(mentorEmail.replaceAll("\\.", "_")).child(chatList.get(viewHolder.getAdapterPosition()).getId()).removeValue();
             });
         }
     };
@@ -235,7 +211,7 @@ public class chatScreen extends AppCompatActivity {
         String currentDate = dateFormat.format(new Date());
         String currentTime = timeFormat.format(new Date());
 
-        String mentorEmail = "";
+        String mentorEmail;
         if (context.getClass().equals(mentorScreen.class))
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "SV10");
         else
@@ -253,7 +229,7 @@ public class chatScreen extends AppCompatActivity {
         map.put("time", currentTime);
 
         databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
-                .child(mentorEmail.replaceAll("\\.", "_")).child(String.valueOf(timeStamp)).setValue(map);
+                .child(mentorEmail.replaceAll("\\.", "_")).child(timeStamp).setValue(map);
 
 
 //        String finalMentorEmail = mentorEmail;
@@ -287,7 +263,7 @@ public class chatScreen extends AppCompatActivity {
 //        );
 //
 //        int socketTimeOut = 50000;
-//        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+//        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULTI);
 //        stringRequest.setRetryPolicy(policy);
 //        RequestQueue queue = Volley.newRequestQueue(context);
 //        queue.add(stringRequest);

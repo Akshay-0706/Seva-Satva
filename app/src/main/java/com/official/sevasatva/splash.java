@@ -1,30 +1,11 @@
 package com.official.sevasatva;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.content.ContextCompat;
-
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class splash extends AppCompatActivity {
 
@@ -35,9 +16,9 @@ public class splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        TextView sevaText = (TextView) findViewById(R.id.splashTextSeva);
-        TextView slashText = (TextView) findViewById(R.id.splashTextSlash);
-        TextView satvaText = (TextView) findViewById(R.id.splashTextSatva);
+        TextView sevaText = findViewById(R.id.splashTextSeva);
+        TextView slashText = findViewById(R.id.splashTextSlash);
+        TextView satvaText = findViewById(R.id.splashTextSatva);
 
         sevaText.animate().alpha(1).setDuration(500);
         slashText.animate().alpha(1).setDuration(1000);

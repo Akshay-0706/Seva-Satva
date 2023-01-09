@@ -83,88 +83,82 @@ public class mentorAllocator extends AppCompatActivity {
 
         setMentorsItems();
 
-        findViewById(R.id.mentorAlcAddBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (addingMentor)
-                    Toast.makeText(mentorAllocator.this, "Adding mentor please wait!", Toast.LENGTH_SHORT).show();
-                if (!editingAvailable)
-                    Toast.makeText(mentorAllocator.this, "Fetching details please wait", Toast.LENGTH_SHORT).show();
-                else if (mentorsDetails.length == 0)
-                    Toast.makeText(mentorAllocator.this, "No mentors required!", Toast.LENGTH_SHORT).show();
-                else if (areAllocated)
-                    Toast.makeText(mentorAllocator.this, "Can't add more mentors!", Toast.LENGTH_SHORT).show();
-                else {
-                    if (findViewById(R.id.mentorAlcAddLayout).getVisibility() == View.GONE) {
-                        findViewById(R.id.mentorAlcAddLayout).setVisibility(View.VISIBLE);
-                        getInput();
-                    } else
-                        findViewById(R.id.mentorAlcAddLayout).setVisibility(View.GONE);
-                }
+        findViewById(R.id.mentorAlcAddBtn).setOnClickListener(v -> {
+            if (addingMentor)
+                Toast.makeText(mentorAllocator.this, "Adding mentor please wait!", Toast.LENGTH_SHORT).show();
+            if (!editingAvailable)
+                Toast.makeText(mentorAllocator.this, "Fetching details please wait", Toast.LENGTH_SHORT).show();
+            else if (mentorsDetails.length == 0)
+                Toast.makeText(mentorAllocator.this, "No mentors required!", Toast.LENGTH_SHORT).show();
+            else if (areAllocated)
+                Toast.makeText(mentorAllocator.this, "Can't add more mentors!", Toast.LENGTH_SHORT).show();
+            else {
+                if (findViewById(R.id.mentorAlcAddLayout).getVisibility() == View.GONE) {
+                    findViewById(R.id.mentorAlcAddLayout).setVisibility(View.VISIBLE);
+                    getInput();
+                } else
+                    findViewById(R.id.mentorAlcAddLayout).setVisibility(View.GONE);
             }
         });
     }
 
     private void setMentorsItems() {
 
-        firebaseFirestore.collection("Courses").document(cc).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot documentSnapshot = null;
-                Map<String, Object> data = null;
-                if (task.getResult() != null)
-                    documentSnapshot = task.getResult();
-                if (documentSnapshot.getData() != null)
-                    data = documentSnapshot.getData();
+        firebaseFirestore.collection("Courses").document(cc).get().addOnCompleteListener(task -> {
+            DocumentSnapshot documentSnapshot = null;
+            Map<String, Object> data = null;
+            if (task.getResult() != null)
+                documentSnapshot = task.getResult();
+            if (documentSnapshot.getData() != null)
+                data = documentSnapshot.getData();
 
-                Map<String, Object> mentorsData = null;
-                Map<String, Object> mentorsData2 = null;
+            Map<String, Object> mentorsData;
+            Map<String, Object> mentorsData2;
 
-                if (data != null) {
-                    mentorList.clear();
-                    for (Map.Entry<String, Object> entry : data.entrySet()) {
-                        if (entry.getKey().equals("Mentors")) {
-                            mentorsData = (Map<String, Object>) entry.getValue();
-                            if (mentorsData.size() != 0)
-                                mentorDetailsIndex = mentorsData.size() - 1;
-                            for (Map.Entry<String, Object> entry2 : mentorsData.entrySet()) {
-                                mentorsData2 = (Map<String, Object>) entry2.getValue();
+            if (data != null) {
+                mentorList.clear();
+                for (Map.Entry<String, Object> entry : data.entrySet()) {
+                    if (entry.getKey().equals("Mentors")) {
+                        mentorsData = (Map<String, Object>) entry.getValue();
+                        if (mentorsData.size() != 0)
+                            mentorDetailsIndex = mentorsData.size() - 1;
+                        for (Map.Entry<String, Object> entry2 : mentorsData.entrySet()) {
+                            mentorsData2 = (Map<String, Object>) entry2.getValue();
 
-                                String mentorName = "", mentorEmail = "", mentorPass = "", mentorStudentCount = "";
+                            String mentorName = "", mentorEmail = "", mentorPass = "", mentorStudentCount = "";
 
-                                for (Map.Entry<String, Object> entry3 :
-                                        mentorsData2.entrySet()) {
-                                    if (entry3.getKey().equals("name"))
-                                        mentorName = entry3.getValue().toString();
-                                    else if (entry3.getKey().equals("email"))
-                                        mentorEmail = entry3.getValue().toString();
-                                    else if (entry3.getKey().equals("pass"))
-                                        mentorPass = entry3.getValue().toString();
-                                    else if (entry3.getKey().equals("studentCount"))
-                                        mentorStudentCount = entry3.getValue().toString();
-                                }
-                                mentorAllocatorModel allocatorModel = new mentorAllocatorModel(mentorName, "Email: " + mentorEmail, "Password: " + mentorPass, "Students: " + mentorStudentCount, false);
-                                mentorList.add(allocatorModel);
+                            for (Map.Entry<String, Object> entry3 :
+                                    mentorsData2.entrySet()) {
+                                if (entry3.getKey().equals("name"))
+                                    mentorName = entry3.getValue().toString();
+                                else if (entry3.getKey().equals("email"))
+                                    mentorEmail = entry3.getValue().toString();
+                                else if (entry3.getKey().equals("pass"))
+                                    mentorPass = entry3.getValue().toString();
+                                else if (entry3.getKey().equals("studentCount"))
+                                    mentorStudentCount = entry3.getValue().toString();
                             }
+                            mentorAllocatorModel allocatorModel = new mentorAllocatorModel(mentorName, "Email: " + mentorEmail, "Password: " + mentorPass, "Students: " + mentorStudentCount, false);
+                            mentorList.add(allocatorModel);
                         }
                     }
-                    mentorAllocatorAdapter mentorAllocatorAdapter = new mentorAllocatorAdapter(mentorList);
-                    mentorAllocatorRecyclerView.setLayoutManager(new LinearLayoutManager(mentorAllocator.this));
-                    mentorAllocatorRecyclerView.setAdapter(mentorAllocatorAdapter);
                 }
+                mentorAllocatorAdapter mentorAllocatorAdapter = new mentorAllocatorAdapter(mentorList);
+                mentorAllocatorRecyclerView.setLayoutManager(new LinearLayoutManager(mentorAllocator.this));
+                mentorAllocatorRecyclerView.setAdapter(mentorAllocatorAdapter);
+            }
 
-                if (newLaunch) {
-                    if (data != null) {
-                        if (data.get("areAllocated") == null) {
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("areAllocated", false);
-                            firebaseFirestore.collection("Courses").document(cc).set(map, SetOptions.merge());
-                            areAllocated = false;
-                        } else
-                            areAllocated = (boolean) data.get("areAllocated");
-                    }
-                    getStudentsEnrolled();
+            if (newLaunch) {
+                if (data != null) {
+                    if (data.get("areAllocated") == null) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("areAllocated", false);
+                        firebaseFirestore.collection("Courses").document(cc).set(map, SetOptions.merge());
+                        areAllocated = false;
+                    } else
+                        areAllocated = (boolean) data.get("areAllocated");
                 }
+                getStudentsEnrolled();
             }
         });
 
@@ -174,27 +168,24 @@ public class mentorAllocator extends AppCompatActivity {
         newLaunch = false;
 
         firebaseFirestore.collection("Courses").document(cc).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot documentSnapshot = null;
-                        Map<String, Object> data = null;
-                        if (task.getResult() != null)
-                            documentSnapshot = task.getResult();
-                        if (documentSnapshot.getData() != null)
-                            data = documentSnapshot.getData();
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = null;
+                    Map<String, Object> data = null;
+                    if (task.getResult() != null)
+                        documentSnapshot = task.getResult();
+                    if (documentSnapshot.getData() != null)
+                        data = documentSnapshot.getData();
 
-                        if (data != null)
-                            for (Map.Entry<String, Object> entry : data.entrySet()) {
-                                if (entry.getKey().equals("Students")) {
-                                    studentData = (Map<String, Object>) entry.getValue();
-                                    break;
-                                }
+                    if (data != null)
+                        for (Map.Entry<String, Object> entry : data.entrySet()) {
+                            if (entry.getKey().equals("Students")) {
+                                studentData = (Map<String, Object>) entry.getValue();
+                                break;
                             }
+                        }
 
-                        setDetails();
+                    setDetails();
 
-                    }
                 });
     }
 
@@ -344,13 +335,7 @@ public class mentorAllocator extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         auth.createUserWithEmailAndPassword(email, pass)
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(mentorAllocator.this, "Mentor added", Toast.LENGTH_SHORT).show();
-                        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+                .addOnSuccessListener(authResult -> Toast.makeText(mentorAllocator.this, "Mentor added", Toast.LENGTH_SHORT).show()).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("TAG", "onFailure: " + e);
@@ -426,14 +411,11 @@ public class mentorAllocator extends AppCompatActivity {
         allocatedMentor.put(String.valueOf(System.currentTimeMillis()).substring(0, 10), allocatedMentorDetails);
         mentor.put("Mentors", allocatedMentor);
         firebaseFirestore.collection("Courses").document(cc).set(mentor, SetOptions.merge())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        mentorDetailsIndex++;
-                        addingMentor = false;
-                        Toast.makeText(mentorAllocator.this, "Mentor added successfully!", Toast.LENGTH_SHORT).show();
-                        setMentorsItems();
-                    }
+                .addOnCompleteListener(task -> {
+                    mentorDetailsIndex++;
+                    addingMentor = false;
+                    Toast.makeText(mentorAllocator.this, "Mentor added successfully!", Toast.LENGTH_SHORT).show();
+                    setMentorsItems();
                 });
 
         if (mentorDetailsIndex == mentorsDetails.length - 1) {
