@@ -110,19 +110,19 @@ public class studentProfile extends Fragment {
         getView().findViewById(R.id.proAskMentorText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
+//                if (getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
                     startActivity(intent);
-                else
-                    Toast.makeText(getContext(), "Mentor is not allocated to you yet", Toast.LENGTH_SHORT).show();
+//                else
+//                    Toast.makeText(getContext(), "Mentor is not allocated to you yet", Toast.LENGTH_SHORT).show();
             }
         });
         getView().findViewById(R.id.proAskMentorIcon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
+//                if (getContext().getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false))
                     startActivity(intent);
-                else
-                    Toast.makeText(getContext(), "Mentor is not allocated to you yet", Toast.LENGTH_SHORT).show();
+//                else
+//                    Toast.makeText(getContext(), "Mentor is not allocated to you yet", Toast.LENGTH_SHORT).show();
             }
         });
 

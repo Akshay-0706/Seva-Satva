@@ -101,7 +101,7 @@ public class chatScreen extends AppCompatActivity {
         if (context.getClass().equals(mentorScreen.class))
             mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "email");
         else
-            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "email");
+            mentorEmail = context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("mentorEmail", "Anonymous");
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String finalMentorEmail = mentorEmail;
@@ -143,6 +143,11 @@ public class chatScreen extends AppCompatActivity {
                     lottieAnimationView.setVisibility(View.VISIBLE);
                 }
 
+                if(chatList.isEmpty() && mentorEmail.equals("Anonymous")) {
+                    anonymousMessagesInfo("This section are for those students whose mentors are not allocated yet. " +
+                            "You can discuss your doubts among other students here. " +
+                            "Messages in this section will not be visible to the mentors in future.", context);
+                }
                 chatScreenAdapter = new chatScreenAdapter(chatList, context, context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("date", "temp"));
                 new ItemTouchHelper(simpleCallback).attachToRecyclerView(chatRecyclerView);
                 chatRecyclerView.setAdapter(chatScreenAdapter);
@@ -203,6 +208,29 @@ public class chatScreen extends AppCompatActivity {
             });
         }
     };
+
+    public void anonymousMessagesInfo(String message, Context context)
+    {
+        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        String currentDate = dateFormat.format(new Date());
+        String currentTime = timeFormat.format(new Date());
+
+        HashMap<String, Object> map = new HashMap<>();
+        DatabaseReference databaseReference;
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        map.put("email", "anonymous.messages@gmail.com");
+        map.put("isStudent", false);
+        map.put("msg", message);
+        map.put("name", "System");
+        map.put("date", currentDate);
+        map.put("time", currentTime);
+
+        databaseReference.child("messages").child(context.getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("cc", "SV10"))
+                .child(mentorEmail.replaceAll("\\.", "_")).child(timeStamp).setValue(map);
+    }
 
     public void sendMessage(String message, Context context) {
         String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);

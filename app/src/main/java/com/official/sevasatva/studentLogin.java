@@ -71,6 +71,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class studentLogin extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
 
     SharedPreferences sharedPreferences;
 
@@ -187,7 +188,7 @@ public class studentLogin extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithCredential(authCredential)
                 .addOnSuccessListener(authResult -> {
-                    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                    firebaseUser = firebaseAuth.getCurrentUser();
                     assert firebaseUser != null;
                     sharedPreferences.edit().putString("email", firebaseUser.getEmail()).apply();
                     sharedPreferences.edit().putString("image", firebaseUser.getPhotoUrl().toString()).apply();
@@ -240,13 +241,12 @@ public class studentLogin extends AppCompatActivity {
 
                             alertDialog.findViewById(R.id.alertPositive).setOnClickListener(v -> {
                                 alertDialog.dismiss();
-                                String urlString = "https://youtu.be/dQw4w9WgXcQ";
+                                String urlString = "https://drive.google.com/drive/folders/1HlkMQvH8ErTcIjB4P7Ou6K7yzAVmTZ4C?usp=sharing";
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                                intent.setPackage("com.google.android.youtube");
+                                intent.setPackage("com.google.android.apps.docs");
                                 try {
-                                    Toast.makeText(studentLogin.this, "Got you!", Toast.LENGTH_SHORT).show();
                                     startActivity(intent);
                                     finishAffinity();
                                 } catch (ActivityNotFoundException ex) {
@@ -310,16 +310,36 @@ public class studentLogin extends AppCompatActivity {
             sharedPreferences.edit().putString("class", jo.getString("class")).apply();
             sharedPreferences.edit().putString("year", jo.getString("year")).apply();
 
-            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+            checkExistingEnrollment();
+        } catch (
+                JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Your data was not found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Signed in as a guest user", Toast.LENGTH_LONG).show();
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.child("flags").child("areStudentsAllowed").get().addOnCompleteListener(
-                    task -> {
+            sharedPreferences.edit().putString("uid", "1234567890").apply();
+            sharedPreferences.edit().putString("name", firebaseUser.getDisplayName()).apply();
+            sharedPreferences.edit().putString("branch", "GUEST").apply();
+            sharedPreferences.edit().putString("class", "NEW").apply();
+            sharedPreferences.edit().putString("year", "2023").apply();
+
+            checkExistingEnrollment();
+        }
+
+    }
+
+    private void checkExistingEnrollment() {
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("flags").child("areStudentsAllowed").get().addOnCompleteListener(
+                task -> {
 //                        isEnrollmentStopped = (boolean) task.getResult().getValue();
 //                        switchMaterial.setChecked(isEnrollmentStopped);
 
-                        final boolean[] isAllowed = {true};
-                        isAllowed[0] = (boolean) task.getResult().getValue();
+                    final boolean[] isAllowed = {true};
+                    isAllowed[0] = (boolean) task.getResult().getValue();
 //                    }
 //                }
 //        );
@@ -337,67 +357,59 @@ public class studentLogin extends AppCompatActivity {
 //                    final boolean[] isAllowed = {true};
 //                    isAllowed[0] = (boolean) data.get("areStudentsAllowed");
 
-                        firestore.collection("Courses").document("Students").get().addOnCompleteListener(task1 -> {
-                            DocumentSnapshot documentSnapshot = null;
-                            Map<String, Object> data2 = null;
-                            if (task1.getResult() != null)
-                                documentSnapshot = task1.getResult();
-                            if (documentSnapshot.getData() != null)
-                                data2 = documentSnapshot.getData();
+                    firestore.collection("Courses").document("Students").get().addOnCompleteListener(task1 -> {
+                        DocumentSnapshot documentSnapshot = null;
+                        Map<String, Object> data2 = null;
+                        if (task1.getResult() != null)
+                            documentSnapshot = task1.getResult();
+                        if (documentSnapshot.getData() != null)
+                            data2 = documentSnapshot.getData();
 
-                            String cc = "", cn = "", desc = "";
+                        String cc = "", cn = "", desc = "";
 
-                            boolean found = false;
+                        boolean found = false;
 
-                            if (data2 != null)
-                                for (Map.Entry<String, Object> entry : data2.entrySet()) {
-                                    if (found)
-                                        break;
-                                    for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
-                                        switch (entry2.getKey()) {
-                                            case "cc":
-                                                cc = entry2.getValue().toString();
-                                                break;
-                                            case "cn":
-                                                cn = entry2.getValue().toString();
-                                                break;
-                                            case "desc":
-                                                desc = entry2.getValue().toString();
-                                                break;
-                                            case "email":
-                                                if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
-                                                    isNewStudent = false;
-                                                    found = true;
-                                                }
-                                                break;
-                                        }
+                        if (data2 != null)
+                            for (Map.Entry<String, Object> entry : data2.entrySet()) {
+                                if (found)
+                                    break;
+                                for (Map.Entry<String, Object> entry2 : ((Map<String, Object>) entry.getValue()).entrySet()) {
+                                    switch (entry2.getKey()) {
+                                        case "cc":
+                                            cc = entry2.getValue().toString();
+                                            break;
+                                        case "cn":
+                                            cn = entry2.getValue().toString();
+                                            break;
+                                        case "desc":
+                                            desc = entry2.getValue().toString();
+                                            break;
+                                        case "email":
+                                            if (entry2.getValue().equals(getSharedPreferences("PREFERENCE", MODE_PRIVATE).getString("email", "temp"))) {
+                                                isNewStudent = false;
+                                                found = true;
+                                            }
+                                            break;
                                     }
                                 }
-
-                            if (!isAllowed[0] && isNewStudent) {
-                                Toast.makeText(studentLogin.this, "Course enrollment has stopped!", Toast.LENGTH_LONG).show();
-                                finishAndRemoveTask();
-                            } else if (isNewStudent) {
-                                startActivity(new Intent(studentLogin.this, studentDetails.class));
-                                finish();
-                            } else {
-                                sharedPreferences.edit().putString("cc", cc).apply();
-                                sharedPreferences.edit().putString("cn", cn).apply();
-                                sharedPreferences.edit().putString("desc", desc).apply();
-
-                                getCategory(true);
                             }
-                        });
 
+                        if (!isAllowed[0] && isNewStudent) {
+                            Toast.makeText(studentLogin.this, "Course enrollment has stopped!", Toast.LENGTH_LONG).show();
+                            finishAndRemoveTask();
+                        } else if (isNewStudent) {
+                            startActivity(new Intent(studentLogin.this, studentDetails.class));
+                            finish();
+                        } else {
+                            sharedPreferences.edit().putString("cc", cc).apply();
+                            sharedPreferences.edit().putString("cn", cn).apply();
+                            sharedPreferences.edit().putString("desc", desc).apply();
+
+                            getCategory(true);
+                        }
                     });
 
-
-        } catch (
-                JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Your data is not listed in our database, please contact our organizer.", Toast.LENGTH_LONG).show();
-            finishAndRemoveTask();
-        }
+                });
 
     }
 
@@ -413,7 +425,7 @@ public class studentLogin extends AppCompatActivity {
                     if (documentSnapshot.getData() != null)
                         data3 = documentSnapshot.getData();
 
-                    String mentorName = "", mentorEmail = "";
+                    String mentorName = "", mentorEmail = "Anonymous";
                     boolean areMentorsAllocated = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("areMentorsAllocated", false);
                     boolean found2 = false;
 
